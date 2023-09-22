@@ -1,9 +1,9 @@
 import React from 'react'
-import '../style.scss'
+import style from './Style.module.scss'
 
 const NewsCard = ({data} : any) => {
   return (
-    <a href={data.link} className='covid-19-news w-1/2 px-3' rel="noreferrer" target="_blank">
+    <a href={data.link} className={`${style.covid_19_news} w-1/2 px-3`} rel="noreferrer" target="_blank">
         <div className='flex flex-row flex-nowrap'>
         <img
           style={{

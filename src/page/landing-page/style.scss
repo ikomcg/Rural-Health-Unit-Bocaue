@@ -43,12 +43,3 @@ section.living-healthy-page, section.newsletter-page , section.subcription-page{
 section.subcription-page > div{
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
 }
-.covid-19-news{
-
-    &:hover{
-
-        h5{
-            color: color.$blueLight;
-        }
-    }
-}

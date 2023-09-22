@@ -1,0 +1,9 @@
+.covid_19_news{
+
+    &:hover{
+
+        h5{
+            color: color.$blueLight;
+        }
+    }
+}
