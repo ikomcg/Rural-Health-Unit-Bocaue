@@ -1,8 +1,8 @@
-import HealthCondition from './Home/HealthCondition';
-import LivingHealthy from './Home/Living_Healthy';
-import Main from './Home/Main'
-import News from './Home/News';
-import Newsletter from './Home/Newsletter';
+import HealthCondition from './landing-page/HealthCondition';
+import LivingHealthy from './landing-page/Living_Healthy';
+import Main from './landing-page/Main'
+import News from './landing-page/News';
+import Newsletter from './landing-page/Newsletter';
 
 const LandingPage = () => {
   return (

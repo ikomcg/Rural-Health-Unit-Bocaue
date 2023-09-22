@@ -1,9 +1,9 @@
 import {memo} from 'react'
-import TopicHeader from './components/TopicHeader'
-import { useFetch } from './hooks/Hooks'
+import TopicHeader from '../../components/home/TopicHeader'
+import { useFetch } from '../../hooks/Hooks'
 import { RotatingLines } from 'react-loader-spinner'
 
-import NewsCard from './components/NewsCard';
+import NewsCard from '../../components/home/NewsCard';
 
 const News = () => {
  

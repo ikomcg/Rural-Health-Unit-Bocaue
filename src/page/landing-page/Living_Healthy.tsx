@@ -5,7 +5,7 @@ import Fitness_and_Excercise from '../../images/section-healthy/Fitness_and_Exce
 import Health_Beauty from '../../images/section-healthy/Health_Beauty.jpg'
 import Pregnance from '../../images/section-healthy/Womens_Health.jpg'
 import Mental_Health from '../../images/section-healthy/mental_health.jpg'
-import Cards from './components/Cards'
+import Cards from '../../components/home/Cards'
 
 const livingHealthy = [
     {src: Mental_Health, topic: 'Mental Health'},

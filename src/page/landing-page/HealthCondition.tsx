@@ -5,7 +5,7 @@ import Migraine from '../../images/health-condition/inflamm-img.webp'
 import MultipleSclerosis from '../../images/health-condition/multiple-img.webp'
 import BreastCancer from '../../images/health-condition/Breast-cancer.webp'
 import RheumatoidArthritis from '../../images/health-condition/rheumoid.webp'
-import Cards from './components/Cards'
+import Cards from '../../components/home/Cards'
 
 
 
