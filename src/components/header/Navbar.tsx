@@ -1,7 +1,9 @@
+import {useState} from 'react'
 import { Link } from 'react-router-dom'
 import style from './Style.module.scss'
 
 const Navbar = () => {
+  const [open, setOpen] = useState(false)
   return (
     <div className='flex gap-3 w-1/3'>
       <ul className='flex justify-between items-center w-full'>
