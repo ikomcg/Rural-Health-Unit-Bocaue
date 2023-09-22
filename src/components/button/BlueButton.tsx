@@ -20,3 +20,19 @@ export const BlueButton = (props : BlueButtonType) => {
         </button>
     )
 }
+
+type ButtonType = {
+  title : string
+}& React.ComponentProps<"button">
+
+export const LightBlueButton = ({
+    title, 
+    className,
+    ...cleanprops} : ButtonType) => {
+
+  return (
+    <button className={`bg-regal-blue w-max text-white rounded ${className ?? ''}`} {...cleanprops}>
+        {title}
+    </button>
+  )
+}
