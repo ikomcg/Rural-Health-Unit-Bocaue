@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
+.wrap{
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+}
+html::-webkit-scrollbar{
+    display: none;
+}
+body{
+    font-family: 'Roboto', sans-serif;
+    scroll-behavior: none;
+}
+section.page-features h4, section.page-features p, section.page-topic h4, section.page-topic p{
+    word-wrap: break-word;
+    white-space: normal;
+    overflow: hidden;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+footer h1{
+    font-family: 'Lobster, cursive'
+   
+}
+footer ul li {
+    margin: 10px 0;
+}
+footer ul {
+    display: grid;
+    grid-template-columns: 25% 25%;
+}
