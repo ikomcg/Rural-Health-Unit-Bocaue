@@ -14,7 +14,7 @@ const firebaseConfig = {
   measurementId: ENV.VITE_MEASUREMENT_ID
 }; 
 
-console.log("ENV" , import.meta.env.MODE)
+console.log("ENV:" , import.meta.env.MODE)
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
