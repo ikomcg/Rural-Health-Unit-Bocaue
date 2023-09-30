@@ -1,31 +1,29 @@
-@use '../../_color.scss';
+@use "../../_color.scss";
 
-.btn{
-    color: white;
-    border-radius: .3rem;
+.btn {
+  color: white;
+  border-radius: 0.3rem;
 }
 .blue_btn {
-    background-color: color.$blue;
-    color: 'black';
-    border : 1px solid color.$blue !important; 
-  
+  background-color: color.$blue;
+  color: "black";
+  border: 1px solid color.$blue !important;
 }
 .action_btn {
-
-    &:hover{
-        background-color: rgba(45, 161, 250, 0.684);
-    }
+  &:hover {
+    background-color: rgba(45, 161, 250, 0.684);
+  }
 }
-.red_btn{
-    background-color: red;
-    color: white;
-    transition-duration: 150ms;
-    // font-size: 1rem;
-    padding: .6em 1.5em;
-    border-radius: .3rem;
-    font-weight: 600;
-    
-    &:hover{
-        background-color: rgba(255, 0, 0, 0.52) ;
-    }
+.red_btn {
+  background-color: red;
+  color: white;
+  transition-duration: 150ms;
+  // font-size: 1rem;
+  padding: 0.6em 1.5em;
+  border-radius: 0.3rem;
+  font-weight: 600;
+
+  &:hover {
+    background-color: rgba(255, 0, 0, 0.52);
+  }
 }

@@ -1,15 +1,15 @@
-import {useState} from 'react'
-import { Link } from 'react-router-dom'
-import style from './Style.module.scss'
-import Login from '../../page/login/Login'
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import style from "./Style.module.scss";
+import Login from "../../page/login/Login";
 
 const Navbar = () => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <>
-      <div className='flex gap-3 w-1/3'>
-        <ul className='flex justify-between items-center w-full'>
+      <div className="flex gap-3 w-1/3">
+        <ul className="flex justify-between items-center w-full">
           <li>
             <Link to="/home">Home</Link>
           </li>
@@ -22,20 +22,14 @@ const Navbar = () => {
           <li>
             <Link to="/contact-use">Contact us</Link>
           </li>
-          </ul>
-          <button 
-            className={style.button_sign_up}
-            onClick={() => setOpen(true)}>
-            Sign in
-          </button>
+        </ul>
+        <button className={style.button_sign_up} onClick={() => setOpen(true)}>
+          Sign in
+        </button>
       </div>
-      <Login
-        open={open}
-        setOpen={setOpen}
-      />
+      <Login open={open} setOpen={setOpen} />
     </>
-    
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

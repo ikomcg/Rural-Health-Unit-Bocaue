@@ -1,19 +1,17 @@
-import {BrowserRouter, Routes, Route} from 'react-router-dom'
-import LandingPageLayout from './components/layout/LandingPage'
-import LandingPage from './page/LandingPage'
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import LandingPageLayout from "./components/layout/LandingPage";
+import LandingPage from "./page/LandingPage";
 
 const App = () => {
   return (
-          <BrowserRouter>
-            <Routes>
-              <Route element={<LandingPageLayout/>}>
-                <Route index element={<LandingPage/>}/>
-              </Route>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<LandingPageLayout />}>
+          <Route index element={<LandingPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+};
 
-            </Routes>
-          </BrowserRouter>
-  )
-}
-
-export default App
+export default App;
