@@ -13,7 +13,7 @@ import {
    uploadBytesResumable,
    getDownloadURL,
 } from "firebase/storage";
-
+   
 type PostType = {
    isPost: boolean;
    setIsPost: React.Dispatch<SetStateAction<boolean>>;
