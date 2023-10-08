@@ -1,0 +1,103 @@
+@use "../../color" ;
+
+.rgth_cldr {
+   > div {
+      width: 90%;
+
+      border: 1px solid rgba(128, 128, 128, 0.553);
+      padding: 5px;
+      border-radius: 5px;
+
+      margin: 20px auto 0;
+   }
+
+   div.react-calendar {
+      .react-calendar__navigation {
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         margin-bottom: 10px;
+         .react-calendar__navigation__label {
+            color: color.$blue;
+            font-weight: 400;
+         }
+         .react-calendar__navigation__arrow {
+            font-size: 18px;
+         }
+      }
+      .react-calendar__viewContainer {
+         font-size: 14px;
+        
+         .react-calendar__month-view__weekdays {
+            abbr {
+               text-decoration: none;
+             
+            }
+         }
+         .react-calendar__month-view__days__day--weekend {
+            color: red;
+         }
+         .react-calendar__tile--active {
+            background-color: color.$blue;
+            color: #ffffff;
+         }
+         .react-calendar__month-view__days__day--neighboringMonth {
+            color: #48484885;
+         }
+      }
+   }
+   div.todo-container {
+      ul {
+         margin-top: 10px;
+         padding: 0 10px;
+
+         li {
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #3680e9;
+
+            word-wrap: break-word;
+            white-space: normal;
+            overflow: hidden;
+            display: -webkit-box;
+            text-overflow: ellipsis;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+
+            &:hover {
+               background-color: #3e3e3e22;
+            }
+         }
+      }
+   }
+   div.online-container {
+      > div {
+         display: flex;
+         flex-flow: row wrap;
+         div {
+            display: flex;
+            flex-flow: column wrap;
+            gap: 2px;
+            width: 15%;
+            margin: 0 10px;
+            > div {
+               width: 90%;
+               img {
+                  width: 100%;
+               }
+               span {
+                  font-size: 12px;
+                  word-wrap: break-word;
+                  white-space: normal;
+                  overflow: hidden;
+                  display: -webkit-box;
+                  text-overflow: ellipsis;
+                  -webkit-box-orient: vertical;
+                  -webkit-line-clamp: 1;
+               }
+            }
+         }
+      }
+   }
+}

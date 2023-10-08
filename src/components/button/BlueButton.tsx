@@ -31,7 +31,7 @@ export const LightBlueButton = ({
 }: ButtonType) => {
   return (
     <button
-      className={`bg-regal-blue w-max text-white rounded ${className ?? ""}`}
+      className={`bg-blue w-max text-white rounded ${className ?? ""}`}
       {...cleanprops}
     >
       {title}

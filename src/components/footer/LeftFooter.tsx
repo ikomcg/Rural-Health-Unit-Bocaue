@@ -15,7 +15,7 @@ const LeftFooter = () => {
   return (
     <div className="left-footer w-1/2 px-5">
       <div className="flex flex-col justify-center items-center my-5">
-        <h1 className="text-5xl first-letter:text-regal-blue font-bold">
+        <h1 className="text-5xl first-letter:text-blue font-bold">
           RURAL HEALTH UNIT
         </h1>
         <ul className="flex flex-row my-5 gap-5 ">
@@ -36,7 +36,7 @@ const LeftFooter = () => {
         </p>
         <div className="my-7">
           <Subscribes />
-          <span className="text-lg text-regal-blue font-normal leading-3">
+          <span className="text-lg text-blue font-normal leading-3">
             Your privacy is important to us
           </span>
         </div>

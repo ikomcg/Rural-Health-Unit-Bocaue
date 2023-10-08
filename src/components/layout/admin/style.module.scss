@@ -1,0 +1,20 @@
+.container {
+   display: flex;
+   flex-flow: row nowrap;
+
+   height: 100vh;
+}
+
+.module {
+   color: #ffffff;
+    margin-top: 40px;
+   li {
+      a {
+         display: flex;
+         flex-flow: row nowrap;
+         align-items: center;
+         gap: 5px;
+         padding:   5px 10px;
+      }
+   }
+}
