@@ -13,7 +13,6 @@ import {
    uploadBytesResumable,
    getDownloadURL,
 } from "firebase/storage";
-import { image } from "@uiw/react-md-editor";
 
 type PostType = {
    isPost: boolean;
