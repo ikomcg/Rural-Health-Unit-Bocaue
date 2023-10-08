@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import style from "./Style.module.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { BiErrorCircle } from "react-icons/bi";
@@ -6,6 +6,10 @@ import { SignInWithEmailAndPassword } from "../../firebase/SignIn";
 import { InputPassword, InputText } from "../../components/forms/Form";
 import { LightBlueButton } from "../../components/button/BlueButton";
 import DialogSlide from "../../components/mui/dialog/SlideModal";
+import { doc } from "firebase/firestore";
+import { db } from "../../firebase/Base";
+import { GetDocFireBase } from "../../firebase/Document";
+import { UserProvider } from "../../context/UserProvider";
 
 type LoginType = {
    open: boolean;
@@ -13,6 +17,7 @@ type LoginType = {
 };
 const Login = ({ open, setOpen }: LoginType) => {
    const navigate = useNavigate();
+   const context = useContext(UserProvider);
    const [status, setStatus] = useState({
       remember: false,
       isUserName: false,
@@ -71,7 +76,19 @@ const Login = ({ open, setOpen }: LoginType) => {
       }));
 
       if (login.status) {
-         navigate("/admin/home");
+         const data = login.res;
+         const set_cookie = await SetCookies(data.user.uid);
+
+         setStatus((prev) => ({
+            ...prev,
+            isLoading: false,
+         }));
+
+         if (!set_cookie) return;
+
+         if (set_cookie.role.includes("admin")) {
+            navigate("/admin/home");
+         }
       }
 
       if (!login.status) {
@@ -85,6 +102,27 @@ const Login = ({ open, setOpen }: LoginType) => {
             alertMessage: message,
          }));
       }
+   };
+
+   const SetCookies = async (id: string) => {
+      const ref = doc(db, "users", id);
+
+      const user = await GetDocFireBase(ref);
+      console.log(user);
+      if (!user) {
+         return false;
+      }
+
+      if (!user.exists()) return false;
+
+      const cookie = {
+         ...user.data(),
+         id,
+      } as UserType;
+
+      context.saveCookies(cookie);
+
+      return cookie;
    };
 
    return (
