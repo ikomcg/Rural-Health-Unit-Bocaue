@@ -1,0 +1,56 @@
+@use "../../color" ;
+
+.rgth_cldr {
+   > div {
+      width: 90%;
+
+      border: 1px solid rgba(128, 128, 128, 0.553);
+      padding: 5px;
+      border-radius: 5px;
+
+      margin: 20px auto 0;
+   }
+
+   div.react-calendar {
+      .react-calendar__navigation {
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         margin-bottom: 10px;
+         .react-calendar__navigation__label {
+            color: color.$blue;
+            font-weight: 400;
+         }
+         .react-calendar__navigation__arrow {
+            font-size: 18px;
+         }
+      }
+      .react-calendar__month-view__weekdays{
+         >div{
+            text-align: center;
+         }
+      }
+      .react-calendar__viewContainer {
+
+       
+         font-size: 14px;
+        
+         .react-calendar__month-view__weekdays {
+            abbr {
+               text-decoration: none;
+             
+            }
+         }
+         .react-calendar__month-view__days__day--weekend {
+            color: red;
+         }
+         .react-calendar__tile--active {
+            background-color: color.$blue;
+            color: #ffffff;
+         }
+         .react-calendar__month-view__days__day--neighboringMonth {
+            color: #48484885;
+         }
+      }
+   }
+}

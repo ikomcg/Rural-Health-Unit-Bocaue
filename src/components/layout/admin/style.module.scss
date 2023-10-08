@@ -1,0 +1,35 @@
+.container {
+   display: flex;
+   flex-flow: row nowrap;
+
+   height: 100vh;
+}
+
+.module {
+   color: #ffffff;
+   margin-top: 40px;
+   li {
+      a {
+         display: flex;
+         flex-flow: row nowrap;
+         align-items: center;
+         gap: 10px;
+         padding: 10px;
+      }
+
+      &:hover {
+         background-color: #ffffff;
+
+         a {
+            color: #000000;
+         }
+      }
+   }
+}
+.active_lnk {
+   background-color: #ffffff;
+
+   a {
+      color: #000000;
+   }
+}

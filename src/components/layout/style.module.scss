@@ -1,0 +1,37 @@
+@use "../../color";
+.user_nav {
+    display: flex;
+    align-items: center;
+
+    padding: 10px;
+    background-color: color.$blue;
+    color:  #ffffff;
+
+    img{
+        width: 60px;
+        margin-right: 10px;
+        clip-path: circle();
+    }
+    
+    h2{
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: flex-start;
+
+        span{
+            display: flex;
+        }
+        button{
+            width: max-content;
+            margin-left: 10px;
+            font-size: 18px;
+        }
+        
+    }
+
+   button{
+    margin-left: auto;
+    font-size: 32px;
+    margin-right: 8px;
+   }
+}

@@ -1,0 +1,31 @@
+.grid_container_1{
+    grid-template-columns: 100%;
+    grid-auto-rows: 400px;
+    margin-top: 20px;
+}
+.grid_container_2{
+    grid-template-columns: 50% 50%;
+    grid-auto-rows: 250px;
+    margin-top: 20px;
+}
+
+.grid_container_3{
+    grid-template-columns: 50% 50%;
+    grid-auto-rows: 200px;
+    margin-top: 20px;
+
+    >img {
+        &:first-child {
+            grid-row-start: 1;
+            grid-row-end: 3;
+        }
+    
+    }
+       
+}
+
+.grid_container_4{
+    grid-template-columns: auto auto;
+    grid-auto-rows: 200px;
+    margin-top: 20px;
+}

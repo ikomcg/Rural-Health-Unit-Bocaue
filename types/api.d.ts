@@ -1,10 +1,9 @@
-
-type BaseResponse<T,> = {
-    status : number
-    data : T[]
-}
+type BaseResponse<T> = {
+  status: number;
+  data: T[];
+};
 
 type ErrorResponse = {
-    code : string
-    name : string
-}
+  code: string;
+  name: string;
+};

@@ -1,14 +1,14 @@
-@use '../../color';
+@use "../../color";
 
-.header_{
-    background-color: color.$darkVar;
-    width: 100%;
-    color: white;
-    padding: 14px 0;
+.header_ {
+  background-color: color.$darkVar;
+  width: 100%;
+  color: white;
+  padding: 14px 0;
 }
-.button_sign_up{
-    width: 30%;
-     &:hover{
-        color: color.$blueLight;
-     }
+.button_sign_up {
+  width: 30%;
+  &:hover {
+    color: color.$blueLight;
+  }
 }
