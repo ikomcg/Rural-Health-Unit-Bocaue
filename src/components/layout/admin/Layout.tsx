@@ -1,17 +1,24 @@
 import SideBar from "./SideBar";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import Calendar from "../Calendar";
 import style from "./style.module.scss";
 import "../calendar.scss";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserProvider } from "../../../context/UserProvider";
 const AdminLayout = () => {
-   const{cookies} = useContext(UserProvider)
-   const navigate = useNavigate()
-   return (
-      !cookies?.role.includes("admin") ?
-      navigate('/')
-      :
+   const { cookies } = useContext(UserProvider);
+   const navigate = useNavigate();
+   const url = window.location.pathname;
+
+   useEffect(() => {
+      if (url === "/patient" && cookies) {
+         navigate("/patient/home");
+      }
+   }, [url]);
+
+   return !cookies ? (
+      Navigate({ to: "/" })
+   ) : (
       <div className={style.container}>
          <SideBar />
          <div className="w-[65%]">

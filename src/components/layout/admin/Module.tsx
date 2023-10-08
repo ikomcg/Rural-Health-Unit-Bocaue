@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { MdOutlineInventory } from "react-icons/md";
 import { TbReportSearch } from "react-icons/tb";
 import { FaUsers } from "react-icons/fa";
-import style from "./style.module.scss"
+import style from "./style.module.scss";
 const Module = () => {
    const Menu = [
       {
@@ -44,15 +44,21 @@ const Module = () => {
          link: "patient",
       },
    ];
+
+   const link = window.location.pathname;
+
    return (
       <ul className={style.module}>
          {Menu.map((item, i) => {
             return (
-               <li key={item.name+i} >
-                  <a href={item.link}>
-                    {item.icon}
-                    <Link to={item.link}>{item.name}</Link>
-                  </a>
+               <li
+                  key={item.name + i}
+                  className={link.includes(item.link) ? style.active_lnk : ""}
+               >
+                  <Link to={item.link}>
+                     {item.icon}
+                     {item.name}
+                  </Link>
                </li>
             );
          })}

@@ -3,13 +3,14 @@
     display: flex;
     align-items: center;
 
-    padding: 10px 0;
+    padding: 10px;
     background-color: color.$blue;
     color:  #ffffff;
 
     img{
-        width: 70px;
+        width: 60px;
         margin-right: 10px;
+        clip-path: circle();
     }
     
     h2{

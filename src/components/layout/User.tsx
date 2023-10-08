@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 const User = () => {
    const { cookies, deleteCookies } = useContext(UserProvider);
+
+   const profile = cookies?.profile !== "" ? cookies?.profile : "/image/profile.png"
    const navigate = useNavigate();
    const LogOut = async () => {
       const logout = await SignOutFireBase();
@@ -26,7 +28,7 @@ const User = () => {
 
    return (
       <div className={style.user_nav}>
-         <img src="/image/profile.png" alt="" />
+         <img src={profile} alt="" />
          <h2>
             {cookies?.last_name}, {cookies?.first_name} {cookies?.middle_name}
             <span>
