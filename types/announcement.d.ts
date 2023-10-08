@@ -1,5 +1,5 @@
 
-type NewsType = {
+type AnnouncementType = {
     id : string
     user : {
         name : string,
@@ -12,3 +12,6 @@ type NewsType = {
 
 
 }
+type CreateAnnouncementType = {
+    images? : string[]
+} & Pick<AnnouncementType, "descriptions" | "user">

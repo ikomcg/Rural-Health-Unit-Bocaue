@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { db } from "../firebase/Base";
 
 const NewsFetch = () => {
-   const [news, setNews] = useState<NewsType[] | null>();
+   const [news, setNews] = useState<AnnouncementType[] | null>();
    useEffect(() => {
       GetNews();
    }, []);
@@ -27,7 +27,7 @@ const NewsFetch = () => {
                   id: doc.id,
                   created_at,
                };
-            }) as NewsType[];
+            }) as AnnouncementType[];
             setNews(data);
          },
          (error) => {

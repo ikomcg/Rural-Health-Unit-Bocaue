@@ -21,7 +21,7 @@ const AdminLayout = () => {
    ) : (
       <div className={style.container}>
          <SideBar />
-         <div className="w-[65%]">
+         <div className="w-[65%] overflow-y-auto">
             <Outlet />
          </div>
          <div className="rgth_cldr w-[20%]">
