@@ -1,4 +1,10 @@
-import React, { SetStateAction, useContext, useRef, useState } from "react";
+import React, {
+   SetStateAction,
+   useContext,
+   useEffect,
+   useRef,
+   useState,
+} from "react";
 import DialogSlide from "../../components/mui/dialog/SlideModal";
 import { AiFillCloseCircle } from "react-icons/ai";
 import style from "./Style.module.scss";
@@ -13,7 +19,7 @@ import {
    uploadBytesResumable,
    getDownloadURL,
 } from "firebase/storage";
-   
+
 type PostType = {
    isPost: boolean;
    setIsPost: React.Dispatch<SetStateAction<boolean>>;
@@ -51,7 +57,7 @@ const Post = ({ isPost, setIsPost }: PostType) => {
       setIsPost(false);
    };
 
-   const OnChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+   const OnChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
       const { files } = e.target;
 
       if (!files || files.length === 0) return;
@@ -62,7 +68,8 @@ const Post = ({ isPost, setIsPost }: PostType) => {
          setImages((prev) => [
             ...prev.concat({ id, url: _url, link: "", status: "uploading" }),
          ]);
-         UploadFile(files[0], id);
+
+         await UploadFile(files[i], id);
       }
 
       if (!inputRef.current) return;
@@ -82,7 +89,7 @@ const Post = ({ isPost, setIsPost }: PostType) => {
       const storageRef = ref(storage, "announcement/" + file.name);
       const uploadTask = uploadBytesResumable(storageRef, file, metadata);
 
-      await uploadTask.on(
+      uploadTask.on(
          "state_changed",
          (snapshot) => {
             const progress =
@@ -218,6 +225,7 @@ const Post = ({ isPost, setIsPost }: PostType) => {
                   id="image"
                   className="hidden"
                   accept="image/*"
+                  multiple
                   onChange={OnChangeFile}
                />
             </label>
