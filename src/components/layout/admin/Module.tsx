@@ -6,7 +6,11 @@ import { MdOutlineInventory } from "react-icons/md";
 import { TbReportSearch } from "react-icons/tb";
 import { FaUsers } from "react-icons/fa";
 import style from "./style.module.scss";
-const Module = () => {
+
+type ModuleType = {
+   isMenu: boolean;
+};
+const Module = ({ isMenu }: ModuleType) => {
    const Menu = [
       {
          name: "Home",
@@ -55,9 +59,12 @@ const Module = () => {
                   key={item.name + i}
                   className={link.includes(item.link) ? style.active_lnk : ""}
                >
-                  <Link to={item.link}>
+                  <Link
+                     to={item.link}
+                     className={isMenu ? style.actve_mnu : style.in_actv_mnu}
+                  >
                      {item.icon}
-                     {item.name}
+                     <span>{item.name}</span>
                   </Link>
                </li>
             );

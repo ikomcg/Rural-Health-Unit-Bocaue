@@ -1,27 +1,34 @@
 import CloseMenu from "../../button/Menu";
 import Module from "./Module";
 import User from "../User";
-import { useState } from "react";
+import style from "./style.module.scss";
 
-const SideBar = () => {
-   const [isMenu, setIsMenu] = useState(false);
+type SideBarType = {
+   isMenu: boolean;
+   setIsMenu: React.Dispatch<React.SetStateAction<boolean>>;
+};
+const SideBar = ({ isMenu, setIsMenu }: SideBarType) => {
    return (
-      <div className="flex flex-col justify-between bg-black w-[20%]">
+      <div
+         className={`flex flex-col justify-between bg-black overflow ${
+            style.menu
+         } ${isMenu ? style.actv_menu : style.inactv_menu}`}
+      >
          <div>
-            <div className="flex  justify-between  items-start text-white p-4">
-               <h1 className="text-xl">
+            <div className={isMenu ? style.actv_header : style.inactv_header}>
+               <h1 className={`text-xl`}>
                   Rural Health Unit
                   <br />
                   <small className="text-sm">Bocaue, Bulacan</small>
                </h1>
                <CloseMenu
-                  disabled={isMenu}
+                  disabled={!isMenu}
                   onClick={() => setIsMenu((prev) => !prev)}
                />
             </div>
-            <Module />
+            <Module isMenu={isMenu} />
          </div>
-         <User />
+         <User isMenu={isMenu} />
       </div>
    );
 };
