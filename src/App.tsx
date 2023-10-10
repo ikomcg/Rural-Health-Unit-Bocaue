@@ -4,6 +4,7 @@ import LandingPage from "./page/LandingPage";
 import AdminLayout from "./components/layout/admin/Layout";
 import UnderConstructionLogo from "./components/logo/UnderConstructionLogo";
 import Announcement from "./page/Announcement/Announcement";
+import Home from "./page/admin/home/Home";
 
 const App = () => {
    return (
@@ -13,6 +14,7 @@ const App = () => {
                <Route index element={<LandingPage />} />
             </Route>
             <Route path="/admin" element={<AdminLayout />}>
+            <Route path="home" element={<Home />} />
                <Route path="announcement" element={<Announcement />} />
 
                <Route
