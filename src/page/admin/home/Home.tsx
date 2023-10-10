@@ -5,6 +5,22 @@ import Chart from "react-apexcharts";
 
 const Home = () => {
    const { cookies } = useContext(UserProvider);
+   const generateDayWiseTimeSeries = (
+      baseval: number,
+      count: number,
+      yrange: { min: number; max: number }
+   ) => {
+      const series = [];
+      for (let i = 0; i < count; i++) {
+         const x = baseval;
+         const y =
+            Math.floor(Math.random() * (yrange.max - yrange.min + 1)) +
+            yrange.min;
+         series.push([x, y]);
+         baseval += 86400000; // 1 day in milliseconds
+      }
+      return series;
+   };
 
    return (
       <>
@@ -15,36 +31,50 @@ const Home = () => {
          <div className="flex flex-row my-10">
             <Card count={150} name="Total Patient" />
             <Card count={25} name="Users" />
-            <Card count={50} name="Covid Case" />
+            <Card count={50} name="Covid Cases" />
          </div>
          <Chart
-            width='99%'
+            width="99%"
             height={500}
             type="area"
             series={[
                {
-                  name: "series1",
-                  data: [31, 40, 28, 51, 42, 109, 100],
+                  name: "Patien",
+                  data: generateDayWiseTimeSeries(
+                     new Date("11 Feb 2017 GMT").getTime(),
+                     20,
+                     {
+                        min: 10,
+                        max: 60,
+                     }
+                  ),
                },
                {
-                  name: "series2",
-                  data: [11, 32, 45, 32, 34, 52, 41],
+                  name: "Users",
+                  data: generateDayWiseTimeSeries(
+                     new Date("11 Feb 2017 GMT").getTime(),
+                     20,
+                     {
+                        min: 10,
+                        max: 20,
+                     }
+                  ),
                },
                {
-                name: "series3",
-                data: [10, 25, 40, 37, 38, 52, 35],
-             },
+                  name: "Covid Cases",
+                  data: generateDayWiseTimeSeries(
+                     new Date("11 Feb 2017 GMT").getTime(),
+                     20,
+                     {
+                        min: 10,
+                        max: 15,
+                     }
+                  ),
+               },
             ]}
             options={{
-               chart: {
-                  height: 350,
-                  type: "area",
-               },
                dataLabels: {
                   enabled: false,
-               },
-               stroke: {
-                  curve: "smooth",
                },
                xaxis: {
                   type: "datetime",
@@ -58,9 +88,34 @@ const Home = () => {
                      "2018-09-19T06:30:00.000Z",
                   ],
                },
+               colors: ["#008FFB", "#00E396", "#CED4DC"],
                tooltip: {
                   x: {
                      format: "dd/MM/yy HH:mm",
+                  },
+               },
+               legend: {
+                  position: "top",
+                  horizontalAlign: "left",
+               },
+               stroke: {
+                  curve: "smooth",
+               },
+               fill: {
+                  type: "gradient",
+                  gradient: {
+                     opacityFrom: 0.6,
+                     opacityTo: 0.8,
+                  },
+               },
+               chart: {
+                  type: "area",
+                  height: 350,
+                  stacked: true,
+                  events: {
+                     selection: function (chart, e) {
+                        console.log(new Date(e.xaxis.min));
+                     },
                   },
                },
             }}
