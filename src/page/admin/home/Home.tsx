@@ -12,13 +12,13 @@ const Home = () => {
             Welcome {cookies?.first_name} {cookies?.middle_name}{" "}
             {cookies?.last_name}!
          </div>
-         <div className="flex flex-row mt-10">
+         <div className="flex flex-row my-10">
             <Card count={150} name="Total Patient" />
             <Card count={25} name="Users" />
             <Card count={50} name="Covid Case" />
          </div>
          <Chart
-            width='100%'
+            width='99%'
             height={500}
             type="area"
             series={[
