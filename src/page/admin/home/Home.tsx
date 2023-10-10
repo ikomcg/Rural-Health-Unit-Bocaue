@@ -11,7 +11,7 @@ const Home = () => {
       yrange: { min: number; max: number }
    ) => {
       const series = [];
-      for (let i = 0; i < count; i++) {
+      for (let i = 0; i <= 15; i++) {
          const x = baseval;
          const y =
             Math.floor(Math.random() * (yrange.max - yrange.min + 1)) +
@@ -41,7 +41,7 @@ const Home = () => {
                {
                   name: "Patien",
                   data: generateDayWiseTimeSeries(
-                     new Date("11 Feb 2017 GMT").getTime(),
+                     new Date("1 Oct 2023 GMT").getTime(),
                      20,
                      {
                         min: 10,
@@ -52,7 +52,7 @@ const Home = () => {
                {
                   name: "Users",
                   data: generateDayWiseTimeSeries(
-                     new Date("11 Feb 2017 GMT").getTime(),
+                     new Date("1 Oct 2023 GMT").getTime(),
                      20,
                      {
                         min: 10,
@@ -63,7 +63,7 @@ const Home = () => {
                {
                   name: "Covid Cases",
                   data: generateDayWiseTimeSeries(
-                     new Date("11 Feb 2017 GMT").getTime(),
+                     new Date("1 Oct 2023 GMT").getTime(),
                      20,
                      {
                         min: 10,
@@ -78,15 +78,6 @@ const Home = () => {
                },
                xaxis: {
                   type: "datetime",
-                  categories: [
-                     "2018-09-19T00:00:00.000Z",
-                     "2018-09-19T01:30:00.000Z",
-                     "2018-09-19T02:30:00.000Z",
-                     "2018-09-19T03:30:00.000Z",
-                     "2018-09-19T04:30:00.000Z",
-                     "2018-09-19T05:30:00.000Z",
-                     "2018-09-19T06:30:00.000Z",
-                  ],
                },
                colors: ["#008FFB", "#00E396", "#CED4DC"],
                tooltip: {
