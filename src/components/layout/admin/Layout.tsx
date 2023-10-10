@@ -6,6 +6,7 @@ import "../calendar.scss";
 import { useContext, useEffect } from "react";
 import { UserProvider } from "../../../context/UserProvider";
 import { useState } from "react";
+import Schedule from "./Schedule";
 
 const AdminLayout = () => {
    const { cookies } = useContext(UserProvider);
@@ -34,6 +35,7 @@ const AdminLayout = () => {
          </div>
          <div className="rgth_cldr w-[20%]">
             <Calendar />
+            <Schedule/>
          </div>
       </div>
    );

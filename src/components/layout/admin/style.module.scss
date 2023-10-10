@@ -1,3 +1,5 @@
+@use "../../../color";
+
 .container {
    display: flex;
    flex-flow: row nowrap;
@@ -70,6 +72,43 @@
    > span {
       &:last-child {
          display: none;
+      }
+   }
+}
+.schedules {
+   display: flex;
+   flex-flow: column nowrap;
+
+   width: 95%;
+   margin: 0 auto;
+
+   h2 {
+      color: color.$blue;
+      font-size: 16px;
+      margin-bottom: 10px;
+   }
+
+   ul {
+      li {
+         font-size: 14px;
+         margin-bottom: 10px;
+         word-spacing: 2px;
+         padding: 3px 0;
+         border-bottom: 1px solid color.$blue;
+
+         cursor: pointer;
+         &:hover {
+            background-color: #cacaca25;
+         }
+      }
+   }
+
+   button {
+      margin-left: auto;
+      color: rgba(128, 128, 128, 0.8);
+
+      &:hover {
+         text-decoration: underline;
       }
    }
 }
