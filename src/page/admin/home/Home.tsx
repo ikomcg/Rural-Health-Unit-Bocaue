@@ -11,7 +11,7 @@ const Home = () => {
       yrange: { min: number; max: number }
    ) => {
       const series = [];
-      for (let i = 0; i <= 15; i++) {
+      for (let i = 0; i <= count; i++) {
          const x = baseval;
          const y =
             Math.floor(Math.random() * (yrange.max - yrange.min + 1)) +
