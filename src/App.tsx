@@ -5,6 +5,9 @@ import AdminLayout from "./components/layout/admin/Layout";
 import UnderConstructionLogo from "./components/logo/UnderConstructionLogo";
 import Announcement from "./page/Announcement/Announcement";
 import Home from "./page/admin/home/Home";
+import ServiceMedicine from "./page/admin/service-medicine/ServiceMedicine";
+import HealthService from "./page/admin/service-medicine/health service/Health Service";
+import Medicines from "./page/admin/service-medicine/medecines/Medecines";
 
 const App = () => {
    return (
@@ -14,8 +17,12 @@ const App = () => {
                <Route index element={<LandingPage />} />
             </Route>
             <Route path="/admin" element={<AdminLayout />}>
-            <Route path="home" element={<Home />} />
+               <Route path="home" element={<Home />} />
                <Route path="announcement" element={<Announcement />} />
+               <Route path="service-medicine" element={<ServiceMedicine />}>
+                  <Route index element={<HealthService />} />
+                  <Route path="medicines" element={<Medicines />} />
+               </Route>
 
                <Route
                   path="*"

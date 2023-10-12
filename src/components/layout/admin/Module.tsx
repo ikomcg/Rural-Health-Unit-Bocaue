@@ -2,8 +2,6 @@ import { AiFillHome, AiFillSchedule } from "react-icons/ai";
 import { BsFillMegaphoneFill } from "react-icons/bs";
 import { GiBattleGear } from "react-icons/gi";
 import { Link } from "react-router-dom";
-import { MdOutlineInventory } from "react-icons/md";
-import { TbReportSearch } from "react-icons/tb";
 import { FaUsers } from "react-icons/fa";
 import style from "./style.module.scss";
 
@@ -26,16 +24,6 @@ const Module = ({ isMenu }: ModuleType) => {
          name: "Service And Medicine",
          icon: <GiBattleGear />,
          link: "service-medicine",
-      },
-      {
-         name: "Inventory",
-         icon: <MdOutlineInventory />,
-         link: "inventory",
-      },
-      {
-         name: "Report",
-         icon: <TbReportSearch />,
-         link: "report",
       },
       {
          name: "Schedule",
