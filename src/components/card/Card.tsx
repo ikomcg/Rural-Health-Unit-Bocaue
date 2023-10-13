@@ -7,7 +7,8 @@ type CardType = {
 const Card: React.FC<CardType> = ({ title, bg, ...props }) => {
    return (
       <div className={`${style.container}`} {...props}>
-         <div className={`bg-[url('${bg}')] `}>
+         <div className="relative">
+            <img src={bg} alt="" />
             <h1>{title}</h1>
          </div>
       </div>
