@@ -3,6 +3,7 @@ import style from "./style.module.scss";
 type CardType = {
    title: string;
    bg: string;
+   
 } & React.ComponentProps<"div">;
 const Card: React.FC<CardType> = ({ title, bg, ...props }) => {
    return (

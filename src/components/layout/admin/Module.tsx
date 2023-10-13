@@ -23,7 +23,7 @@ const Module = ({ isMenu }: ModuleType) => {
       {
          name: "Service And Medicine",
          icon: <GiBattleGear />,
-         link: "service-medicine",
+         link: "service-medicine/health-services",
       },
       {
          name: "Schedule",

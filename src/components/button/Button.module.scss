@@ -7,10 +7,11 @@
 .blue_btn {
   background-color: color.$blue;
   color: "black";
-  border: 1px solid color.$blue !important;
+  border: 1px solid color.$blue;
 }
 .action_btn {
   &:hover {
+    border: 1px solid white;
     background-color: rgba(45, 161, 250, 0.684);
   }
 }
@@ -18,7 +19,6 @@
   background-color: red;
   color: white;
   transition-duration: 150ms;
-  // font-size: 1rem;
   padding: 0.6em 1.5em;
   border-radius: 0.3rem;
   font-weight: 600;

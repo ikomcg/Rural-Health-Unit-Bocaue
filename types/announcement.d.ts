@@ -8,7 +8,7 @@ type AnnouncementType = {
     }
     images : string[]
     descriptions : string
-    created_at : any
+    created_at : unknown
 
 
 }

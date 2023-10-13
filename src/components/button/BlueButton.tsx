@@ -1,7 +1,7 @@
 import React from "react";
 import btn_style from "./Button.module.scss";
 
-type BlueButtonType = {} & React.ComponentProps<"button">;
+type BlueButtonType = object & React.ComponentProps<"button">;
 
 export const BlueButton = (props: BlueButtonType) => {
   const { disabled, children, className, ...cleanProps } = props;

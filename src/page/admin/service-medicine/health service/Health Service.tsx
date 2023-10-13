@@ -1,29 +1,21 @@
 import style from "./style.module.scss";
 import Card from "../../../../components/card/Card";
+import useFetchService from "../../../../hooks/Service";
 
 const HealthService = () => {
+   const service = useFetchService();
+
    return (
       <div className={style.card}>
-         <Card
-            title="General Consultations"
-            bg="/image/service-medicine/general_consultation.jpg"
-         ></Card>
-         <Card
-            title="Family Planning"
-            bg="/image/service-medicine/general_consultation.jpg"
-         ></Card>
-         <Card
-            title="Laboratory Examinations"
-            bg="/image/service-medicine/general_consultation.jpg"
-         ></Card>
-         <Card
-            title="Communication Desease"
-            bg="/image/service-medicine/general_consultation.jpg"
-         ></Card>
-         <Card
-            title="Dental Services"
-            bg="/image/service-medicine/general_consultation.jpg"
-         ></Card>
+         {service === undefined ? (
+            <h1 className="w-full text-center text-gray-400">Loading...</h1>
+         ) : service === null ? (
+            <h1 className="text-center text-gray-400">Something went wrong</h1>
+         ) : (
+            service.map((item) => (
+               <Card key={item.id} title={item.name} bg={item.image} />
+            ))
+         )}
       </div>
    );
 };
