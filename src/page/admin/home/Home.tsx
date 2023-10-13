@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { UserProvider } from "../../../context/UserProvider";
 import style from "./style.module.scss";
 import Chart from "react-apexcharts";
-import Container from "../../../components/container/Container";
 
 type CardType = {
    count: number;
