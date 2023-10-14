@@ -1,15 +1,15 @@
 import { useParams } from "react-router-dom";
-import Table from "../../../../../components/table/Table";
-import useFetchSchedulesService from "../../../../../hooks/Schedule";
+import Table from "../../../../../../components/table/Table";
+import useFetchSchedulesService from "../../../../../../hooks/Schedule";
 import { CircularProgress } from "@mui/material";
 import moment from "moment";
 import { FaTrash } from "react-icons/fa";
 import { AiFillEdit } from "react-icons/ai";
 import { deleteDoc, doc } from "firebase/firestore";
-import { db } from "../../../../../firebase/Base";
+import { db } from "../../../../../../firebase/Base";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
-import Pagination from "../../../../../components/pagination/Pagination";
+import Pagination from "../../../../../../components/pagination/Pagination";
 const Doctors = () => {
    const { id } = useParams();
    const doctors = useFetchSchedulesService({ id: id });

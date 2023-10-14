@@ -1,14 +1,14 @@
 import React, { SetStateAction, useEffect, useState } from "react";
 import style from "../style.module.scss";
-import useFetchDoctors from "../../../../../hooks/Doctors";
+import useFetchDoctors from "../../../../../../hooks/Doctors";
 import { useParams } from "react-router-dom";
-import DialogSlide from "../../../../../components/mui/dialog/SlideModal";
+import DialogSlide from "../../../../../../components/mui/dialog/SlideModal";
 import { AiFillCloseCircle } from "react-icons/ai";
-import { BlueButton } from "../../../../../components/button/BlueButton";
+import { BlueButton } from "../../../../../../components/button/BlueButton";
 import { MdAssignmentAdd, MdOutlineRemoveCircleOutline } from "react-icons/md";
 import uuid from "react-uuid";
-import { TimeStampValue } from "../../../../../shared/TimeStamp";
-import { CreateServiceScheduleFrb } from "../../../../../firebase/Service/Create";
+import { TimeStampValue } from "../../../../../../shared/TimeStamp";
+import { CreateServiceScheduleFrb } from "../../../../../../firebase/Service/Create";
 import Swal from "sweetalert2";
 
 type PostType = {
@@ -40,7 +40,7 @@ const AddDoctors = ({ isPost, setIsPost }: PostType) => {
    ]);
 
    const OnClose = () => {
-    //   if (isCreate) return;
+      //   if (isCreate) return;
       setIsPost(false);
    };
 

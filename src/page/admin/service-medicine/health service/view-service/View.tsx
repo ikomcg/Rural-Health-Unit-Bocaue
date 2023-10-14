@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
-import Doctors from "./Doctors";
+import Doctors from "./doctors/Doctors";
 import { BlueButton } from "../../../../../components/button/BlueButton";
 import Request from "./view-request/Requests";
 import { useState } from "react";
-import AddDoctors from "./AddDoctors";
+import AddDoctors from "./doctors/AddDoctors";
 
 const ViewService = () => {
    const { name } = useParams();
