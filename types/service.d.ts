@@ -13,3 +13,11 @@ type ScheduleService = {
    available_to: any;
    created_at: any;
 };
+
+type RequestService = {
+   id: string;
+   name: string;
+   request_date: any;
+   created_at: any;
+   status :  "pending" | "accept" | "decline"
+};

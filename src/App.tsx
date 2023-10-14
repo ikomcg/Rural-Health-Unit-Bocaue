@@ -8,7 +8,7 @@ import Home from "./page/admin/home/Home";
 import ServiceMedicine from "./page/admin/service-medicine/ServiceMedicine";
 import HealthService from "./page/admin/service-medicine/health service/Health Service";
 import Medicines from "./page/admin/service-medicine/medecines/Medecines";
-import ViewService from "./page/admin/service-medicine/health service/view/View";
+import ViewService from "./page/admin/service-medicine/health service/view-service/View";
 
 const App = () => {
    return (

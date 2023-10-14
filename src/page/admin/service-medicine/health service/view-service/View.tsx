@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import useFetchDoctors from "../../../../../hooks/Doctors";
 import { BlueButton } from "../../../../../components/button/BlueButton";
 import { TimeStampValue } from "../../../../../shared/TimeStamp";
+import Request from "./view-request/Requests";
 
 const ViewService = () => {
    const { name, id } = useParams();
@@ -128,6 +129,8 @@ const ViewService = () => {
          </BlueButton>
 
          <Doctors />
+         <br />
+         <Request />
       </div>
    );
 };
