@@ -11,6 +11,10 @@ import Medicines from "./page/admin/service-medicine/medecines/Medecines";
 import ViewService from "./page/admin/service-medicine/health service/view-service/View";
 import HomePatient from "./page/patient/home/Home";
 import PatientLayout from "./components/layout/patient/Layout";
+import PatientServiceMedicine from "./page/patient/service-medicine/ServiceMedicine";
+import PatientHealthService from "./page/patient/service-medicine/health service/Health Service";
+import PatientViewService from "./page/patient/service-medicine/health service/view-service/View";
+import PatientMedicines from "./page/patient/service-medicine/medecines/Medecines";
 
 const App = () => {
    return (
@@ -42,6 +46,17 @@ const App = () => {
             </Route>
             <Route path="patient" element={<PatientLayout />}>
                <Route path="home" element={<HomePatient />} />
+               <Route
+                  path="service-medicine"
+                  element={<PatientServiceMedicine />}
+               >
+                  <Route path="health-services">
+                     <Route index element={<PatientHealthService />} />
+                     <Route path=":name/:id" element={<PatientViewService />} />
+                  </Route>
+
+                  <Route path="medicines" element={<PatientMedicines />} />
+               </Route>
                <Route
                   path="*"
                   element={

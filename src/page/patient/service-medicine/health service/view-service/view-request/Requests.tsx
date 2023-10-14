@@ -5,10 +5,6 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import Pagination from "../../../../../../components/pagination/Pagination";
 import useFetchRequest from "../../../../../../hooks/Request";
-import { BlueButton } from "../../../../../../components/button/BlueButton";
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "../../../../../../firebase/Base";
-import { RedButton } from "../../../../../../components/button/RedButton";
 const Request = () => {
    const { id } = useParams();
    const doctors = useFetchRequest({ id: id });
@@ -30,20 +26,10 @@ const Request = () => {
       SlicePagination();
    }, [currentPage, doctors]);
 
-   const OnChangeStatus = async (requestID: string, status: string) => {
-      if (!id) return;
-
-      await updateDoc(doc(db, "service", id, "requests", requestID), { status })
-         .then(() => {})
-         .catch((err) => {
-            console.log("sending message error", err);
-         });
-   };
-
    return (
       <>
-         <h1 className="text-blue text-2xl mt-10">Patient's Request</h1>
-         <Table th={["Patient", "Date Schedule", "Action"]}>
+         <h1 className="text-blue text-2xl mt-10">Your's Request</h1>
+         <Table th={["Patient", "Date Schedule", "Status"]}>
             {sliceDoctors === undefined ? (
                <tr>
                   <td className="text-center" colSpan={3}>
@@ -74,18 +60,10 @@ const Request = () => {
                            .utcOffset(8)
                            .format("LLL")}
                      </td>
-                     <td className="flex flex-col gap-2 justify-center items-center">
-                        <BlueButton
-                           disabled={item.status === "accept"}
-                           onClick={() => OnChangeStatus(item.id, "accept")}
-                        >
-                           Accept
-                        </BlueButton>
-                        <RedButton
-                           onClick={() => OnChangeStatus(item.id, "decline")}
-                        >
-                           Decline
-                        </RedButton>
+                     <td>
+                        <span className="bg-[gray] text-sm text-slate-100 px-2 py-1 rounded">
+                           {item.status.toLocaleUpperCase()}
+                        </span>
                      </td>
                   </tr>
                ))
