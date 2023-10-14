@@ -33,7 +33,7 @@ export const CreateServiceFrb = async ({ data }: CreateService) => {
 type CreateServiceSchedule = {
    id: string;
    data: {
-      id : string
+      user_id: string;
       name: string;
       available_from: Timestamp;
       available_to: Timestamp;

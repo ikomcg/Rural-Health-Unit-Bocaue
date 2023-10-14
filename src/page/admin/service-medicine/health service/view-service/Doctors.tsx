@@ -39,8 +39,8 @@ const Doctors = () => {
          if (doctors === null) return setSliceDoctors(null);
 
          const page = currentPage + 1;
-         const lastPostIndex = page * 5;
-         const firstPostIndex = lastPostIndex - 5;
+         const lastPostIndex = page * 10;
+         const firstPostIndex = lastPostIndex - 10;
 
          const currentPost = doctors?.slice(firstPostIndex, lastPostIndex);
          setSliceDoctors(currentPost);
@@ -112,7 +112,7 @@ const Doctors = () => {
 
          {doctors && (
             <Pagination
-               limit={5}
+               limit={10}
                count={doctors.length}
                currentPage={currentPage}
                setCurrentPage={setCurrentPage}

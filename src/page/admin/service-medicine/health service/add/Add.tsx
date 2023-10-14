@@ -104,9 +104,9 @@ const NewService = ({ isPost, setIsPost }: PostType) => {
    const CreateService = async () => {
       setIsCreate(true);
       const _image =
-         image.url === ""
+         image.link === ""
             ? "https://firebasestorage.googleapis.com/v0/b/rural-health-unit-72880.appspot.com/o/medecines%2F22.webp?alt=media&token=b87d6565-432c-44c4-b0c6-2c88bb556600&_gl=1*1xh88mo*_ga*MzM1MjM3ODExLjE2ODk0MDg3NjA.*_ga_CW55HF8NVT*MTY5NzI0NDY0OC45MC4xLjE2OTcyNDc3OTMuNDUuMC4w"
-            : image.url;
+            : image.link;
       const create = await CreateServiceFrb({
          data: {
             name: title,
