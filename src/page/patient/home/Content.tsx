@@ -12,7 +12,7 @@ const Content = ({ item }: ContentType) => {
 
    return (
       <div
-         className={`flex flex-col w-[60%] border border-1 border-gray-400 rounded-lg pt-5 overflow-hidden mb-3 py-10`}
+         className={`flex flex-col w-[75%] border border-1 border-gray-400 rounded-lg pt-5 overflow-hidden mb-3 py-10`}
       >
          <div className="flex items-center gap-2 px-3 h-[10%] ">
             <img className={`${style.profile_img}`} src={item.user.profile} />
