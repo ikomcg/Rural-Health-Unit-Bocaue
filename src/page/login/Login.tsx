@@ -88,6 +88,8 @@ const Login = ({ open, setOpen }: LoginType) => {
 
          if (set_cookie.role.includes("admin")) {
             navigate("/admin/home");
+         }else{
+            navigate("/patient/home");
          }
       }
 
