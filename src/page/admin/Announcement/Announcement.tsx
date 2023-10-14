@@ -3,7 +3,7 @@ import { BsGear } from "react-icons/bs";
 import { useState } from "react";
 
 import Post from "./Post";
-import Container from "../../components/container/Container";
+import Container from "../../../components/container/Container";
 
 const Announcement = () => {
    const [isPost, setIsPost] = useState(false);

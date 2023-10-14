@@ -5,7 +5,7 @@ import "./GridStyle.scss";
 import moment from "moment";
 import BasicMenu from "./Menu";
 import React, { useContext } from "react";
-import { UserProvider } from "../../context/UserProvider";
+import { UserProvider } from "../../../context/UserProvider";
 
 type ContentType = {
    item: AnnouncementType;

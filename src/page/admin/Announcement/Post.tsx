@@ -1,10 +1,10 @@
 import React, { SetStateAction, useContext, useRef, useState } from "react";
-import DialogSlide from "../../components/mui/dialog/SlideModal";
+import DialogSlide from "../../../components/mui/dialog/SlideModal";
 import { AiFillCloseCircle } from "react-icons/ai";
 import style from "./Style.module.scss";
-import { UserProvider } from "../../context/UserProvider";
-import { BlueButton } from "../../components/button/BlueButton";
-import { CreateAnnouncementsFrb } from "../../firebase/Announcement/Create";
+import { UserProvider } from "../../../context/UserProvider";
+import { BlueButton } from "../../../components/button/BlueButton";
+import { CreateAnnouncementsFrb } from "../../../firebase/Announcement/Create";
 import Swal from "sweetalert2";
 import uuid from "react-uuid";
 import {
