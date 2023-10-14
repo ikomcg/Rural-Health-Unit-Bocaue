@@ -1,5 +1,5 @@
 import React, { SetStateAction, useEffect, useState } from "react";
-import style from "../style.module.scss";
+import style from "../../style.module.scss";
 import useFetchDoctors from "../../../../../../hooks/Doctors";
 import { useParams } from "react-router-dom";
 import DialogSlide from "../../../../../../components/mui/dialog/SlideModal";
