@@ -8,6 +8,7 @@ import Home from "./page/admin/home/Home";
 import ServiceMedicine from "./page/admin/service-medicine/ServiceMedicine";
 import HealthService from "./page/admin/service-medicine/health service/Health Service";
 import Medicines from "./page/admin/service-medicine/medecines/Medecines";
+import ViewService from "./page/admin/service-medicine/health service/view/View";
 
 const App = () => {
    return (
@@ -20,7 +21,11 @@ const App = () => {
                <Route path="home" element={<Home />} />
                <Route path="announcement" element={<Announcement />} />
                <Route path="service-medicine" element={<ServiceMedicine />}>
-                  <Route path="health-services" element={<HealthService />} />
+                  <Route path="health-services">
+                     <Route index element={<HealthService />} />
+                     <Route path=":name/:id" element={<ViewService />} />
+                  </Route>
+
                   <Route path="medicines" element={<Medicines />} />
                </Route>
 
