@@ -137,7 +137,7 @@ const AddDoctors = ({ isPost, setIsPost }: PostType) => {
       >
          <div className="p-5">
             <div className={style.header_post}>
-               <h1>Medecines</h1>
+               <h1>Add Medecines</h1>
                <button type="button" onClick={OnClose}>
                   <AiFillCloseCircle />
                </button>
