@@ -68,7 +68,7 @@ const Request = () => {
             <h1 className="text-blue text-2xl ">Patient's Request</h1>
             <div className="flex flex-row items-center w-[40%]">
                <button
-                  className="text-white bg-blue text-xl px-2 py-[6.5px] rounded-l border border-blue"
+                  className="text-white bg-blue text-xl px-2 py-[6px] rounded-l border border-blue"
                   onClick={HandleRefresh}
                >
                   <AiOutlineSearch />
