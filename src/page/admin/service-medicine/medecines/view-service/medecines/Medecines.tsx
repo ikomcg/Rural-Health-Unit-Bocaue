@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import Table from "../../../../../../components/table/Table";
 import { CircularProgress } from "@mui/material";
 import { FaTrash } from "react-icons/fa";
-import { AiFillEdit } from "react-icons/ai";
+import { AiFillEdit, AiOutlineSearch } from "react-icons/ai";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../../../../../firebase/Base";
 import Swal from "sweetalert2";
@@ -35,24 +35,60 @@ const Medecines = () => {
    const [sliceMedecines, setSliceMedecines] = useState<
       MedecineList[] | null
    >();
+   const [search, setSearch] = useState("");
+   const [refresh, setRefresh] = useState(false);
+   const [pages, setPages] = useState(0);
 
    useEffect(() => {
       const SlicePagination = () => {
          if (medecines === null) return setSliceMedecines(null);
+         if (medecines === undefined) return;
+
+         const filterData = medecines.filter((item) =>
+            item.name
+               .trim()
+               .toLocaleLowerCase()
+               .includes(search.toLocaleLowerCase().trim())
+         );
+         setPages(filterData.length);
 
          const page = currentPage + 1;
          const lastPostIndex = page * 10;
          const firstPostIndex = lastPostIndex - 10;
 
-         const currentPost = medecines?.slice(firstPostIndex, lastPostIndex);
+         const currentPost = filterData?.slice(firstPostIndex, lastPostIndex);
          setSliceMedecines(currentPost);
       };
 
       SlicePagination();
-   }, [currentPage, medecines]);
-
+   }, [currentPage, medecines, refresh]);
+   const HandleRefresh = () => {
+      setCurrentPage(0);
+      setRefresh((prev) => !prev);
+   };
    return (
       <>
+         <div className="flex flex-row justify-end mt-2">
+            <button
+               className="text-white bg-blue text-xl px-2 py-[4px] rounded-l border border-blue"
+               onClick={HandleRefresh}
+            >
+               <AiOutlineSearch />
+            </button>
+            <input
+               type="text"
+               placeholder="Search...."
+               className="border border-blue px-2 py-1 rounded-r w-1/3"
+               style={{ outline: "none" }}
+               value={search}
+               onChange={(e) => setSearch(e.target.value)}
+               onKeyDown={(e) => {
+                  if (e.code === "Enter") {
+                     HandleRefresh();
+                  }
+               }}
+            />
+         </div>
          <Table th={["Medecines", "Descriptions", "Stock", "Action"]}>
             {sliceMedecines === undefined ? (
                <tr>
@@ -100,7 +136,7 @@ const Medecines = () => {
          {medecines && (
             <Pagination
                limit={10}
-               count={medecines.length}
+               count={pages}
                currentPage={currentPage}
                setCurrentPage={setCurrentPage}
                className="mt-3"

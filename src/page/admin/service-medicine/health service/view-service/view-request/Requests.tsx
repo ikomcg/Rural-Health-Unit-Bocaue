@@ -10,26 +10,43 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../../firebase/Base";
 import { RedButton } from "../../../../../../components/button/RedButton";
 import Swal from "sweetalert2";
+import { AiOutlineSearch } from "react-icons/ai";
 const Request = () => {
    const { id } = useParams();
-   const doctors = useFetchRequest({ id: id });
+   const requests = useFetchRequest({ id: id });
    const [currentPage, setCurrentPage] = useState(0);
-   const [sliceDoctors, setSliceDoctors] = useState<RequestService[] | null>();
+   const [sliceRequest, setSliceRequest] = useState<RequestService[] | null>();
+   const [search, setSearch] = useState("");
+   const [refresh, setRefresh] = useState(false);
+   const [pages, setPages] = useState(0);
 
    useEffect(() => {
       const SlicePagination = () => {
-         if (doctors === null) return setSliceDoctors(null);
+         if (requests === null) return setSliceRequest(null);
+         if (requests === undefined) return;
 
+         const filterData = requests.filter((item) =>
+            item.patient_name
+               .trim()
+               .toLocaleLowerCase()
+               .includes(search.toLocaleLowerCase().trim())
+         );
+         setPages(filterData.length);
          const page = currentPage + 1;
-         const lastPostIndex = page * 5;
-         const firstPostIndex = lastPostIndex - 5;
+         const lastPostIndex = page * 10;
+         const firstPostIndex = lastPostIndex - 10;
 
-         const currentPost = doctors?.slice(firstPostIndex, lastPostIndex);
-         setSliceDoctors(currentPost);
+         const currentPost = filterData?.slice(firstPostIndex, lastPostIndex);
+         setSliceRequest(currentPost);
       };
 
       SlicePagination();
-   }, [currentPage, doctors]);
+   }, [currentPage, requests, refresh]);
+
+   const HandleRefresh = () => {
+      setCurrentPage(0);
+      setRefresh((prev) => !prev);
+   };
 
    const OnChangeStatus = async (requestID: string, status: string) => {
       if (!id) return;
@@ -46,9 +63,33 @@ const Request = () => {
 
    return (
       <>
-         <h1 className="text-blue text-2xl mt-10">Patient's Request</h1>
+         <div className="flex flex-row justify-between items-center mt-10">
+            <h1 className="text-blue text-2xl ">Patient's Request</h1>
+            <div className="flex flex-row items-center w-[40%]">
+               <button
+                  className="text-white bg-blue text-xl px-2 py-[6.5px] rounded-l border border-blue"
+                  onClick={HandleRefresh}
+               >
+                  <AiOutlineSearch />
+               </button>
+               <input
+                  type="text"
+                  placeholder="Search...."
+                  className="border border-blue px-2 py-1 rounded-r w-[90%]"
+                  style={{ outline: "none" }}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  onKeyDown={(e) => {
+                     if (e.code === "Enter") {
+                        HandleRefresh();
+                     }
+                  }}
+               />
+            </div>
+         </div>
+
          <Table th={["Patient", "Date Schedule", "Action"]}>
-            {sliceDoctors === undefined ? (
+            {sliceRequest === undefined ? (
                <tr>
                   <td className="text-center" colSpan={3}>
                      <div className="flex flex-col justify-center items-center">
@@ -57,20 +98,20 @@ const Request = () => {
                      </div>
                   </td>
                </tr>
-            ) : sliceDoctors === null ? (
+            ) : sliceRequest === null ? (
                <tr>
                   <td className="text-sm" colSpan={3}>
                      Error Get Request List!!
                   </td>
                </tr>
-            ) : sliceDoctors.length === 0 ? (
+            ) : sliceRequest.length === 0 ? (
                <tr>
                   <td className="text-sm" colSpan={3}>
                      No Request found
                   </td>
                </tr>
             ) : (
-               sliceDoctors.map((item) => (
+               sliceRequest.map((item) => (
                   <tr key={item.id}>
                      <td>{item.patient_name}</td>
                      <td>
@@ -96,10 +137,10 @@ const Request = () => {
             )}
          </Table>
 
-         {doctors && (
+         {requests && (
             <Pagination
                limit={5}
-               count={doctors.length}
+               count={pages}
                currentPage={currentPage}
                setCurrentPage={setCurrentPage}
                className="mt-3"

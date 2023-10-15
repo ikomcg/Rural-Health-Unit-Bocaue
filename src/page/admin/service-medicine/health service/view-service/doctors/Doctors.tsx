@@ -4,7 +4,7 @@ import useFetchSchedulesService from "../../../../../../hooks/Schedule";
 import { CircularProgress } from "@mui/material";
 import moment from "moment";
 import { FaTrash } from "react-icons/fa";
-import { AiFillEdit } from "react-icons/ai";
+import { AiFillEdit, AiOutlineSearch } from "react-icons/ai";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../../../../../firebase/Base";
 import Swal from "sweetalert2";
@@ -32,25 +32,61 @@ const Doctors = () => {
    };
 
    const [currentPage, setCurrentPage] = useState(0);
+   const [pages, setPages] = useState(0);
    const [sliceDoctors, setSliceDoctors] = useState<ScheduleService[] | null>();
-
+   const [search, setSearch] = useState("");
+   const [refresh, setRefresh] = useState(false);
    useEffect(() => {
       const SlicePagination = () => {
          if (doctors === null) return setSliceDoctors(null);
+         if (doctors === undefined) return;
 
+         const filterData = doctors.filter((item) =>
+            item.name
+               .trim()
+               .toLocaleLowerCase()
+               .includes(search.toLocaleLowerCase().trim())
+         );
+         setPages(filterData.length);
          const page = currentPage + 1;
          const lastPostIndex = page * 10;
          const firstPostIndex = lastPostIndex - 10;
 
-         const currentPost = doctors?.slice(firstPostIndex, lastPostIndex);
+         const currentPost = filterData?.slice(firstPostIndex, lastPostIndex);
          setSliceDoctors(currentPost);
       };
 
       SlicePagination();
-   }, [currentPage, doctors]);
+   }, [currentPage, doctors, refresh]);
+
+   const HandleRefresh = () => {
+      setCurrentPage(0);
+      setRefresh((prev) => !prev);
+   };
 
    return (
       <>
+         <div className="flex flex-row justify-end mt-2">
+            <button
+               className="text-white bg-blue text-xl px-2 py-[4px] rounded-l border border-blue"
+               onClick={HandleRefresh}
+            >
+               <AiOutlineSearch />
+            </button>
+            <input
+               type="text"
+               placeholder="Search...."
+               className="border border-blue px-2 py-1 rounded-r w-1/3"
+               style={{ outline: "none" }}
+               value={search}
+               onChange={(e) => setSearch(e.target.value)}
+               onKeyDown={(e) => {
+                  if (e.code === "Enter") {
+                     HandleRefresh();
+                  }
+               }}
+            />
+         </div>
          <Table
             th={[
                "Health Worker Name",
@@ -113,7 +149,7 @@ const Doctors = () => {
          {doctors && (
             <Pagination
                limit={10}
-               count={doctors.length}
+               count={pages}
                currentPage={currentPage}
                setCurrentPage={setCurrentPage}
                className="mt-3"
