@@ -1,9 +1,10 @@
-import { AiFillHome, AiFillSchedule } from "react-icons/ai";
+import { AiFillHome } from "react-icons/ai";
 import { BsFillMegaphoneFill } from "react-icons/bs";
 import { GiBattleGear } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import { FaUsers } from "react-icons/fa";
 import style from "./style.module.scss";
+import { MdHealthAndSafety } from "react-icons/md";
 
 type ModuleType = {
    isMenu: boolean;
@@ -26,8 +27,8 @@ const Module = ({ isMenu }: ModuleType) => {
          link: "service-medicine/health-services",
       },
       {
-         name: "Schedule",
-         icon: <AiFillSchedule />,
+         name: "Health Workers",
+         icon: <MdHealthAndSafety />,
          link: "schedule",
       },
       {

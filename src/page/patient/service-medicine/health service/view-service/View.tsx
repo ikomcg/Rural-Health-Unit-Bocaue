@@ -10,7 +10,7 @@ const ViewService = () => {
          <div className="flex flex-col">
             <h1 className="text-blue text-2xl mt-10">{name}</h1>
             <Doctors />
-            <br />
+            <hr className="mt-10 border border-blue" />
             <Request />
          </div>
       </>

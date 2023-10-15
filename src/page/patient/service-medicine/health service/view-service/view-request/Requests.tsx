@@ -2,15 +2,19 @@ import { useParams } from "react-router-dom";
 import Table from "../../../../../../components/table/Table";
 import { CircularProgress } from "@mui/material";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Pagination from "../../../../../../components/pagination/Pagination";
-import useFetchRequest from "../../../../../../hooks/Request";
+import { BlueButton } from "../../../../../../components/button/BlueButton";
+import AddRequest from "./add/Add";
+import useFetchMyRequest from "../../../../../../hooks/MyRequest";
+import { UserProvider } from "../../../../../../context/UserProvider";
 const Request = () => {
    const { id } = useParams();
-   const doctors = useFetchRequest({ id: id });
+   const { cookies } = useContext(UserProvider);
+   const doctors = useFetchMyRequest({ id: id, user_id: cookies?.id });
    const [currentPage, setCurrentPage] = useState(0);
    const [sliceDoctors, setSliceDoctors] = useState<RequestService[] | null>();
-
+   const [isOpen, setIsOpen] = useState(false);
    useEffect(() => {
       const SlicePagination = () => {
          if (doctors === null) return setSliceDoctors(null);
@@ -28,8 +32,13 @@ const Request = () => {
 
    return (
       <>
-         <h1 className="text-blue text-2xl mt-10">Your's Request</h1>
-         <Table th={["Patient", "Date Schedule", "Status"]}>
+         <div className="flex flex-row items-center mt-10">
+            <h1 className="text-blue text-2xl">Your's Request</h1>
+            <BlueButton className="ml-auto" onClick={() => setIsOpen(true)}>
+               Add Request
+            </BlueButton>
+         </div>
+         <Table th={["Date Schedule", "Status"]}>
             {sliceDoctors === undefined ? (
                <tr>
                   <td className="text-center" colSpan={3}>
@@ -54,7 +63,6 @@ const Request = () => {
             ) : (
                sliceDoctors.map((item) => (
                   <tr key={item.id}>
-                     <td>{item.name}</td>
                      <td>
                         {moment(item.request_date.toISOString())
                            .utcOffset(8)
@@ -79,6 +87,8 @@ const Request = () => {
                className="mt-3"
             />
          )}
+
+         {isOpen && <AddRequest isPost={isOpen} setIsPost={setIsOpen} />}
       </>
    );
 };

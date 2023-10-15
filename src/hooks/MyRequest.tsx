@@ -1,4 +1,5 @@
 import {
+   and,
    collection,
    onSnapshot,
    orderBy,
@@ -10,21 +11,22 @@ import { db } from "../firebase/Base";
 
 type RerquestType = {
    id: string | undefined;
+   user_id: string | undefined;
 };
 
-const useFetchRequest = ({ id }: RerquestType) => {
+const useFetchMyRequest = ({ id, user_id }: RerquestType) => {
    const [requests, setRequests] = useState<RequestService[] | null>();
    useEffect(() => {
       if (!id) return;
       GetRequests();
-   }, [id]);
+   }, [id, user_id]);
 
    const GetRequests = async () => {
-      if (!id) return;
+      if (!id || !user_id) return;
 
       const queryDB = query(
-         collection(db, `schedules`),
-         where("service_id", "==", id),
+         collection(db, "schedules"),
+         and(where("patient_id", "==", user_id), where("service_id", "==", id)),
          orderBy("request_date", "asc")
       );
       onSnapshot(
@@ -49,4 +51,4 @@ const useFetchRequest = ({ id }: RerquestType) => {
    return requests;
 };
 
-export default useFetchRequest;
+export default useFetchMyRequest;

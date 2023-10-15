@@ -17,7 +17,6 @@ const LandingPage = () => {
    useEffect(() => {
       const unsubscribe = onAuthStateChanged(auth, (user) => {
          if (user) {
-            console.log("user login", user);
             const ref = doc(db, "users", user.uid);
             onSnapshot(
                ref,
@@ -31,6 +30,12 @@ const LandingPage = () => {
                         ...data,
                         id: snapshot.id,
                      } as UserType;
+
+                     if (cookie.role.includes("admin")) {
+                        navigate("/admin/home");
+                     }else{
+                        navigate("/patient/home");
+                     }
 
                      saveCookies(cookie);
                   } else {

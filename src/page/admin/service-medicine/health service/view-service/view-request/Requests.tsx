@@ -9,6 +9,7 @@ import { BlueButton } from "../../../../../../components/button/BlueButton";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../../firebase/Base";
 import { RedButton } from "../../../../../../components/button/RedButton";
+import Swal from "sweetalert2";
 const Request = () => {
    const { id } = useParams();
    const doctors = useFetchRequest({ id: id });
@@ -33,10 +34,13 @@ const Request = () => {
    const OnChangeStatus = async (requestID: string, status: string) => {
       if (!id) return;
 
-      await updateDoc(doc(db, "service", id, "requests", requestID), { status })
+      await updateDoc(doc(db, "schedules", requestID), { status })
          .then(() => {})
          .catch((err) => {
-            console.log("sending message error", err);
+            Swal.fire({
+               icon: "error",
+               title: err,
+            });
          });
    };
 
@@ -68,7 +72,7 @@ const Request = () => {
             ) : (
                sliceDoctors.map((item) => (
                   <tr key={item.id}>
-                     <td>{item.name}</td>
+                     <td>{item.patient_name}</td>
                      <td>
                         {moment(item.request_date.toISOString())
                            .utcOffset(8)

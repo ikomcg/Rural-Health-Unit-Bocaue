@@ -16,8 +16,11 @@ type ScheduleService = {
 
 type RequestService = {
    id: string;
-   name: string;
+   patient_name: string;
+   patient_id: string;
+   service_id: string;
+   service_name: string;
    request_date: any;
    created_at: any;
-   status :  "pending" | "accept" | "decline"
+   status: "pending" | "accept" | "decline";
 };
