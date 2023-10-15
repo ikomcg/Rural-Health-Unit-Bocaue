@@ -1,0 +1,1 @@
+type MedecinesType = object & ServiceType;

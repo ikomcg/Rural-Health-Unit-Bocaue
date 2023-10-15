@@ -2,10 +2,9 @@
 
 .rgth_cldr {
    > div {
-      width: 90%;
-
+      width: 95%;
       border: 1px solid rgba(128, 128, 128, 0.553);
-      padding: 5px;
+      padding: 10px;
       border-radius: 5px;
 
       margin: 20px auto 0;
@@ -22,7 +21,7 @@
             font-weight: 400;
          }
          .react-calendar__navigation__arrow {
-            font-size: 18px;
+            font-size: 22px;
          }
       }
       .react-calendar__month-view__weekdays{
@@ -31,8 +30,6 @@
          }
       }
       .react-calendar__viewContainer {
-
-       
          font-size: 14px;
         
          .react-calendar__month-view__weekdays {
@@ -45,6 +42,7 @@
             color: red;
          }
          .react-calendar__tile--active {
+            border-radius: 5px;
             background-color: color.$blue;
             color: #ffffff;
          }

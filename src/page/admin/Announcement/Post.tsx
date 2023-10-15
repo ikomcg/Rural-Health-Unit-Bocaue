@@ -1,10 +1,10 @@
 import React, { SetStateAction, useContext, useRef, useState } from "react";
-import DialogSlide from "../../components/mui/dialog/SlideModal";
+import DialogSlide from "../../../components/mui/dialog/SlideModal";
 import { AiFillCloseCircle } from "react-icons/ai";
 import style from "./Style.module.scss";
-import { UserProvider } from "../../context/UserProvider";
-import { BlueButton } from "../../components/button/BlueButton";
-import { CreateAnnouncementsFrb } from "../../firebase/Announcement/Create";
+import { UserProvider } from "../../../context/UserProvider";
+import { BlueButton } from "../../../components/button/BlueButton";
+import { CreateAnnouncementsFrb } from "../../../firebase/Announcement/Create";
 import Swal from "sweetalert2";
 import uuid from "react-uuid";
 import {
@@ -51,7 +51,7 @@ const Post = ({ isPost, setIsPost }: PostType) => {
       setIsPost(false);
    };
 
-   const OnChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+   const OnChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
       const { files } = e.target;
 
       if (!files || files.length === 0) return;
@@ -62,7 +62,8 @@ const Post = ({ isPost, setIsPost }: PostType) => {
          setImages((prev) => [
             ...prev.concat({ id, url: _url, link: "", status: "uploading" }),
          ]);
-         UploadFile(files[0], id);
+
+         await UploadFile(files[i], id);
       }
 
       if (!inputRef.current) return;
@@ -82,7 +83,7 @@ const Post = ({ isPost, setIsPost }: PostType) => {
       const storageRef = ref(storage, "announcement/" + file.name);
       const uploadTask = uploadBytesResumable(storageRef, file, metadata);
 
-      await uploadTask.on(
+      uploadTask.on(
          "state_changed",
          (snapshot) => {
             const progress =
@@ -192,7 +193,7 @@ const Post = ({ isPost, setIsPost }: PostType) => {
 
             <div className={style.image_upload}>
                {images.map((item) => (
-                  <div>
+                  <div key={item.id}>
                      <div className={style.progress}></div>
                      <button onClick={() => RemoveImage(item.id)}>
                         <AiFillCloseCircle />
@@ -218,6 +219,7 @@ const Post = ({ isPost, setIsPost }: PostType) => {
                   id="image"
                   className="hidden"
                   accept="image/*"
+                  multiple
                   onChange={OnChangeFile}
                />
             </label>

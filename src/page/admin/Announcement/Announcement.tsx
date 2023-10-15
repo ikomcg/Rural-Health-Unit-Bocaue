@@ -3,6 +3,7 @@ import { BsGear } from "react-icons/bs";
 import { useState } from "react";
 
 import Post from "./Post";
+import Container from "../../../components/container/Container";
 
 const Announcement = () => {
    const [isPost, setIsPost] = useState(false);
@@ -12,7 +13,7 @@ const Announcement = () => {
    };
    return (
       <>
-         <div className="w-full flex flex-col items-center mt-4">
+         <Container>
             <div className="flex flex-row gap-2 w-[90%] bg-blue rounded-md mx-auto py-2 px-4 mb-8">
                <button
                   className="rounded-md bg-white p-2 w-1/2 text-left mr-auto"
@@ -38,7 +39,7 @@ const Announcement = () => {
                </button>
             </div>
             <AnnouncementList />
-         </div>
+         </Container>
 
          <Post isPost={isPost} setIsPost={setIsPost} />
       </>

@@ -1,0 +1,27 @@
+@use "../../color";
+
+.table {
+   margin-top: 20px;
+   thead {
+      font-size: 16px;
+      color: white;
+      background-color: color.$blue;
+
+      th {
+         text-align: center;
+         padding: 10px 0;
+      }
+   }
+   tbody {
+      tr {
+         td {
+            text-align: center;
+            padding: 10px 0;
+            color: black;
+         }
+         &:nth-child(even) {
+            background-color: rgb(231, 231, 231);
+         }  
+      }
+   }
+}

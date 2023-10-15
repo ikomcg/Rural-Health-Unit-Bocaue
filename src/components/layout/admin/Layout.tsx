@@ -5,10 +5,14 @@ import style from "./style.module.scss";
 import "../calendar.scss";
 import { useContext, useEffect } from "react";
 import { UserProvider } from "../../../context/UserProvider";
+import { useState } from "react";
+import Schedule from "./Schedule";
+
 const AdminLayout = () => {
    const { cookies } = useContext(UserProvider);
    const navigate = useNavigate();
    const url = window.location.pathname;
+   const [isMenu, setIsMenu] = useState(true);
 
    useEffect(() => {
       if (url === "/patient" && cookies) {
@@ -20,12 +24,18 @@ const AdminLayout = () => {
       Navigate({ to: "/" })
    ) : (
       <div className={style.container}>
-         <SideBar />
-         <div className="w-[65%] overflow-y-auto">
+         <SideBar isMenu={isMenu} setIsMenu={setIsMenu} />
+         <div
+            className={`overflow-y-auto`}
+            style={{
+               width: isMenu ? "60%" : "80%",
+            }}
+         >
             <Outlet />
          </div>
-         <div className="rgth_cldr w-[20%]">
+         <div className="rgth_cldr w-[25%]">
             <Calendar />
+            <Schedule/>
          </div>
       </div>
    );

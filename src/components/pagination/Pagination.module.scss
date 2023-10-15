@@ -1,0 +1,33 @@
+.container {
+   display: flex;
+   align-items: center;
+   max-width: 1000px;
+
+   button {
+      border: none;
+      display: flex;
+      transition-duration: 200ms;
+   }
+}
+.pages {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   overflow: auto;
+}
+.loadingContainer {
+   animation: rotation 1s infinite linear;
+}
+@keyframes rotation {
+   from {
+      transform: rotate(0deg);
+   }
+   to {
+      transform: rotate(359deg);
+   }
+}
+@media print {
+   .container {
+      display: none;
+   }
+}
