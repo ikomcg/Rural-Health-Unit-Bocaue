@@ -9,10 +9,21 @@ import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import Pagination from "../../../../../../components/pagination/Pagination";
 import { useFetchMedecineListService } from "../../../../../../hooks/Medecines";
+import UpdateMedecine from "./UpdateMedecine";
+
+type PayloadType = object & Omit<MedecineList, "created_at">;
 
 const Medecines = () => {
    const { id } = useParams();
    const medecines = useFetchMedecineListService({ id: id });
+   const [currentPage, setCurrentPage] = useState(0);
+   const [sliceMedecines, setSliceMedecines] = useState<
+      MedecineList[] | null
+   >();
+   const [search, setSearch] = useState("");
+   const [refresh, setRefresh] = useState(false);
+   const [pages, setPages] = useState(0);
+   const [payload, setPayload] = useState<PayloadType | undefined>();
 
    const OnDeleteList = async (itemID: string) => {
       if (!id) return;
@@ -30,14 +41,6 @@ const Medecines = () => {
             });
          });
    };
-
-   const [currentPage, setCurrentPage] = useState(0);
-   const [sliceMedecines, setSliceMedecines] = useState<
-      MedecineList[] | null
-   >();
-   const [search, setSearch] = useState("");
-   const [refresh, setRefresh] = useState(false);
-   const [pages, setPages] = useState(0);
 
    useEffect(() => {
       const SlicePagination = () => {
@@ -62,10 +65,21 @@ const Medecines = () => {
 
       SlicePagination();
    }, [currentPage, medecines, refresh]);
+
    const HandleRefresh = () => {
       setCurrentPage(0);
       setRefresh((prev) => !prev);
    };
+
+   const OnClickEdit = (item: MedecineList) => {
+      setPayload({
+         id: item.id,
+         name: item.name,
+         descriptions: item.descriptions,
+         stock: item.stock,
+      });
+   };
+
    return (
       <>
          <div className="flex flex-row justify-end mt-2">
@@ -124,7 +138,10 @@ const Medecines = () => {
                         >
                            <FaTrash className="text-white" />
                         </button>
-                        <button className="bg-blue px-1 py-1 rounded text-xs">
+                        <button
+                           className="bg-blue px-1 py-1 rounded text-xs"
+                           onClick={() => OnClickEdit(item)}
+                        >
                            <AiFillEdit className="text-white" />
                         </button>
                      </td>
@@ -141,6 +158,9 @@ const Medecines = () => {
                setCurrentPage={setCurrentPage}
                className="mt-3"
             />
+         )}
+         {payload && (
+            <UpdateMedecine payload={payload} setPayload={setPayload} />
          )}
       </>
    );

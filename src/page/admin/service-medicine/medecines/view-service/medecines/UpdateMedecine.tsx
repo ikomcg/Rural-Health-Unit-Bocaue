@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import style from "../../style.module.scss";
-import useFetchDoctors from "../../../../../../hooks/Doctors";
 import { useParams } from "react-router-dom";
 import DialogSlide from "../../../../../../components/mui/dialog/SlideModal";
 import { AiFillCloseCircle } from "react-icons/ai";
@@ -8,18 +7,18 @@ import { BlueButton } from "../../../../../../components/button/BlueButton";
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../../firebase/Base";
 import Swal from "sweetalert2";
-import { TimeStampValue } from "../../../../../../shared/TimeStamp";
+
+type PayloadType = object & Omit<MedecineList, "created_at">;
 
 type PostType = {
    payload: PayloadType;
-   setPayload: React.Dispatch<React.SetStateAction<PayloadType | undefined>>;
+   setPayload: React.Dispatch<SetStateAction<PayloadType | undefined>>;
 };
 
-const UpdateDoctors = ({ payload, setPayload }: PostType) => {
-   const doctors = useFetchDoctors();
+const UpdateMedecine = ({ payload, setPayload }: PostType) => {
    const { id } = useParams();
-   const [isPost, setIsPost] = useState(false);
    const [isCreate, setIsCreate] = useState(false);
+   const [isPost, setIsPost] = useState(false);
 
    useEffect(() => {
       if (!payload) return;
@@ -29,25 +28,21 @@ const UpdateDoctors = ({ payload, setPayload }: PostType) => {
 
    const OnClose = () => {
       setIsPost(false);
-      setPayload(undefined);
+      setIsCreate(false);
    };
 
-   const UpdateSchedule = async (e: React.FormEvent) => {
+   const CreateMedecines = async (e: React.FormEvent) => {
       e.preventDefault();
-      if (!id || !doctors) return;
+      if (!id) return;
       setIsCreate(true);
-
-      const doctor = doctors.find((item) => item.id === payload.user_id);
-
       const data = {
-         user_id: payload.user_id,
-         name: doctor?.name,
-         available_from: TimeStampValue(payload.available_from),
-         available_to: TimeStampValue(payload.available_from),
+         name: payload.name,
+         descriptions: payload.descriptions,
+         stock: payload.stock,
          update_at: serverTimestamp(),
       };
 
-      await updateDoc(doc(db, "service", id, "schedules", payload.id), data)
+      await updateDoc(doc(db, "medecines", id, "medecines", payload.id), data)
          .then(() => {
             OnClose();
             Swal.fire({
@@ -79,62 +74,46 @@ const UpdateDoctors = ({ payload, setPayload }: PostType) => {
       >
          <div className="p-5">
             <div className={style.header_post}>
-               <h1>Update Schedule</h1>
+               <h1>Update Medecine</h1>
                <button type="button" onClick={OnClose}>
                   <AiFillCloseCircle />
                </button>
             </div>
             <form
                className="flex flex-col gap-3 flex-nowrap mt-5"
-               id="schedule"
-               onSubmit={UpdateSchedule}
+               id="updateMedecineForm"
+               onSubmit={CreateMedecines}
             >
                <div className="relative flex flex-row gap-3 mb-2">
                   <div className="flex flex-col w-1/3">
-                     <label>Health Workers:</label>
-                     <select
-                        required
-                        name="user_id"
-                        value={payload.user_id}
-                        className="border border-blue px-2 py-[6px]  outline-none text-lg"
-                        placeholder="Doc. Name"
-                        onChange={OnChangeHandle}
-                     >
-                        <option value="" disabled>
-                           ------
-                        </option>
-                        {!doctors ? (
-                           <option value="" disabled>
-                              Loading...
-                           </option>
-                        ) : (
-                           doctors.map((item) => (
-                              <option key={item.id} value={item.id}>
-                                 {item.name}
-                              </option>
-                           ))
-                        )}
-                     </select>
-                  </div>
-                  <div className="flex flex-col  w-1/3">
-                     <label>Date Time From:</label>
+                     <label>Medecines Name:</label>
                      <input
                         required
-                        name="available_from"
-                        value={payload.available_from}
-                        type="datetime-local"
+                        name="name"
+                        value={payload.name}
+                        type="text"
                         className="border border-blue px-2 py-1  outline-none text-md"
                         onChange={OnChangeHandle}
                      />
                   </div>
                   <div className="flex flex-col  w-1/3">
-                     <label>Date Time To:</label>
+                     <label>Descriptions:</label>
                      <input
                         required
-                        type="datetime-local"
-                        name="available_to"
-                        value={payload.available_to}
-                        min={payload.available_from}
+                        name="descriptions"
+                        value={payload.descriptions}
+                        type="text"
+                        className="border border-blue px-2 py-1  outline-none text-md"
+                        onChange={OnChangeHandle}
+                     />
+                  </div>
+                  <div className="flex flex-col  w-1/3">
+                     <label>Stock:</label>
+                     <input
+                        required
+                        name="stock"
+                        value={payload.stock}
+                        type="number"
                         className="border border-blue px-2 py-1  outline-none text-md"
                         onChange={OnChangeHandle}
                      />
@@ -144,11 +123,11 @@ const UpdateDoctors = ({ payload, setPayload }: PostType) => {
             <div className="flex flex-row justify-between mt-8">
                <BlueButton
                   type="submit"
-                  form="schedule"
+                  form="updateMedecineForm"
                   className="ml-auto py-2"
                   disabled={isCreate}
                >
-                  Update Schedule
+                  Update Medecines
                </BlueButton>
             </div>
          </div>
@@ -156,4 +135,4 @@ const UpdateDoctors = ({ payload, setPayload }: PostType) => {
    );
 };
 
-export default UpdateDoctors;
+export default UpdateMedecine;

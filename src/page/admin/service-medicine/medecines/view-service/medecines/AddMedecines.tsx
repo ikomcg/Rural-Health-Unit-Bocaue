@@ -21,7 +21,7 @@ type PayloadType = {
    status: string;
 };
 
-const AddDoctors = ({ isPost, setIsPost }: PostType) => {
+const AddMedecines = ({ isPost, setIsPost }: PostType) => {
    const { id } = useParams();
    const [isCreate, setIsCreate] = useState(false);
    const [payload, setPayload] = useState<PayloadType[]>([
@@ -86,6 +86,10 @@ const AddDoctors = ({ isPost, setIsPost }: PostType) => {
 
          index++;
          if (index === _data.length) {
+            Swal.fire({
+               icon: "success",
+               title: "Medecines Added Successfully",
+            });
             OnClose();
          }
       } while (payload.length !== index);
@@ -144,7 +148,7 @@ const AddDoctors = ({ isPost, setIsPost }: PostType) => {
             </div>
             <form
                className="flex flex-col gap-3 flex-nowrap mt-5"
-               id="schedule"
+               id="medecineForm"
                onSubmit={CreateMedecines}
             >
                {payload.map((item) => (
@@ -168,7 +172,7 @@ const AddDoctors = ({ isPost, setIsPost }: PostType) => {
             <div className="flex flex-row justify-between mt-8">
                <BlueButton
                   type="submit"
-                  form="schedule"
+                  form="medecineForm"
                   className="ml-auto py-2"
                   disabled={isCreate}
                >
@@ -180,7 +184,7 @@ const AddDoctors = ({ isPost, setIsPost }: PostType) => {
    );
 };
 
-export default AddDoctors;
+export default AddMedecines;
 
 type FormType = {
    item: PayloadType;

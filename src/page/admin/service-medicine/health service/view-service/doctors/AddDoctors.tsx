@@ -119,6 +119,7 @@ const AddDoctors = ({ isPost, setIsPost }: PostType) => {
       Swal.fire({
          icon: "success",
          title: "Schedule Added Successfully",
+      
       });
       OnClose();
    }, [payload]);

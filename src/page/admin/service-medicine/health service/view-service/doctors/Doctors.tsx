@@ -21,8 +21,8 @@ const Doctors = () => {
    const [sliceDoctors, setSliceDoctors] = useState<DoctorList[] | null>();
    const [search, setSearch] = useState("");
    const [refresh, setRefresh] = useState(false);
-
    const [payload, setPayload] = useState<PayloadType | undefined>();
+   
    const OnDeleteSchedule = async (schedule_id: string) => {
       if (!id) return;
       return await deleteDoc(doc(db, "service", id, "schedules", schedule_id))
