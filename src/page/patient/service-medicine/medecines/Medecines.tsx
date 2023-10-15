@@ -1,10 +1,12 @@
 import style from "./style.module.scss";
 import Card from "../../../../components/card/Card";
 import useFetchMedecines from "../../../../hooks/Medecines";
+import { useNavigate } from "react-router-dom";
 
 const Medicines = () => {
    const medecines = useFetchMedecines();
-
+   const navigate = useNavigate();
+   
    return (
       <>
          <div className={style.card}>
@@ -16,7 +18,12 @@ const Medicines = () => {
                </h1>
             ) : (
                medecines.map((item) => (
-                  <Card key={item.id} title={item.name} bg={item.image} />
+                  <Card
+                     key={item.id}
+                     title={item.name}
+                     bg={item.image}
+                     onClick={() => navigate(`${item.name}/${item.id}`)}
+                  />
                ))
             )}
          </div>

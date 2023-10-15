@@ -41,3 +41,43 @@ const useFetchMedecines = () => {
 };
 
 export default useFetchMedecines;
+
+type ParamsType = {
+   id: string | undefined;
+};
+export const useFetchMedecineListService = ({ id }: ParamsType) => {
+   const [medecines, setMedecines] = useState<MedecineList[] | null>();
+   useEffect(() => {
+      if (!id) return;
+      GetMedecinesList();
+   }, [id]);
+
+   const GetMedecinesList = async () => {
+      if (!id) return;
+
+      const queryDB = query(collection(db, `medecines`, id, "medecines"));
+      onSnapshot(
+         queryDB,
+         (snapshot) => {
+            try {
+               const data = snapshot.docs.map((doc) => {
+                  return {
+                     ...doc.data(),
+                     id: doc.id,
+                     created_at: doc.data().created_at.toDate(),
+                  };
+               }) as unknown as MedecineList[];
+               setMedecines(data);
+            } catch (err) {
+               console.log(err);
+            }
+         },
+         (error) => {
+            console.log("error medecines", error);
+            setMedecines(null);
+         }
+      );
+   };
+
+   return medecines;
+};

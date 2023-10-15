@@ -10,10 +10,13 @@ import {
 import { useEffect, useState } from "react";
 import { db } from "../firebase/Base";
 
-type RerquestType = {
+type ParamsType = {
    id: string | undefined;
-   user_id: string | undefined;
 };
+
+type RerquestType = {
+   user_id: string | undefined;
+} & ParamsType;
 
 const useFetchMyRequest = ({ id, user_id }: RerquestType) => {
    const [requests, setRequests] = useState<RequestService[] | null>();

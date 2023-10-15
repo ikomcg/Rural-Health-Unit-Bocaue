@@ -76,3 +76,29 @@ export const CreateMedecineFrb = async ({ data }: CreateService) => {
          return null;
       });
 };
+
+type PayloadType = {
+   data: {
+      name: string;
+      descriptions: string;
+      stock: number;
+   };
+   id: string;
+};
+
+export const CreateMedecineListFrb = async ({ data, id }: PayloadType) => {
+   const docData = {
+      ...data,
+      created_at: serverTimestamp(),
+   };
+
+   return await addDoc(collection(db, "medecines", id, "medecines"), docData)
+      .then((res) => {
+         return res;
+      })
+      .catch((err) => {
+         console.log("error medecines", err);
+
+         return null;
+      });
+};

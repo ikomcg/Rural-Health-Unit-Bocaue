@@ -1,15 +1,13 @@
-import React, { SetStateAction, useEffect, useState } from "react";
+import React, { SetStateAction, useState } from "react";
 import style from "../../style.module.scss";
-import useFetchDoctors from "../../../../../../hooks/Doctors";
 import { useParams } from "react-router-dom";
 import DialogSlide from "../../../../../../components/mui/dialog/SlideModal";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { BlueButton } from "../../../../../../components/button/BlueButton";
 import { MdAssignmentAdd, MdOutlineRemoveCircleOutline } from "react-icons/md";
 import uuid from "react-uuid";
-import { TimeStampValue } from "../../../../../../shared/TimeStamp";
-import { CreateServiceScheduleFrb } from "../../../../../../firebase/Service/Create";
-import Swal from "sweetalert2";
+import { CreateMedecineListFrb } from "../../../../../../firebase/Service/Create";
+
 
 type PostType = {
    isPost: boolean;
@@ -17,126 +15,66 @@ type PostType = {
 };
 type PayloadType = {
    id: string;
-   user_id: string;
    name: string;
-   available_from: string;
-   available_to: string;
-   status?: string; //pending | success | error
+   descriptions: string;
+   stock: number;
+   status: string;
 };
 
 const AddDoctors = ({ isPost, setIsPost }: PostType) => {
-   const doctors = useFetchDoctors();
    const { id } = useParams();
    const [isCreate, setIsCreate] = useState(false);
    const [payload, setPayload] = useState<PayloadType[]>([
       {
          id: uuid(),
-         user_id: "",
          name: "",
-         available_from: "",
-         available_to: "",
+         descriptions: "",
+         stock: 0,
          status: "pending",
       },
    ]);
 
    const OnClose = () => {
-      //   if (isCreate) return;
       setIsPost(false);
    };
 
-   const CreateSchedule = async (e: React.FormEvent) => {
+   const CreateMedecines = async (e: React.FormEvent) => {
       e.preventDefault();
       if (!id) return;
-
       const filterData = payload.filter((item) => item.status != "success");
 
       const _data = filterData.map((item) => ({
-         user_id: item.user_id,
+         id: item.id,
          name: item.name,
-         available_from: TimeStampValue(item.available_from),
-         available_to: TimeStampValue(item.available_to),
+         descriptions: item.descriptions,
+         stock: item.stock,
       }));
 
       if (_data.length === 0) return;
       setIsCreate(true);
       let index = 0;
       do {
-         const data = await CreateServiceScheduleFrb({
-            data: _data[index],
+         await CreateMedecineListFrb({
+            data: {
+               name: _data[index].name,
+               descriptions: _data[index].descriptions,
+               stock: _data[index].stock,
+            },
             id,
          });
 
-         if (!data) {
-            setPayload((prev) => [
-               ...prev.map((item) => {
-                  if (item.id === payload[index].id) {
-                     return {
-                        ...item,
-                        status: "error",
-                     };
-                  }
-                  return item;
-               }),
-            ]);
-         } else {
-            setPayload((prev) => [
-               ...prev.map((item) => {
-                  if (item.id === payload[index].id) {
-                     return {
-                        ...item,
-                        status: "success",
-                     };
-                  }
-                  return item;
-               }),
-            ]);
-         }
-
-         if (index === payload.length) {
-            setIsCreate(false);
-         }
-
          index++;
+         if (index === _data.length) {
+            OnClose();
+         }
       } while (payload.length !== index);
    };
-   const pending = payload.some((item) => item.status === "pending");
-   const error = payload.some((item) => item.status === "error");
-   useEffect(() => {
-      if (pending) return;
-
-      if (error) {
-         Swal.fire({
-            icon: "error",
-            title: "Something went wrong",
-            text: "Failed to Add Schedule",
-         });
-         return;
-      }
-
-      OnClose();
-   }, [payload]);
 
    const OnChangeHandle = (
       e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
       uuid: string
    ) => {
       const { name, value } = e.target;
-
-      if (name === "user_id" && doctors) {
-         const doctorName = doctors.find((item) => item.id === value);
-         if (!doctorName) return;
-         setPayload((prev) => [
-            ...prev.map((item) => {
-               if (item.id === uuid) {
-                  return {
-                     ...item,
-                     name: doctorName.name,
-                  };
-               }
-               return item;
-            }),
-         ]);
-      }
 
       setPayload((prev) => [
          ...prev.map((item) => {
@@ -161,10 +99,9 @@ const AddDoctors = ({ isPost, setIsPost }: PostType) => {
    const AddForm = () => {
       const form = {
          id: uuid(),
-         user_id: "",
          name: "",
-         available_from: "",
-         available_to: "",
+         descriptions: "",
+         stock: 0,
          status: "pending",
       };
       setPayload((prev) => [...prev.concat(form)]);
@@ -179,7 +116,7 @@ const AddDoctors = ({ isPost, setIsPost }: PostType) => {
       >
          <div className="p-5">
             <div className={style.header_post}>
-               <h1>Health Workers Schedule</h1>
+               <h1>Medecines</h1>
                <button type="button" onClick={OnClose}>
                   <AiFillCloseCircle />
                </button>
@@ -187,13 +124,12 @@ const AddDoctors = ({ isPost, setIsPost }: PostType) => {
             <form
                className="flex flex-col gap-3 flex-nowrap mt-5"
                id="schedule"
-               onSubmit={CreateSchedule}
+               onSubmit={CreateMedecines}
             >
                {payload.map((item) => (
                   <Form
                      key={item.id}
                      item={item}
-                     doctors={doctors}
                      OnChangeHandle={OnChangeHandle}
                      OnRemove={OnRemoveHandle}
                   />
@@ -215,7 +151,7 @@ const AddDoctors = ({ isPost, setIsPost }: PostType) => {
                   className="ml-auto py-2"
                   disabled={isCreate}
                >
-                  Add Schedule
+                  Add Medecines
                </BlueButton>
             </div>
          </div>
@@ -227,61 +163,44 @@ export default AddDoctors;
 
 type FormType = {
    item: PayloadType;
-   doctors: HealthWorkers[] | undefined | null;
    OnRemove: (id: string) => void;
    OnChangeHandle: (
       e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
       uuid: string
    ) => void;
 };
-const Form = ({ item, doctors, OnChangeHandle, OnRemove }: FormType) => {
+const Form = ({ item, OnChangeHandle, OnRemove }: FormType) => {
    return (
       <div className="relative flex flex-row gap-3 mb-2">
          <div className="flex flex-col w-1/3">
-            <label>Health Workers:</label>
-            <select
-               required
-               name="user_id"
-               value={item.user_id}
-               className="border border-blue px-2 py-[6px]  outline-none text-lg"
-               placeholder="Doc. Name"
-               onChange={(e) => OnChangeHandle(e, item.id)}
-            >
-               <option value="" disabled>
-                  ------
-               </option>
-               {!doctors ? (
-                  <option value="" disabled>
-                     Loading...
-                  </option>
-               ) : (
-                  doctors.map((item) => (
-                     <option key={item.id} value={item.id}>
-                        {item.name}
-                     </option>
-                  ))
-               )}
-            </select>
-         </div>
-         <div className="flex flex-col  w-1/3">
-            <label>Date Time From:</label>
+            <label>Medecines Name:</label>
             <input
                required
-               name="available_from"
-               value={item.available_from}
-               type="datetime-local"
+               name="name"
+               value={item.name}
+               type="text"
                className="border border-blue px-2 py-1  outline-none text-md"
                onChange={(e) => OnChangeHandle(e, item.id)}
             />
          </div>
          <div className="flex flex-col  w-1/3">
-            <label>Date Time To:</label>
+            <label>Descriptions:</label>
             <input
                required
-               type="datetime-local"
-               name="available_to"
-               value={item.available_to}
-               min={item.available_from}
+               name="descriptions"
+               value={item.descriptions}
+               type="text"
+               className="border border-blue px-2 py-1  outline-none text-md"
+               onChange={(e) => OnChangeHandle(e, item.id)}
+            />
+         </div>
+         <div className="flex flex-col  w-1/3">
+            <label>Stock:</label>
+            <input
+               required
+               name="stock"
+               value={item.stock}
+               type="number"
                className="border border-blue px-2 py-1  outline-none text-md"
                onChange={(e) => OnChangeHandle(e, item.id)}
             />

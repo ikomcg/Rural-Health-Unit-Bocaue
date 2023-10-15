@@ -24,3 +24,21 @@ type RequestService = {
    created_at: any;
    status: "pending" | "accept" | "decline";
 };
+type MedecineList = {
+   id: string;
+   name: string;
+   descriptions : string
+   stock : number
+   created_at: any;
+};
+type RequestMedecines = {
+   id: string;
+   patient_name: string;
+   patient_id: string;
+   service_id: string;
+   service_name: string;
+   medecines_name: string;
+   request_stock: any;
+   created_at: any;
+   status: "pending" | "accept" | "decline";
+};
