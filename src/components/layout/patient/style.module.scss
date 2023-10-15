@@ -78,9 +78,9 @@
 .schedules {
    display: flex;
    flex-flow: column nowrap;
-
    width: 95%;
    margin: 0 auto;
+   
    h2 {
       color: color.$blue;
       font-size: 16px;
@@ -88,7 +88,7 @@
    }
 
    ul {
-      padding:0 10px;
+      padding: 0 10px;
       li {
          font-size: 14px;
          margin-bottom: 10px;

@@ -26,7 +26,13 @@ const List = () => {
             <h1 className="text-center text-gray-400">Something went wrong</h1>
          ) : (
             news.map((item) => {
-               return <Content item={item} OnDeletePost={OnDeletePost} />;
+               return (
+                  <Content
+                     key={item.id}
+                     item={item}
+                     OnDeletePost={OnDeletePost}
+                  />
+               );
             })
          )}
       </div>

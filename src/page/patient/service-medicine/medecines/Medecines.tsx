@@ -2,7 +2,6 @@ import style from "./style.module.scss";
 import Card from "../../../../components/card/Card";
 import useFetchMedecines from "../../../../hooks/Medecines";
 
-
 const Medicines = () => {
    const medecines = useFetchMedecines();
 

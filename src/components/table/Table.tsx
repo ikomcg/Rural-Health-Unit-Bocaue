@@ -10,8 +10,8 @@ const Table = ({ th, ...props }: TableType) => {
       <table className={`${style.table}`}>
          <thead>
             <tr>
-               {th.map((item) => (
-                  <th>{item}</th>
+               {th.map((item, i) => (
+                  <th key={item+i}>{item}</th>
                ))}
             </tr>
          </thead>

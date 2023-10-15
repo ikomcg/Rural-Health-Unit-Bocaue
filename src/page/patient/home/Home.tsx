@@ -5,7 +5,7 @@ import Content from "./Content";
 import Container from "../../../components/container/Container";
 const Home = () => {
    const { news } = NewsFetch();
-   
+
    return (
       <Container>
          <div className="flex flex-col items-center overflow-y-auto w-full">

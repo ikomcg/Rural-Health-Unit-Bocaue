@@ -193,7 +193,7 @@ const Post = ({ isPost, setIsPost }: PostType) => {
 
             <div className={style.image_upload}>
                {images.map((item) => (
-                  <div>
+                  <div key={item.id}>
                      <div className={style.progress}></div>
                      <button onClick={() => RemoveImage(item.id)}>
                         <AiFillCloseCircle />

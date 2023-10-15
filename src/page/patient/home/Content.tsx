@@ -7,7 +7,6 @@ type ContentType = {
    item: AnnouncementType;
 };
 const Content = ({ item }: ContentType) => {
-
    const image_len = item.images.length > 3 ? "4" : item.images.length;
 
    return (

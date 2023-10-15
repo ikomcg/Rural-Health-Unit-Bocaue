@@ -2,6 +2,7 @@ import {
    and,
    collection,
    onSnapshot,
+   or,
    orderBy,
    query,
    where,
@@ -26,7 +27,10 @@ const useFetchMyRequest = ({ id, user_id }: RerquestType) => {
 
       const queryDB = query(
          collection(db, "schedules"),
-         and(where("patient_id", "==", user_id), where("service_id", "==", id)),
+         and(
+            where("patient_id", "==", user_id),
+            or(where("service_id", "==", id))
+         ),
          orderBy("request_date", "asc")
       );
       onSnapshot(
