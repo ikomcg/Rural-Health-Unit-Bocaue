@@ -1,40 +1,41 @@
 import { useParams } from "react-router-dom";
 import Table from "../../../../../../components/table/Table";
 import { CircularProgress } from "@mui/material";
-import moment from "moment";
 import { useEffect, useState } from "react";
 import Pagination from "../../../../../../components/pagination/Pagination";
-import useFetchRequest from "../../../../../../hooks/Request";
 import { BlueButton } from "../../../../../../components/button/BlueButton";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../../firebase/Base";
 import { RedButton } from "../../../../../../components/button/RedButton";
 import Swal from "sweetalert2";
+import { useFetchRequestMedecine } from "../../../../../../hooks/Request";
 const Request = () => {
    const { id } = useParams();
-   const doctors = useFetchRequest({ id: id });
+   const medecine = useFetchRequestMedecine({ id: id });
    const [currentPage, setCurrentPage] = useState(0);
-   const [sliceDoctors, setSliceDoctors] = useState<RequestService[] | null>();
+   const [sliceMedecines, setSliceMedecines] = useState<
+      RequestMedecines[] | null
+   >();
 
    useEffect(() => {
       const SlicePagination = () => {
-         if (doctors === null) return setSliceDoctors(null);
+         if (medecine === null) return setSliceMedecines(null);
 
          const page = currentPage + 1;
          const lastPostIndex = page * 5;
          const firstPostIndex = lastPostIndex - 5;
 
-         const currentPost = doctors?.slice(firstPostIndex, lastPostIndex);
-         setSliceDoctors(currentPost);
+         const currentPost = medecine?.slice(firstPostIndex, lastPostIndex);
+         setSliceMedecines(currentPost);
       };
 
       SlicePagination();
-   }, [currentPage, doctors]);
+   }, [currentPage, medecine]);
 
    const OnChangeStatus = async (requestID: string, status: string) => {
       if (!id) return;
 
-      await updateDoc(doc(db, "schedules", requestID), { status })
+      await updateDoc(doc(db, "medecine_request", requestID), { status })
          .then(() => {})
          .catch((err) => {
             Swal.fire({
@@ -47,8 +48,8 @@ const Request = () => {
    return (
       <>
          <h1 className="text-blue text-2xl mt-10">Patient's Request</h1>
-         <Table th={["Patient", "Date Schedule", "Action"]}>
-            {sliceDoctors === undefined ? (
+         <Table th={["Patient", "Medecine", "Quantity", "Action"]}>
+            {sliceMedecines === undefined ? (
                <tr>
                   <td className="text-center" colSpan={3}>
                      <div className="flex flex-col justify-center items-center">
@@ -57,27 +58,24 @@ const Request = () => {
                      </div>
                   </td>
                </tr>
-            ) : sliceDoctors === null ? (
+            ) : sliceMedecines === null ? (
                <tr>
                   <td className="text-sm" colSpan={3}>
                      Error Get Request List!!
                   </td>
                </tr>
-            ) : sliceDoctors.length === 0 ? (
+            ) : sliceMedecines.length === 0 ? (
                <tr>
                   <td className="text-sm" colSpan={3}>
                      No Request found
                   </td>
                </tr>
             ) : (
-               sliceDoctors.map((item) => (
+               sliceMedecines.map((item) => (
                   <tr key={item.id}>
                      <td>{item.patient_name}</td>
-                     <td>
-                        {moment(item.request_date.toISOString())
-                           .utcOffset(8)
-                           .format("LLL")}
-                     </td>
+                     <td>{item.medecine_name}</td>
+                     <td>{item.quantity}</td>
                      <td className="flex flex-col gap-2 justify-center items-center">
                         <BlueButton
                            disabled={item.status === "accept"}
@@ -96,10 +94,10 @@ const Request = () => {
             )}
          </Table>
 
-         {doctors && (
+         {medecine && (
             <Pagination
                limit={5}
-               count={doctors.length}
+               count={medecine.length}
                currentPage={currentPage}
                setCurrentPage={setCurrentPage}
                className="mt-3"

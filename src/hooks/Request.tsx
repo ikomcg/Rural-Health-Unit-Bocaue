@@ -90,3 +90,39 @@ export const useFetchMyRequestMedecine = ({ id, user_id }: RerquestType) => {
 
    return requests;
 };
+
+export const useFetchRequestMedecine = ({ id }: ParamsType) => {
+   const [requests, setRequests] = useState<RequestMedecines[] | null>();
+   useEffect(() => {
+      if (!id) return;
+      GetRequests();
+   }, [id]);
+
+   const GetRequests = async () => {
+      if (!id) return;
+
+      const queryDB = query(
+         collection(db, `medecine_request`),
+         where("service_id", "==", id),
+         orderBy("created_at", "asc")
+      );
+      onSnapshot(
+         queryDB,
+         (snapshot) => {
+            const data = snapshot.docs.map((doc) => {
+               return {
+                  ...doc.data(),
+                  id: doc.id,
+               };
+            }) as unknown as RequestMedecines[];
+            setRequests(data);
+         },
+         (error) => {
+            console.log("error requests", error);
+            setRequests(null);
+         }
+      );
+   };
+
+   return requests;
+};
