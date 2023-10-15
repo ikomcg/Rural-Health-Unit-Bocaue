@@ -1,4 +1,4 @@
-import React, { SetStateAction, useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import style from "../../style.module.scss";
 import { useParams } from "react-router-dom";
 import DialogSlide from "../../../../../../components/mui/dialog/SlideModal";
@@ -7,7 +7,7 @@ import { BlueButton } from "../../../../../../components/button/BlueButton";
 import { MdAssignmentAdd, MdOutlineRemoveCircleOutline } from "react-icons/md";
 import uuid from "react-uuid";
 import { CreateMedecineListFrb } from "../../../../../../firebase/Service/Create";
-
+import Swal from "sweetalert2";
 
 type PostType = {
    isPost: boolean;
@@ -41,7 +41,7 @@ const AddDoctors = ({ isPost, setIsPost }: PostType) => {
    const CreateMedecines = async (e: React.FormEvent) => {
       e.preventDefault();
       if (!id) return;
-      const filterData = payload.filter((item) => item.status != "success");
+      const filterData = payload.filter((item) => item.status !== "success");
 
       const _data = filterData.map((item) => ({
          id: item.id,
@@ -54,7 +54,7 @@ const AddDoctors = ({ isPost, setIsPost }: PostType) => {
       setIsCreate(true);
       let index = 0;
       do {
-         await CreateMedecineListFrb({
+         const data = await CreateMedecineListFrb({
             data: {
                name: _data[index].name,
                descriptions: _data[index].descriptions,
@@ -62,6 +62,27 @@ const AddDoctors = ({ isPost, setIsPost }: PostType) => {
             },
             id,
          });
+
+         if (!data) {
+            Swal.fire({
+               icon: "error",
+               title: "Something went wrong",
+               text: "Failed to Add Schedule",
+            });
+            return;
+         } else {
+            setPayload((prev) => [
+               ...prev.map((item) => {
+                  if (item.id === _data[index].id) {
+                     return {
+                        ...item,
+                        status: "success",
+                     };
+                  }
+                  return item;
+               }),
+            ]);
+         }
 
          index++;
          if (index === _data.length) {
