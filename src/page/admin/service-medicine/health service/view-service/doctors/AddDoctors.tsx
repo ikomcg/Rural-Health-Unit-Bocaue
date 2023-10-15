@@ -46,16 +46,20 @@ const AddDoctors = ({ isPost, setIsPost }: PostType) => {
 
    const CreateSchedule = async (e: React.FormEvent) => {
       e.preventDefault();
-      if (!id) return;
+      if (!id || !doctors) return;
 
       const filterData = payload.filter((item) => item.status != "success");
 
-      const _data = filterData.map((item) => ({
-         user_id: item.user_id,
-         name: item.name,
-         available_from: TimeStampValue(item.available_from),
-         available_to: TimeStampValue(item.available_to),
-      }));
+      const _data = filterData.map((item) => {
+         const doctor = doctors.find((doc) => doc.id === item.user_id);
+
+         return {
+            user_id: item.user_id,
+            name: doctor?.name ?? "",
+            available_from: TimeStampValue(item.available_from),
+            available_to: TimeStampValue(item.available_to),
+         };
+      });
 
       if (_data.length === 0) return;
       setIsCreate(true);
@@ -112,7 +116,10 @@ const AddDoctors = ({ isPost, setIsPost }: PostType) => {
          });
          return;
       }
-
+      Swal.fire({
+         icon: "success",
+         title: "Schedule Added Successfully",
+      });
       OnClose();
    }, [payload]);
 
@@ -121,22 +128,6 @@ const AddDoctors = ({ isPost, setIsPost }: PostType) => {
       uuid: string
    ) => {
       const { name, value } = e.target;
-
-      if (name === "user_id" && doctors) {
-         const doctorName = doctors.find((item) => item.id === value);
-         if (!doctorName) return;
-         setPayload((prev) => [
-            ...prev.map((item) => {
-               if (item.id === uuid) {
-                  return {
-                     ...item,
-                     name: doctorName.name,
-                  };
-               }
-               return item;
-            }),
-         ]);
-      }
 
       setPayload((prev) => [
          ...prev.map((item) => {
@@ -234,7 +225,7 @@ type FormType = {
       uuid: string
    ) => void;
 };
-const Form = ({ item, doctors, OnChangeHandle, OnRemove }: FormType) => {
+export const Form = ({ item, doctors, OnChangeHandle, OnRemove }: FormType) => {
    return (
       <div className="relative flex flex-row gap-3 mb-2">
          <div className="flex flex-col w-1/3">

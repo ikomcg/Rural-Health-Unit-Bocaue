@@ -10,10 +10,19 @@ import { db } from "../../../../../../firebase/Base";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import Pagination from "../../../../../../components/pagination/Pagination";
+import UpdateDoctors from "./UpdateDoctors";
+import DateTimeLocal from "../../../../../../shared/DateTimeLocal";
+
 const Doctors = () => {
    const { id } = useParams();
    const doctors = useFetchSchedulesService({ id: id });
+   const [currentPage, setCurrentPage] = useState(0);
+   const [pages, setPages] = useState(0);
+   const [sliceDoctors, setSliceDoctors] = useState<DoctorList[] | null>();
+   const [search, setSearch] = useState("");
+   const [refresh, setRefresh] = useState(false);
 
+   const [payload, setPayload] = useState<PayloadType | undefined>();
    const OnDeleteSchedule = async (schedule_id: string) => {
       if (!id) return;
       return await deleteDoc(doc(db, "service", id, "schedules", schedule_id))
@@ -31,11 +40,6 @@ const Doctors = () => {
          });
    };
 
-   const [currentPage, setCurrentPage] = useState(0);
-   const [pages, setPages] = useState(0);
-   const [sliceDoctors, setSliceDoctors] = useState<ScheduleService[] | null>();
-   const [search, setSearch] = useState("");
-   const [refresh, setRefresh] = useState(false);
    useEffect(() => {
       const SlicePagination = () => {
          if (doctors === null) return setSliceDoctors(null);
@@ -62,6 +66,17 @@ const Doctors = () => {
    const HandleRefresh = () => {
       setCurrentPage(0);
       setRefresh((prev) => !prev);
+   };
+
+   const OnClickEdit = (item: DoctorList) => {
+      
+      setPayload({
+         id: item.id,
+         user_id: item.user_id,
+         name: item.name,
+         available_from: DateTimeLocal(item.available_from),
+         available_to:  DateTimeLocal(item.available_from),
+      });
    };
 
    return (
@@ -137,7 +152,10 @@ const Doctors = () => {
                         >
                            <FaTrash className="text-white" />
                         </button>
-                        <button className="bg-blue px-1 py-1 rounded text-xs">
+                        <button
+                           className="bg-blue px-1 py-1 rounded text-xs"
+                           onClick={() => OnClickEdit(item)}
+                        >
                            <AiFillEdit className="text-white" />
                         </button>
                      </td>
@@ -154,6 +172,9 @@ const Doctors = () => {
                setCurrentPage={setCurrentPage}
                className="mt-3"
             />
+         )}
+         {payload && (
+            <UpdateDoctors payload={payload} setPayload={setPayload} />
          )}
       </>
    );

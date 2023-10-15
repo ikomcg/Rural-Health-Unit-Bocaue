@@ -7,7 +7,7 @@ type ScheduleType = {
 };
 
 const useFetchSchedulesService = ({ id }: ScheduleType) => {
-   const [schedules, setSchedules] = useState<ScheduleService[] | null>();
+   const [schedules, setSchedules] = useState<DoctorList[] | null>();
    useEffect(() => {
       if (!id) return;
       GetSchedules();
@@ -30,7 +30,7 @@ const useFetchSchedulesService = ({ id }: ScheduleType) => {
                   available_from: doc.data().available_from.toDate(),
                   available_to: doc.data().available_to.toDate(),
                };
-            }) as unknown as ScheduleService[];
+            }) as unknown as DoctorList[];
             setSchedules(data);
          },
          (error) => {
