@@ -27,8 +27,8 @@ type RequestService = {
 type MedecineList = {
    id: string;
    name: string;
-   descriptions : string
-   stock : number
+   descriptions: string;
+   stock: number;
    created_at: any;
 };
 type RequestMedecines = {
@@ -37,8 +37,9 @@ type RequestMedecines = {
    patient_id: string;
    service_id: string;
    service_name: string;
-   medecines_name: string;
-   request_stock: any;
+   medecine_name: string;
+   medecine_id: string;
+   quantity: any;
    created_at: any;
    status: "pending" | "accept" | "decline";
 };

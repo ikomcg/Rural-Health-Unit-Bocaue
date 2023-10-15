@@ -1,4 +1,5 @@
 import {
+   and,
    collection,
    onSnapshot,
    orderBy,
@@ -8,11 +9,11 @@ import {
 import { useEffect, useState } from "react";
 import { db } from "../firebase/Base";
 
-type RerquestType = {
+type ParamsType = {
    id: string | undefined;
 };
 
-const useFetchRequest = ({ id }: RerquestType) => {
+const useFetchRequest = ({ id }: ParamsType) => {
    const [requests, setRequests] = useState<RequestService[] | null>();
    useEffect(() => {
       if (!id) return;
@@ -50,3 +51,42 @@ const useFetchRequest = ({ id }: RerquestType) => {
 };
 
 export default useFetchRequest;
+
+type RerquestType = {
+   user_id: string | undefined;
+} & ParamsType;
+
+export const useFetchMyRequestMedecine = ({ id, user_id }: RerquestType) => {
+   const [requests, setRequests] = useState<RequestMedecines[] | null>();
+   useEffect(() => {
+      if (!id) return;
+      GetRequests();
+   }, [id]);
+
+   const GetRequests = async () => {
+      if (!id || !user_id) return;
+
+      const queryDB = query(
+         collection(db, `medecine_request`),
+         and(where("service_id", "==", id), where("patient_id", "==", user_id))
+      );
+      onSnapshot(
+         queryDB,
+         (snapshot) => {
+            const data = snapshot.docs.map((doc) => {
+               return {
+                  ...doc.data(),
+                  id: doc.id,
+               };
+            }) as unknown as RequestMedecines[];
+            setRequests(data);
+         },
+         (error) => {
+            console.log("error requests", error);
+            setRequests(null);
+         }
+      );
+   };
+
+   return requests;
+};

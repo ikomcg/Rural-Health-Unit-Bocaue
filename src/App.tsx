@@ -16,6 +16,7 @@ import PatientHealthService from "./page/patient/service-medicine/health service
 import PatientViewService from "./page/patient/service-medicine/health service/view-service/View";
 import PatientMedicines from "./page/patient/service-medicine/medecines/Medecines";
 import MedecinesViewService from "./page/admin/service-medicine/medecines/view-service/View";
+import PatientViewMedecines from "./page/patient/service-medicine/medecines/view-service/View";
 
 const App = () => {
    return (
@@ -64,6 +65,10 @@ const App = () => {
 
                   <Route path="medicines">
                      <Route index element={<PatientMedicines />} />
+                     <Route
+                        path=":name/:id"
+                        element={<PatientViewMedecines />}
+                     />
                   </Route>
                </Route>
                <Route

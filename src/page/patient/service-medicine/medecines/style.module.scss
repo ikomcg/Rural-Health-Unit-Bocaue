@@ -1,3 +1,5 @@
+@use "../../../../color";
+
 .card {
    display: flex;
    flex-flow: row wrap;
@@ -17,5 +19,34 @@
             background-color: rgba(43, 143, 249, 0.3);
          }
       }
+   }
+}
+.header_post {
+   display: flex;
+   flex-flow: row nowrap;
+
+   h1 {
+      font-weight: 600;
+      font-size: 22px;
+      margin: 0 auto;
+   }
+   button {
+      color: rgba(128, 128, 128, 0.6);
+      font-size: 24px;
+   }
+   border-bottom: 2px solid color.$blue;
+   padding-bottom: 10px;
+   margin-bottom: 10px;
+}
+.addForm {
+   color: color.$blue;
+   border: 1px solid color.$blue;
+   border-radius: 50%;
+   width: max-content;
+   padding: 3px;
+   margin-left: auto;
+   &:hover {
+      color: white;
+      background-color: color.$blue;
    }
 }

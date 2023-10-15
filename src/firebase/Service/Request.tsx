@@ -35,3 +35,26 @@ export const CreateRequestScheduleFrb = async ({
          return null;
       });
 };
+
+type CreateRequestMedecine = {
+   data: Omit<RequestMedecines, "id" | "created_at">;
+};
+
+export const CreateRequestMedecineFrb = async ({
+   data,
+}: CreateRequestMedecine) => {
+   const docData = {
+      ...data,
+      created_at: serverTimestamp(),
+   };
+
+   return await addDoc(collection(db, "medecine_request"), docData)
+      .then((res) => {
+         return res;
+      })
+      .catch((err) => {
+         console.log("error request", err);
+
+         return null;
+      });
+};
