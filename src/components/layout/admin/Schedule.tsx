@@ -8,6 +8,7 @@ import {
    onSnapshot,
    orderBy,
    query,
+   where,
 } from "firebase/firestore";
 import { db } from "../../../firebase/Base";
 
@@ -21,6 +22,7 @@ const Schedule = () => {
 
       const queryDB = query(
          collection(db, "schedules"),
+         where("status", "==", "accept"),
          orderBy("request_date", "asc"),
          limit(4)
       );
@@ -58,6 +60,8 @@ const Schedule = () => {
                <li className="text-center text-slate-400">
                   Error Get list Schedules
                </li>
+            ) : requests.length === 0 ? (
+               <li className="text-center text-slate-400">No Schedules</li>
             ) : (
                requests.map((item) => (
                   <li
@@ -65,7 +69,8 @@ const Schedule = () => {
                      className="word-wrap line-clamp-1"
                      title={item.patient_name}
                   >
-                     {item.patient_name} - {moment(item.request_date.toISOString())
+                     {item.patient_name} -{" "}
+                     {moment(item.request_date.toISOString())
                         .utcOffset(8)
                         .format("LLLL")}{" "}
                   </li>

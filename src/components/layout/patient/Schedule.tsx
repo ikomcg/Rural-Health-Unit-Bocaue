@@ -23,7 +23,10 @@ const Schedule = () => {
 
       const queryDB = query(
          collection(db, "schedules"),
-         and(where("patient_id", "==", cookies.id)),
+         and(
+            where("patient_id", "==", cookies.id),
+            where("status", "==", "accept")
+         ),
          orderBy("request_date", "asc"),
          limit(4)
       );
@@ -61,12 +64,19 @@ const Schedule = () => {
                <li className="text-center text-slate-400">
                   Error Get list Schedules
                </li>
+            ) : requests.length === 0 ? (
+               <li className="text-center text-slate-400">No Schedules</li>
             ) : (
                requests.map((item) => (
-                  <li key={item.id} className="word-wrap line-clamp-1" title={item.service_name}>
+                  <li
+                     key={item.id}
+                     className="word-wrap line-clamp-1"
+                     title={item.service_name}
+                  >
                      {moment(item.request_date.toISOString())
                         .utcOffset(8)
-                        .format("LLL")} - {item.service_name}
+                        .format("LLL")}{" "}
+                     - {item.service_name}
                   </li>
                ))
             )}
