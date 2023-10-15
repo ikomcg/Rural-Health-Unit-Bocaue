@@ -28,12 +28,12 @@ const PatientLayout = () => {
          <div
             className={`overflow-y-auto`}
             style={{
-               width: isMenu ? "65%" : "85%",
+               width: isMenu ? "60%" : "80%",
             }}
          >
             <Outlet />
          </div>
-         <div className="rgth_cldr w-[20%]">
+         <div className="rgth_cldr w-[25%]">
             <Calendar />
             <Schedule />
          </div>

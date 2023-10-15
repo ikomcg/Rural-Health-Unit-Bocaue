@@ -52,7 +52,7 @@ const Schedule = () => {
 
    return (
       <div className={style.schedules}>
-         <h2>Schedules</h2>
+         <h2>My Schedules</h2>
 
          <ul>
             {requests === undefined ? (
