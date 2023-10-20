@@ -33,7 +33,7 @@ const Request = () => {
    return (
       <>
          <div className="flex flex-row items-center mt-10">
-            <h1 className="text-blue text-2xl">Your's Request</h1>
+            <h1 className="text-blue text-2xl">My Request</h1>
             <BlueButton className="ml-auto" onClick={() => setIsOpen(true)}>
                Add Request
             </BlueButton>

@@ -11,7 +11,10 @@ const Request = () => {
    const { id } = useParams();
    const { cookies } = useContext(UserProvider);
 
-   const medecines = useFetchMyRequestMedecine({ id: id, user_id: cookies?.id });
+   const medecines = useFetchMyRequestMedecine({
+      id: id,
+      user_id: cookies?.id,
+   });
    const [currentPage, setCurrentPage] = useState(0);
    const [sliceMedecines, setSliceMedecines] = useState<
       RequestMedecines[] | null
@@ -35,7 +38,7 @@ const Request = () => {
    return (
       <>
          <div className="flex flex-row items-center mt-10">
-            <h1 className="text-blue text-2xl">Your's Request</h1>
+            <h1 className="text-blue text-2xl">My Request</h1>
             <BlueButton className="ml-auto" onClick={() => setIsOpen(true)}>
                Add Request
             </BlueButton>

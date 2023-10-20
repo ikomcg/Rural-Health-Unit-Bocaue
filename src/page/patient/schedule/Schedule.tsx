@@ -20,9 +20,6 @@ const Schedule = () => {
       const mySchedules = schedules.map((item) => ({
          title: item.service_name,
          start: item.request_date,
-         extendedProps: {
-            department: "BioChemistry",
-         },
       }));
 
       return mySchedules;
@@ -34,9 +31,9 @@ const Schedule = () => {
             plugins={[dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
             headerToolbar={{
-               left: "prev,next today",
-               center: "title",
-               right: "",
+               start: "title",
+               center: "",
+               end: "today prev,next",
             }}
             events={MySchedules}
             eventColor="#2b90f9"
