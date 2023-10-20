@@ -17,8 +17,10 @@ import PatientViewService from "./page/patient/service-medicine/health service/v
 import PatientMedicines from "./page/patient/service-medicine/medecines/Medecines";
 import MedecinesViewService from "./page/admin/service-medicine/medecines/view-service/View";
 import PatientViewMedecines from "./page/patient/service-medicine/medecines/view-service/View";
+import Schedule from "./page/patient/schedule/Schedule";
 
 const App = () => {
+
    return (
       <BrowserRouter>
          <Routes>
@@ -71,6 +73,7 @@ const App = () => {
                      />
                   </Route>
                </Route>
+               <Route path="schedule" element={<Schedule />} />
                <Route
                   path="*"
                   element={
@@ -81,14 +84,7 @@ const App = () => {
                />
             </Route>
 
-            <Route
-               path="*"
-               element={
-                  <UnderConstructionLogo>
-                     Under Development
-                  </UnderConstructionLogo>
-               }
-            />
+            <Route path="*" element={<>Page Not Found</>} />
          </Routes>
       </BrowserRouter>
    );
