@@ -1,9 +1,7 @@
 import style from "./style.module.scss";
-import Card from "../../../../components/card/Card";
+import Card, { AddCard } from "../../../../components/card/Card";
 import useFetchMedecines from "../../../../hooks/Medecines";
 import { useState } from "react";
-import { BlueButton } from "../../../../components/button/BlueButton";
-import { BsPlus } from "react-icons/bs";
 import NewMedecine from "./add/Add";
 import { useNavigate } from "react-router-dom";
 
@@ -16,13 +14,6 @@ const Medicines = () => {
    };
    return (
       <>
-         <BlueButton
-            className="flex flex-row gap-1 py-1 items-center ml-auto"
-            onClick={HandleClickMedecine}
-         >
-            <BsPlus className="text-lg" />
-            Add Medecine
-         </BlueButton>
          <div className={style.card}>
             {medecines === undefined ? (
                <h1 className="w-full text-center text-gray-400">Loading...</h1>
@@ -40,6 +31,7 @@ const Medicines = () => {
                   />
                ))
             )}
+            <AddCard onClick={HandleClickMedecine} />
          </div>
 
          {isMedecine && (
