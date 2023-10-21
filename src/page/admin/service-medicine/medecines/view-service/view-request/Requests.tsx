@@ -121,7 +121,7 @@ const Request = () => {
                            disabled={item.status === "approve"}
                            onClick={() => OnChangeStatus(item.id, "approve")}
                         >
-                           Accept
+                           Approve
                         </BlueButton>
                         <RedButton
                            onClick={() => OnChangeStatus(item.id, "decline")}
