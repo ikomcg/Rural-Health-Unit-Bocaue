@@ -35,32 +35,46 @@ const UpdateDoctors = ({ payload, setPayload }: PostType) => {
    const UpdateSchedule = async (e: React.FormEvent) => {
       e.preventDefault();
       if (!id || !doctors) return;
-      setIsCreate(true);
+      setIsPost(false);
+      Swal.fire({
+         icon: "info",
+         title: "Are you sure you want to save?",
+         showCancelButton: true,
+         showConfirmButton: true,
+      }).then(async (res) => {
+         if (res.isConfirmed) {
+            setIsCreate(true);
+            const doctor = doctors.find((item) => item.id === payload.user_id);
 
-      const doctor = doctors.find((item) => item.id === payload.user_id);
+            const data = {
+               user_id: payload.user_id,
+               name: doctor?.name,
+               available_from: TimeStampValue(payload.available_from),
+               available_to: TimeStampValue(payload.available_from),
+               update_at: serverTimestamp(),
+            };
 
-      const data = {
-         user_id: payload.user_id,
-         name: doctor?.name,
-         available_from: TimeStampValue(payload.available_from),
-         available_to: TimeStampValue(payload.available_from),
-         update_at: serverTimestamp(),
-      };
-
-      await updateDoc(doc(db, "service", id, "schedules", payload.id), data)
-         .then(() => {
-            OnClose();
-            Swal.fire({
-               icon: "success",
-               title: "Update Successfully",
-            });
-         })
-         .catch((err) => {
-            Swal.fire({
-               icon: "error",
-               title: err,
-            });
-         });
+            await updateDoc(
+               doc(db, "service", id, "schedules", payload.id),
+               data
+            )
+               .then(() => {
+                  OnClose();
+                  Swal.fire({
+                     icon: "success",
+                     title: "Update Successfully",
+                  });
+               })
+               .catch((err) => {
+                  Swal.fire({
+                     icon: "error",
+                     title: err,
+                  });
+               });
+         } else {
+            setIsPost(true);
+         }
+      });
    };
 
    const OnChangeHandle = (

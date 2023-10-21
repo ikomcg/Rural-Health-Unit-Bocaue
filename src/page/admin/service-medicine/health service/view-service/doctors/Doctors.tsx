@@ -22,22 +22,33 @@ const Doctors = () => {
    const [search, setSearch] = useState("");
    const [refresh, setRefresh] = useState(false);
    const [payload, setPayload] = useState<PayloadType | undefined>();
-   
+
    const OnDeleteSchedule = async (schedule_id: string) => {
       if (!id) return;
-      return await deleteDoc(doc(db, "service", id, "schedules", schedule_id))
-         .then(() => {
-            return Swal.fire({
-               icon: "success",
-               text: "Deleted Schedule Successfuly",
-            });
-         })
-         .catch(() => {
-            return Swal.fire({
-               icon: "error",
-               text: "Failed to Deleted Schedule",
-            });
-         });
+      Swal.fire({
+         icon: "info",
+         title: "Are you sure you want to delete this schedule",
+         showCancelButton: true,
+         showConfirmButton: true,
+      }).then(async (res) => {
+         if (res.isConfirmed) {
+            return await deleteDoc(
+               doc(db, "service", id, "schedules", schedule_id)
+            )
+               .then(() => {
+                  return Swal.fire({
+                     icon: "success",
+                     text: "Deleted Schedule Successfuly",
+                  });
+               })
+               .catch(() => {
+                  return Swal.fire({
+                     icon: "error",
+                     text: "Failed to Deleted Schedule",
+                  });
+               });
+         }
+      });
    };
 
    useEffect(() => {
@@ -69,13 +80,12 @@ const Doctors = () => {
    };
 
    const OnClickEdit = (item: DoctorList) => {
-      
       setPayload({
          id: item.id,
          user_id: item.user_id,
          name: item.name,
          available_from: DateTimeLocal(item.available_from),
-         available_to:  DateTimeLocal(item.available_from),
+         available_to: DateTimeLocal(item.available_from),
       });
    };
 
