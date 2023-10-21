@@ -30,7 +30,11 @@ const Schedule = () => {
                   <li
                      key={item.id}
                      className="word-wrap line-clamp-1"
-                     title={item.service_name}
+                     title={`${item.service_name} - ${moment(
+                        item.request_date.toISOString()
+                     )
+                        .utcOffset(8)
+                        .format("LLLL")}}`}
                   >
                      {moment(item.request_date.toISOString())
                         .utcOffset(8)
