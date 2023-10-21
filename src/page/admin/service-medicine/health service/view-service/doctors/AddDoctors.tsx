@@ -112,14 +112,13 @@ const AddDoctors = ({ isPost, setIsPost }: PostType) => {
          Swal.fire({
             icon: "error",
             title: "Something went wrong",
-            text: "Failed to Add Schedule",
+            text: "Failed to Save",
          });
          return;
       }
       Swal.fire({
          icon: "success",
          title: "Schedule Added Successfully",
-      
       });
       OnClose();
    }, [payload]);
@@ -207,7 +206,7 @@ const AddDoctors = ({ isPost, setIsPost }: PostType) => {
                   className="ml-auto py-2"
                   disabled={isCreate}
                >
-                  Add Schedule
+                  Save
                </BlueButton>
             </div>
          </div>

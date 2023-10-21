@@ -162,7 +162,7 @@ const UpdateDoctors = ({ payload, setPayload }: PostType) => {
                   className="ml-auto py-2"
                   disabled={isCreate}
                >
-                  Update Schedule
+                 Save
                </BlueButton>
             </div>
          </div>

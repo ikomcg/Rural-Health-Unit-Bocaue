@@ -143,7 +143,7 @@ const UpdateMedecine = ({ payload, setPayload }: PostType) => {
                   className="ml-auto py-2"
                   disabled={isCreate}
                >
-                  Update Medecines
+                  Save
                </BlueButton>
             </div>
          </div>
