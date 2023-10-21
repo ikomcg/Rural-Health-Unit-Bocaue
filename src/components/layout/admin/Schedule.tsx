@@ -22,7 +22,7 @@ const Schedule = () => {
 
       const queryDB = query(
          collection(db, "schedules"),
-         where("status", "==", "accept"),
+         where("status", "==", "approve "),
          orderBy("request_date", "asc"),
          limit(4)
       );

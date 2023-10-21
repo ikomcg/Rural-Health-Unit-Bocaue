@@ -121,8 +121,8 @@ const Request = () => {
                      </td>
                      <td className="flex flex-col gap-2 justify-center items-center">
                         <BlueButton
-                           disabled={item.status === "accept"}
-                           onClick={() => OnChangeStatus(item.id, "accept")}
+                           disabled={item.status === "approve"}
+                           onClick={() => OnChangeStatus(item.id, "approve")}
                         >
                            Accept
                         </BlueButton>

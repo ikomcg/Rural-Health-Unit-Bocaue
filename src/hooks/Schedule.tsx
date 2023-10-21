@@ -69,7 +69,7 @@ export const useFetchMySchedules = ({ id, _limit }: MySchedule) => {
 
       const queryDB = query(
          collection(db, "schedules"),
-         and(where("patient_id", "==", id), where("status", "==", "accept")),
+         and(where("patient_id", "==", id), where("status", "==", "approve")),
          orderBy("request_date", "asc"),
          limit(_limit)
       );

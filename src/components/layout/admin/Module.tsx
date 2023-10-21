@@ -29,7 +29,7 @@ const Module = ({ isMenu }: ModuleType) => {
       {
          name: "Health Workers",
          icon: <MdHealthAndSafety />,
-         link: "schedule",
+         link: "health-worker",
       },
       {
          name: "Patient",
