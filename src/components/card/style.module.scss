@@ -30,6 +30,11 @@
       &:hover > img {
          transform: scale(1.3);
       }
+      &:hover {
+         h1 {
+            color: color.$blue;
+         }
+      }
       img {
          position: absolute;
          z-index: -1;
