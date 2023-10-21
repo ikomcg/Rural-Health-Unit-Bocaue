@@ -27,19 +27,30 @@ const Medecines = () => {
 
    const OnDeleteList = async (itemID: string) => {
       if (!id) return;
-      return await deleteDoc(doc(db, "medecines", id, "medecines", itemID))
-         .then(() => {
-            return Swal.fire({
-               icon: "success",
-               text: "Deleted Medecines Successfuly",
-            });
-         })
-         .catch(() => {
-            return Swal.fire({
-               icon: "error",
-               text: "Failed to Deleted Medecines",
-            });
-         });
+      Swal.fire({
+         icon: "info",
+         title: "Are you sure you want to delete?",
+         showCancelButton: true,
+         showConfirmButton: true,
+      }).then(async (res) => {
+         if (res.isConfirmed) {
+            return await deleteDoc(
+               doc(db, "medecines", id, "medecines", itemID)
+            )
+               .then(() => {
+                  return Swal.fire({
+                     icon: "success",
+                     text: "Deleted Medecines Successfuly",
+                  });
+               })
+               .catch(() => {
+                  return Swal.fire({
+                     icon: "error",
+                     text: "Failed to Deleted Medecines",
+                  });
+               });
+         }
+      });
    };
 
    useEffect(() => {

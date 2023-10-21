@@ -34,28 +34,44 @@ const UpdateMedecine = ({ payload, setPayload }: PostType) => {
    const CreateMedecines = async (e: React.FormEvent) => {
       e.preventDefault();
       if (!id) return;
-      setIsCreate(true);
-      const data = {
-         name: payload.name,
-         descriptions: payload.descriptions,
-         stock: payload.stock,
-         update_at: serverTimestamp(),
-      };
+      setIsPost(false);
+      Swal.fire({
+         icon: "info",
+         title: "Are you sure you want to save?",
+         showCancelButton: true,
+         showConfirmButton: true,
+      }).then(async (res) => {
+         if (res.isConfirmed) {
+            setIsCreate(true);
 
-      await updateDoc(doc(db, "medecines", id, "medecines", payload.id), data)
-         .then(() => {
-            OnClose();
-            Swal.fire({
-               icon: "success",
-               title: "Update Successfully",
-            });
-         })
-         .catch((err) => {
-            Swal.fire({
-               icon: "error",
-               title: err,
-            });
-         });
+            const data = {
+               name: payload.name,
+               descriptions: payload.descriptions,
+               stock: payload.stock,
+               update_at: serverTimestamp(),
+            };
+
+            await updateDoc(
+               doc(db, "medecines", id, "medecines", payload.id),
+               data
+            )
+               .then(() => {
+                  OnClose();
+                  Swal.fire({
+                     icon: "success",
+                     title: "Update Successfully",
+                  });
+               })
+               .catch((err) => {
+                  Swal.fire({
+                     icon: "error",
+                     title: err,
+                  });
+               });
+         } else {
+            setIsPost(true);
+         }
+      });
    };
 
    const OnChangeHandle = (

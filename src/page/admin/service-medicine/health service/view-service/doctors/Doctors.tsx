@@ -27,7 +27,7 @@ const Doctors = () => {
       if (!id) return;
       Swal.fire({
          icon: "info",
-         title: "Are you sure you want to delete this schedule",
+         title: "Are you sure you want to delete?",
          showCancelButton: true,
          showConfirmButton: true,
       }).then(async (res) => {
