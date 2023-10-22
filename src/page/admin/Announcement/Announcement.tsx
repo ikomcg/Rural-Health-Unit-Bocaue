@@ -1,7 +1,6 @@
 import AnnouncementList from "./List";
 import { BsGear } from "react-icons/bs";
 import { useState } from "react";
-
 import Post from "./Post";
 import Container from "../../../components/container/Container";
 

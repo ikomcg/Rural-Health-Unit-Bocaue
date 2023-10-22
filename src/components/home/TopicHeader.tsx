@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
-const TopicHeader = ({ title }: any) => {
+type TopicHeaderType = {
+   title: string;
+};
+const TopicHeader = ({ title }: TopicHeaderType) => {
    return (
       <div className="flex flex-row justify-between border-b py-5 px-3 mb-5">
          <h3 className="text-4xl text-blue font-nomal">{title}</h3>
@@ -12,4 +14,4 @@ const TopicHeader = ({ title }: any) => {
    );
 };
 
-export default React.memo(TopicHeader);
+export default TopicHeader;

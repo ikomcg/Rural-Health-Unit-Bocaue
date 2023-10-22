@@ -1,11 +1,18 @@
 import TopicHeader from "./TopicHeader";
 
-export const Cards = ({ title, topic }: any) => {
+type CardType = {
+  title : string,
+  topic : {
+    src : string
+    topic: string
+  }[]
+}
+export const Cards = ({ title, topic }: CardType) => {
   return (
     <div className="wrap flex flex-col">
       <TopicHeader title={title} />
       <div className="flex flex-row fle-wrap">
-        {topic.map((items: any, index: any) => (
+        {topic.map((items, index) => (
           <div
             key={index}
             className="flex w-full cursor-pointer hover:scale-101"
