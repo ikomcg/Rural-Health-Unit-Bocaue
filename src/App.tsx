@@ -3,7 +3,6 @@ import LandingPageLayout from "./components/layout/LandingPage";
 import LandingPage from "./page/LandingPage";
 import AdminLayout from "./components/layout/admin/Layout";
 import UnderConstructionLogo from "./components/logo/UnderConstructionLogo";
-import Announcement from "./page/admin/announcement/Announcement";
 import HomeAdmin from "./page/admin/home/Home";
 import ServiceMedicine from "./page/admin/service-medicine/ServiceMedicine";
 import HealthService from "./page/admin/service-medicine/health service/Health Service";
@@ -18,6 +17,7 @@ import PatientMedicines from "./page/patient/service-medicine/medecines/Medecine
 import MedecinesViewService from "./page/admin/service-medicine/medecines/view-service/View";
 import PatientViewMedecines from "./page/patient/service-medicine/medecines/view-service/View";
 import Schedule from "./page/patient/schedule/Schedule";
+import Announcements from "./page/admin/announcement/Announcements";
 
 const App = () => {
    return (
@@ -28,7 +28,7 @@ const App = () => {
             </Route>
             <Route path="admin" element={<AdminLayout />}>
                <Route path="home" element={<HomeAdmin />} />
-               <Route path="announcement" element={<Announcement />} />
+               <Route path="announcement" element={<Announcements />} />
                <Route path="service-medicine" element={<ServiceMedicine />}>
                   <Route path="health-services">
                      <Route index element={<HealthService />} />
