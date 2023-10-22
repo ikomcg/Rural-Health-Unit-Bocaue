@@ -17,7 +17,7 @@ import PatientMedicines from "./page/patient/service-medicine/medecines/Medecine
 import MedecinesViewService from "./page/admin/service-medicine/medecines/view-service/View";
 import PatientViewMedecines from "./page/patient/service-medicine/medecines/view-service/View";
 import Schedule from "./page/patient/schedule/Schedule";
-import Announcements from "./page/admin/announcement/Announcements";
+import Announcements from "./page/admin/announcements/Announcements";
 
 const App = () => {
    return (
