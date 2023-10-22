@@ -5,6 +5,7 @@ import { useContext } from "react";
 import { UserProvider } from "../../context/UserProvider";
 import { SignOutFireBase } from "../../firebase/SignOut";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 type UserType = {
    isMenu: boolean;
@@ -21,10 +22,10 @@ const User = ({
       const logout = await SignOutFireBase();
 
       if (!logout) {
-         // Swal.fire({
-         //    icon: "error",
-         //    text: "OOPS! Something went wrong",
-         // });
+         Swal.fire({
+            icon: "error",
+            text: "OOPS! Something went wrong",
+         });
          return;
       }
 

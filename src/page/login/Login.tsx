@@ -1,15 +1,17 @@
 import React, { useContext, useState } from "react";
 import style from "./Style.module.scss";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { BiErrorCircle } from "react-icons/bi";
 import { SignInWithEmailAndPassword } from "../../firebase/SignIn";
-import { InputPassword, InputText } from "../../components/forms/Form";
+import { InputPassword, Input } from "../../components/forms/Form";
 import { LightBlueButton } from "../../components/button/BlueButton";
 import DialogSlide from "../../components/mui/dialog/SlideModal";
 import { doc } from "firebase/firestore";
 import { db } from "../../firebase/Base";
 import { GetDocFireBase } from "../../firebase/Document";
 import { UserProvider } from "../../context/UserProvider";
+import Register from "./register/Register";
+import Swal from "sweetalert2";
 
 type LoginType = {
    open: boolean;
@@ -18,6 +20,7 @@ type LoginType = {
 const Login = ({ open, setOpen }: LoginType) => {
    const navigate = useNavigate();
    const context = useContext(UserProvider);
+   const [isRegister, setIsRegister] = useState(false);
    const [status, setStatus] = useState({
       remember: false,
       isUserName: false,
@@ -88,7 +91,7 @@ const Login = ({ open, setOpen }: LoginType) => {
 
          if (set_cookie.role.includes("admin")) {
             navigate("/admin/home");
-         }else{
+         } else {
             navigate("/patient/home");
          }
       }
@@ -116,69 +119,106 @@ const Login = ({ open, setOpen }: LoginType) => {
       }
 
       if (!user.exists()) return false;
-
+      const role = user.data().role;
+      // for patient account
+      const is_verify = user.data().is_verify;
       const cookie = {
          ...user.data(),
          id,
       } as UserType;
 
-      context.saveCookies(cookie);
+      if (role.includes("patient")) {
+         if (is_verify) {
+            context.saveCookies(cookie);
+            return cookie;
+         } else {
+            setOpen(false);
+            Swal.fire({
+               icon: "info",
+               title: "Account not Verify",
+               text: "Contact Rural Health Unit to verify your account",
+            });
 
-      return cookie;
+            return false;
+         }
+      } else if (role.includes("admin")) {
+         context.saveCookies(cookie);
+         return cookie;
+      }
+
+      return false;
    };
 
    return (
-      <DialogSlide open={open} setOpen={setOpen}>
-         <div className={style.container}>
-            <div className={style.header_login}>
-               <h2 className="text-2xl font-semibold">Login</h2>
-               <p>Rural Health Unit</p>
-               <small>Bocaue, Bulacan</small>
-            </div>
+      <>
+         <DialogSlide open={open} setOpen={setOpen}>
+            <div className={style.container}>
+               <div className={style.header_login}>
+                  <h2 className="text-2xl font-semibold">Login</h2>
+                  <p>Rural Health Unit</p>
+                  <small>Bocaue, Bulacan</small>
+               </div>
 
-            {status.invalidAccount && (
-               <span className={style.alert_message}>
-                  <BiErrorCircle /> {status.alertMessage}
-               </span>
-            )}
+               {status.invalidAccount && (
+                  <span className={style.alert_message}>
+                     <BiErrorCircle /> {status.alertMessage}
+                  </span>
+               )}
 
-            <div className="mt-5">
-               <form onSubmit={LoginHandle} className="flex flex-col gap-3">
-                  <InputText
-                     onChange={OnChangeHandle}
-                     value={credential.username}
-                     type="text"
-                     name="username"
-                     id="username"
-                     placeholder="Username"
-                     label="UserName"
-                     error={status.isUserName && credential.username === ""}
-                     message="We'll never share your email with anyone else."
-                  />
-                  <InputPassword
-                     error={status.isPassword && credential.password === ""}
-                     onChange={OnChangeHandle}
-                     value={credential.password}
-                     id="password"
-                     name="password"
-                     placeholder="Password"
-                     label="Password"
-                  />
-                  <div className="flex flex-row justify-end">
-                     <Link to="" className="text-blue hover:underline">
-                        Forgot Password?
-                     </Link>
+               <div className="mt-5">
+                  <form onSubmit={LoginHandle} className="flex flex-col gap-3">
+                     <Input
+                        onChange={OnChangeHandle}
+                        value={credential.username}
+                        type="text"
+                        name="username"
+                        id="username"
+                        placeholder="Username"
+                        label="UserName"
+                        error={status.isUserName && credential.username === ""}
+                        message="We'll never share your email with anyone else."
+                     />
+                     <InputPassword
+                        error={status.isPassword && credential.password === ""}
+                        onChange={OnChangeHandle}
+                        value={credential.password}
+                        id="password"
+                        name="password"
+                        placeholder="Password"
+                        label="Password"
+                     />
+                     <div className="flex flex-row items-center justify-end text-sm">
+                        <button type="button" className="text-sm text-blue">
+                           Forgot Password
+                        </button>
+                     </div>
+                     <LightBlueButton
+                        className="px-4 py-2 mx-auto"
+                        type="submit"
+                        title="Login"
+                        disabled={status.isLoading}
+                     />
+                  </form>
+                  <div className="flex flex-row items-center justify-center text-sm mt-5">
+                     <button
+                        type="button"
+                        className="text-sm"
+                        onClick={() => {
+                           setOpen(false);
+                           setIsRegister(true);
+                        }}
+                     >
+                        Don't have an account?{" "}
+                        <span className="text-blue cursor-pointer hover:underline">
+                           Register
+                        </span>
+                     </button>
                   </div>
-                  <LightBlueButton
-                     className="px-4 py-2"
-                     type="submit"
-                     title="Login"
-                     disabled={status.isLoading}
-                  />
-               </form>
+               </div>
             </div>
-         </div>
-      </DialogSlide>
+         </DialogSlide>
+         {isRegister && <Register open={isRegister} setOpen={setIsRegister} />}
+      </>
    );
 };
 
