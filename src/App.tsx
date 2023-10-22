@@ -18,7 +18,6 @@ import PatientMedicines from "./page/patient/service-medicine/medecines/Medecine
 import MedecinesViewService from "./page/admin/service-medicine/medecines/view-service/View";
 import PatientViewMedecines from "./page/patient/service-medicine/medecines/view-service/View";
 import Schedule from "./page/patient/schedule/Schedule";
-// import HealtWorkers from "./page/admin/health workers/HealtWorkers";
 
 const App = () => {
    return (
@@ -44,10 +43,6 @@ const App = () => {
                      />
                   </Route>
                </Route>
-               {/* <Route path="health-worker">
-                  <Route index element={<HealtWorkers />} />
-               </Route> */}
-
                <Route
                   path="*"
                   element={
