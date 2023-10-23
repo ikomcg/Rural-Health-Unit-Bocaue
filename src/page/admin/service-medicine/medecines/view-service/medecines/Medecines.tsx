@@ -167,7 +167,7 @@ const Medecines = () => {
                variant="outlined"
                shape="rounded"
                color="primary"
-               onChange={(e, page) => setCurrentPage(page)}
+               onChange={(_e, page) => setCurrentPage(page)}
             />
          )}
          {payload && (
