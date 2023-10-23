@@ -1,13 +1,12 @@
 import { useParams } from "react-router-dom";
 import Table from "../../../../../../components/table/Table";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Pagination } from "@mui/material";
 import { FaTrash } from "react-icons/fa";
 import { AiFillEdit, AiOutlineSearch } from "react-icons/ai";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../../../../../firebase/Base";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
-import Pagination from "../../../../../../components/pagination/Pagination";
 import { useFetchMedecineListService } from "../../../../../../hooks/Medecines";
 import UpdateMedecine from "./UpdateMedecine";
 
@@ -16,7 +15,7 @@ type PayloadType = object & Omit<MedecineList, "created_at">;
 const Medecines = () => {
    const { id } = useParams();
    const medecines = useFetchMedecineListService({ id: id });
-   const [currentPage, setCurrentPage] = useState(0);
+   const [currentPage, setCurrentPage] = useState(1);
    const [sliceMedecines, setSliceMedecines] = useState<
       MedecineList[] | null
    >();
@@ -64,9 +63,9 @@ const Medecines = () => {
                .toLocaleLowerCase()
                .includes(search.toLocaleLowerCase().trim())
          );
-         setPages(filterData.length);
-
-         const page = currentPage + 1;
+         const pages = Math.ceil(filterData.length / 10);
+         setPages(pages);
+         const page = currentPage;
          const lastPostIndex = page * 10;
          const firstPostIndex = lastPostIndex - 10;
 
@@ -163,11 +162,12 @@ const Medecines = () => {
 
          {medecines && (
             <Pagination
-               limit={10}
+               page={currentPage}
                count={pages}
-               currentPage={currentPage}
-               setCurrentPage={setCurrentPage}
-               className="mt-3"
+               variant="outlined"
+               shape="rounded"
+               color="primary"
+               onChange={(e, page) => setCurrentPage(page)}
             />
          )}
          {payload && (

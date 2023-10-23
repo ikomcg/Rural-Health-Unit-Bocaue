@@ -33,7 +33,7 @@ const HealthService = () => {
                   />
                ))
             )}
-            <AddCard onClick={HandleClickService} />
+            {service && <AddCard onClick={HandleClickService} />}
          </div>
          {isService && (
             <NewService isPost={isService} setIsPost={setIsService} />

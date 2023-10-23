@@ -1,9 +1,8 @@
 import { useParams } from "react-router-dom";
 import Table from "../../../../../../components/table/Table";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Pagination } from "@mui/material";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import Pagination from "../../../../../../components/pagination/Pagination";
 import useFetchRequest from "../../../../../../hooks/Request";
 import { BlueButton } from "../../../../../../components/button/BlueButton";
 import { doc, updateDoc } from "firebase/firestore";
@@ -14,7 +13,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 const Request = () => {
    const { id } = useParams();
    const requests = useFetchRequest({ id: id });
-   const [currentPage, setCurrentPage] = useState(0);
+   const [currentPage, setCurrentPage] = useState(1);
    const [sliceRequest, setSliceRequest] = useState<RequestService[] | null>();
    const [search, setSearch] = useState("");
    const [refresh, setRefresh] = useState(false);
@@ -31,8 +30,9 @@ const Request = () => {
                .toLocaleLowerCase()
                .includes(search.toLocaleLowerCase().trim())
          );
-         setPages(filterData.length);
-         const page = currentPage + 1;
+         const pages = Math.ceil(filterData.length / 10);
+         setPages(pages);
+         const page = currentPage;
          const lastPostIndex = page * 10;
          const firstPostIndex = lastPostIndex - 10;
 
@@ -139,11 +139,12 @@ const Request = () => {
 
          {requests && (
             <Pagination
-               limit={5}
+               page={currentPage}
                count={pages}
-               currentPage={currentPage}
-               setCurrentPage={setCurrentPage}
-               className="mt-3"
+               variant="outlined"
+               shape="rounded"
+               color="primary"
+               onChange={(e, page) => setCurrentPage(page)}
             />
          )}
       </>

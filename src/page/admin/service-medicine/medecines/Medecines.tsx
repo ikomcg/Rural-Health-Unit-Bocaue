@@ -31,7 +31,7 @@ const Medicines = () => {
                   />
                ))
             )}
-            <AddCard onClick={HandleClickMedecine} />
+            {medecines && <AddCard onClick={HandleClickMedecine} />}
          </div>
 
          {isMedecine && (

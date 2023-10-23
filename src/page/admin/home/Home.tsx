@@ -20,22 +20,22 @@ const Card: React.FC<CardType> = ({ count, name }) => {
 
 const Home = () => {
    const { cookies } = useContext(UserProvider);
-   const generateDayWiseTimeSeries = (
-      baseval: number,
-      count: number,
-      yrange: { min: number; max: number }
-   ) => {
-      const series = [];
-      for (let i = 0; i <= count; i++) {
-         const x = baseval;
-         const y =
-            Math.floor(Math.random() * (yrange.max - yrange.min + 1)) +
-            yrange.min;
-         series.push([x, y]);
-         baseval += 86400000; // 1 day in milliseconds
-      }
-      return series;
-   };
+   // const generateDayWiseTimeSeries = (
+   //    baseval: number,
+   //    count: number,
+   //    yrange: { min: number; max: number }
+   // ) => {
+   //    const series = [];
+   //    for (let i = 0; i <= count; i++) {
+   //       const x = baseval;
+   //       const y =
+   //          Math.floor(Math.random() * (yrange.max - yrange.min + 1)) +
+   //          yrange.min;
+   //       series.push([x, y]);
+   //       baseval += 86400000; // 1 day in milliseconds
+   //    }
+   //    return series;
+   // };
 
    return (
       <>
@@ -54,37 +54,16 @@ const Home = () => {
             type="area"
             series={[
                {
-                  name: "Patien",
-                  data: generateDayWiseTimeSeries(
-                     new Date("1 Oct 2023 GMT").getTime(),
-                     20,
-                     {
-                        min: 10,
-                        max: 60,
-                     }
-                  ),
+                  name: "Patient",
+                  data: [31, 40, 28, 51, 42, 109, 150],
                },
                {
                   name: "Users",
-                  data: generateDayWiseTimeSeries(
-                     new Date("1 Oct 2023 GMT").getTime(),
-                     20,
-                     {
-                        min: 10,
-                        max: 20,
-                     }
-                  ),
+                  data: [11, 32, 45, 32, 34, 52, 25],
                },
                {
                   name: "Covid Cases",
-                  data: generateDayWiseTimeSeries(
-                     new Date("1 Oct 2023 GMT").getTime(),
-                     20,
-                     {
-                        min: 10,
-                        max: 15,
-                     }
-                  ),
+                  data: [51, 31, 40, 100, 28, 42, 50],
                },
             ]}
             options={{
@@ -92,7 +71,8 @@ const Home = () => {
                   enabled: false,
                },
                xaxis: {
-                  type: "datetime",
+                  type: "category", // Set the x-axis type to 'category' for months
+                  categories: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"],
                },
                colors: ["#008FFB", "#00E396", "#CED4DC"],
                tooltip: {
