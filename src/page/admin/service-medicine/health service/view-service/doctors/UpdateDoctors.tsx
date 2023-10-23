@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import style from "../../style.module.scss";
-import useFetchDoctors from "../../../../../../hooks/Doctors";
+import useFetchUsers from "../../../../../../hooks/Users";
 import { useParams } from "react-router-dom";
 import DialogSlide from "../../../../../../components/mui/dialog/SlideModal";
 import { AiFillCloseCircle } from "react-icons/ai";
@@ -16,7 +16,7 @@ type PostType = {
 };
 
 const UpdateDoctors = ({ payload, setPayload }: PostType) => {
-   const doctors = useFetchDoctors();
+   const doctors = useFetchUsers({ role: ["doctor", "health-worker"] });
    const { id } = useParams();
    const [isPost, setIsPost] = useState(false);
    const [isCreate, setIsCreate] = useState(false);
@@ -48,7 +48,7 @@ const UpdateDoctors = ({ payload, setPayload }: PostType) => {
 
             const data = {
                user_id: payload.user_id,
-               name: doctor?.name,
+               name: doctor?.full_name,
                available_from: TimeStampValue(payload.available_from),
                available_to: TimeStampValue(payload.available_from),
                update_at: serverTimestamp(),
@@ -124,7 +124,7 @@ const UpdateDoctors = ({ payload, setPayload }: PostType) => {
                         ) : (
                            doctors.map((item) => (
                               <option key={item.id} value={item.id}>
-                                 {item.name}
+                                 {item.full_name}
                               </option>
                            ))
                         )}
@@ -162,7 +162,7 @@ const UpdateDoctors = ({ payload, setPayload }: PostType) => {
                   className="ml-auto py-2"
                   disabled={isCreate}
                >
-                 Save
+                  Save
                </BlueButton>
             </div>
          </div>

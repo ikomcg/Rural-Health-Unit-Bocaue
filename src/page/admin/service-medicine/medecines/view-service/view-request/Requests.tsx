@@ -136,6 +136,7 @@ const Request = () => {
 
          {medecine && (
             <Pagination
+               className="mt-2"
                page={currentPage}
                count={pages}
                variant="outlined"

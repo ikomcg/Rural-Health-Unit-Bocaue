@@ -1,6 +1,6 @@
 import React, { SetStateAction, useEffect, useState } from "react";
 import style from "../../style.module.scss";
-import useFetchDoctors from "../../../../../../hooks/Doctors";
+import useFetchUsers from "../../../../../../hooks/Users";
 import { useParams } from "react-router-dom";
 import DialogSlide from "../../../../../../components/mui/dialog/SlideModal";
 import { AiFillCloseCircle } from "react-icons/ai";
@@ -25,7 +25,7 @@ type PayloadType = {
 };
 
 const AddDoctors = ({ isPost, setIsPost }: PostType) => {
-   const doctors = useFetchDoctors();
+   const doctors = useFetchUsers({ role: ["doctor", "health-worker"] });
    const { id } = useParams();
    const [isCreate, setIsCreate] = useState(false);
    const [payload, setPayload] = useState<PayloadType[]>([
@@ -55,7 +55,7 @@ const AddDoctors = ({ isPost, setIsPost }: PostType) => {
 
          return {
             user_id: item.user_id,
-            name: doctor?.name ?? "",
+            name: doctor?.full_name ?? "",
             available_from: TimeStampValue(item.available_from),
             available_to: TimeStampValue(item.available_to),
          };
@@ -218,7 +218,7 @@ export default AddDoctors;
 
 type FormType = {
    item: PayloadType;
-   doctors: HealthWorkers[] | undefined | null;
+   doctors: UserType[] | undefined | null;
    OnRemove: (id: string) => void;
    OnChangeHandle: (
       e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -248,7 +248,7 @@ export const Form = ({ item, doctors, OnChangeHandle, OnRemove }: FormType) => {
                ) : (
                   doctors.map((item) => (
                      <option key={item.id} value={item.id}>
-                        {item.name}
+                        {item.full_name}
                      </option>
                   ))
                )}

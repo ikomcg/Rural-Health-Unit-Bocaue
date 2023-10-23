@@ -1,8 +1,7 @@
 import { useParams } from "react-router-dom";
 import Table from "../../../../../../components/table/Table";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Pagination } from "@mui/material";
 import { useEffect, useState } from "react";
-import Pagination from "../../../../../../components/pagination/Pagination";
 import { useFetchMedecineListService } from "../../../../../../hooks/Medecines";
 import { AiOutlineSearch } from "react-icons/ai";
 
@@ -29,7 +28,8 @@ const Medecines = () => {
                .toLocaleLowerCase()
                .includes(search.toLocaleLowerCase().trim())
          );
-         setPages(filterData.length);
+         const pages = Math.ceil(filterData.length / 10);
+         setPages(pages);
 
          const page = currentPage + 1;
          const lastPostIndex = page * 10;
@@ -104,11 +104,13 @@ const Medecines = () => {
 
          {medecines && (
             <Pagination
-               limit={10}
+               className="mt-2"
+               page={currentPage}
                count={pages}
-               currentPage={currentPage}
-               setCurrentPage={setCurrentPage}
-               className="mt-3"
+               variant="outlined"
+               shape="rounded"
+               color="primary"
+               onChange={(_e, page) => setCurrentPage(page)}
             />
          )}
       </>

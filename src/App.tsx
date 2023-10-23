@@ -18,6 +18,8 @@ import MedecinesViewService from "./page/admin/service-medicine/medecines/view-s
 import PatientViewMedecines from "./page/patient/service-medicine/medecines/view-service/View";
 import Schedule from "./page/patient/schedule/Schedule";
 import Announcements from "./page/admin/announcements/Announcements";
+import HealtWorkers from "./page/admin/health workers/HealtWorkers";
+import Patient from "./page/admin/Patient/Patient";
 
 const App = () => {
    return (
@@ -43,6 +45,8 @@ const App = () => {
                      />
                   </Route>
                </Route>
+               <Route path="health-worker" element={<HealtWorkers />} />
+               <Route path="patient" element={<Patient />} />
                <Route
                   path="*"
                   element={

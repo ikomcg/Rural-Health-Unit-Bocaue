@@ -1,8 +1,7 @@
 import { useParams } from "react-router-dom";
 import Table from "../../../../../../components/table/Table";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Pagination } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import Pagination from "../../../../../../components/pagination/Pagination";
 import { useFetchMyRequestMedecine } from "../../../../../../hooks/Request";
 import { BlueButton } from "../../../../../../components/button/BlueButton";
 import AddRequest from "./add/Add";
@@ -20,9 +19,14 @@ const Request = () => {
       RequestMedecines[] | null
    >();
    const [isOpen, setIsOpen] = useState(false);
+   const [pages, setPages] = useState(0);
    useEffect(() => {
       const SlicePagination = () => {
          if (medecines === null) return setSliceMedecines(null);
+         if (medecines === undefined) return;
+
+         const pages = Math.ceil(medecines.length / 10);
+         setPages(pages);
 
          const page = currentPage + 1;
          const lastPostIndex = page * 5;
@@ -82,11 +86,13 @@ const Request = () => {
 
          {medecines && (
             <Pagination
-               limit={5}
-               count={medecines.length}
-               currentPage={currentPage}
-               setCurrentPage={setCurrentPage}
-               className="mt-3"
+               className="mt-2"
+               page={currentPage}
+               count={pages}
+               variant="outlined"
+               shape="rounded"
+               color="primary"
+               onChange={(_e, page) => setCurrentPage(page)}
             />
          )}
          {isOpen && <AddRequest isPost={isOpen} setIsPost={setIsOpen} />}

@@ -1,11 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-type HealthWorkers = {
-   id: string;
-   name: string;
-   role: string;
-   created_at: unknown;
-};
 type PayloadType = {
    id: string;
    user_id: string;

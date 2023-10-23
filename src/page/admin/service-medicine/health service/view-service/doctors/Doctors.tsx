@@ -178,6 +178,7 @@ const Doctors = () => {
 
          {doctors && (
             <Pagination
+               className="mt-2"
                page={currentPage}
                count={pages}
                variant="outlined"

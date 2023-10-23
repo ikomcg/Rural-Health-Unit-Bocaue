@@ -7,17 +7,17 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { BsDot, BsFillGearFill } from "react-icons/bs";
 import style from "./style.module.scss";
 
-const HealtWorkers = () => {
-   const doctors = useFetchUsers({ role: ["doctor", "health-worker"] });
+const Patient = () => {
+   const doctors = useFetchUsers({ role: ["patient"] });
    const [currentPage, setCurrentPage] = useState(1);
    const [pages, setPages] = useState(0);
-   const [sliceDoctors, setSliceDoctors] = useState<UserType[] | null>();
+   const [slicePatient, setSlicePatient] = useState<UserType[] | null>();
    const [search, setSearch] = useState("");
    const [refresh, setRefresh] = useState(false);
 
    useEffect(() => {
       const SlicePagination = () => {
-         if (doctors === null) return setSliceDoctors(null);
+         if (doctors === null) return setSlicePatient(null);
          if (doctors === undefined) return;
 
          const filterData = doctors.filter((item) =>
@@ -33,7 +33,7 @@ const HealtWorkers = () => {
          const firstPostIndex = lastPostIndex - 10;
 
          const currentPost = filterData?.slice(firstPostIndex, lastPostIndex);
-         setSliceDoctors(currentPost);
+         setSlicePatient(currentPost);
       };
 
       SlicePagination();
@@ -47,7 +47,7 @@ const HealtWorkers = () => {
    return (
       <Container>
          <div className="flex flex-row justify-between mt-2 bg-blue py-2 items-center px-3">
-            <h1 className="text-white font-semibold text-lg">Health Workers</h1>
+            <h1 className="text-white font-semibold text-lg">Patient</h1>
             <div className="flex flex-row w-1/2">
                <button
                   className="text-white bg-blue text-xl px-3 py-[4px] rounded-l border border-blue"
@@ -70,12 +70,9 @@ const HealtWorkers = () => {
                />
             </div>
          </div>
-         <Table
-            th={["#", "Name", "Role", "Status", "Action"]}
-            className={style.table}
-         >
+         <Table th={["#", "Name", "Status", "Action"]} className={style.table}>
             {" "}
-            {sliceDoctors === undefined ? (
+            {slicePatient === undefined ? (
                <tr>
                   <td className="text-center" colSpan={5}>
                      <div className="flex flex-col justify-center items-center">
@@ -84,20 +81,20 @@ const HealtWorkers = () => {
                      </div>
                   </td>
                </tr>
-            ) : sliceDoctors === null ? (
+            ) : slicePatient === null ? (
                <tr>
                   <td className="text-sm" colSpan={5}>
                      Error Get List!!
                   </td>
                </tr>
-            ) : sliceDoctors.length === 0 ? (
+            ) : slicePatient.length === 0 ? (
                <tr>
                   <td className="text-sm" colSpan={5}>
                      No Schedules found
                   </td>
                </tr>
             ) : (
-               sliceDoctors.map((item, i) => (
+               slicePatient.map((item, i) => (
                   <tr key={item.id}>
                      <td>{i + 1}</td>
                      <td>
@@ -110,7 +107,6 @@ const HealtWorkers = () => {
                            <span>{item.full_name}</span>
                         </div>
                      </td>
-                     <td>{item.role[0]}</td>
                      <td>
                         <span className="flex flex-row justify-center items-center">
                            <BsDot
@@ -148,4 +144,4 @@ const HealtWorkers = () => {
    );
 };
 
-export default HealtWorkers;
+export default Patient;
