@@ -123,7 +123,7 @@ const Register = ({ open, setOpen }: RegisterType) => {
             </div>
             {page === 1 ? (
                <form
-                  className="flex flex-col gap-3 m-5"
+                  className="flex flex-col gap-3 mx-5 mb-5"
                   onSubmit={(e) => {
                      e.preventDefault();
                      if (payload.email.trim() && password.trim()) {
