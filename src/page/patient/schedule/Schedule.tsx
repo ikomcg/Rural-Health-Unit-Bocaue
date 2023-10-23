@@ -5,6 +5,9 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { useFetchMySchedules } from "../../../hooks/Schedule";
 import { useContext, useMemo } from "react";
 import { UserProvider } from "../../../context/UserProvider";
+import * as bootstrap from "bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import moment from "moment";
 
 const Schedule = () => {
    const { cookies } = useContext(UserProvider);
@@ -26,7 +29,7 @@ const Schedule = () => {
    }, [schedules]);
 
    return (
-      <Container>
+      <Container className="relative">
          <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
@@ -41,6 +44,20 @@ const Schedule = () => {
                hour: "numeric",
                minute: "2-digit",
                meridiem: "short",
+            }}
+            eventDidMount={(info) => {
+               return new bootstrap.Popover(info.el, {
+                  title: info.event.title,
+                  placement: "top",
+                  trigger: "hover",
+                  customClass: "popoverStyle",
+                  content: `<p><strong>Schedule:</strong> ${moment(
+                     info.event.start
+                  )
+                     .utcOffset(8)
+                     .format("LLL")}</p>`,
+                  html: true,
+               });
             }}
          />
       </Container>

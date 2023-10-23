@@ -53,7 +53,7 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
    -moz-appearance: textfield;
 }
-input[type="file"]{
+input[type="file"] {
    border: none;
    padding-top: 0;
    padding-left: 0;
@@ -66,4 +66,9 @@ input[type="file"]::file-selector-button {
    cursor: pointer;
    padding: 5px;
    border-radius: 5px;
+}
+.popoverStyle .popover-header {
+   background-color: #2b90f9;
+   color: white;
+   font-size: 14px;
 }
