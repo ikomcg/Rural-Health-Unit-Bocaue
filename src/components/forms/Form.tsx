@@ -23,7 +23,7 @@ export const Input = ({ label, message, error, ...props }: InputType) => {
             {...props}
             className={`w-full border ${
                error ? "border-red-500 " : "border-slate-400"
-            }  rounded px-5 py-2 outline-none text-black`}
+            }  rounded px-3 py-2 outline-none text-black`}
          />
          {message && (
             <span className="font-normal text-xs text-slate-500">
@@ -51,7 +51,7 @@ export const InputPassword = ({
             {...props}
             className={`w-full border ${
                error ? "border-red-500 " : "border-slate-400"
-            } rounded px-5 py-2 outline-none text-black`}
+            } rounded px-3 py-2 outline-none text-black`}
          />
          {message && (
             <span className="font-normal text-xs text-slate-500">
@@ -91,7 +91,7 @@ export const Select = ({ label, children, error, ...props }: SelectType) => {
             {...props}
             className={`w-full border ${
                error ? "border-red-500 " : "border-slate-400"
-            }  rounded px-5 py-2 outline-none text-black`}
+            }  rounded px-3 py-2 outline-none text-black`}
          >
             {children}
          </select>
