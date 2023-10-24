@@ -6,32 +6,36 @@ import Newsletter from "./landing-page/Newsletter";
 import {
    getAuth,
    isSignInWithEmailLink,
+   onAuthStateChanged,
    signInWithEmailLink,
 } from "firebase/auth";
 import Swal from "sweetalert2";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, onSnapshot, setDoc } from "firebase/firestore";
 import { db } from "../firebase/Base";
 import { TimeStampValue } from "../shared/TimeStamp";
-import { Backdrop, CircularProgress } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { UserProvider } from "../context/UserProvider";
+
 const LandingPage = () => {
    const auth = getAuth();
-   const [isLoading, setIsLoading] = useState(false);
+   const navigate = useNavigate();
+   const { saveCookies, setLoading } = useContext(UserProvider);
 
    useEffect(() => {
       if (isSignInWithEmailLink(auth, window.location.href)) {
          const email = window.localStorage.getItem("emailForSignIn");
 
          if (!email) return;
-         setIsLoading(true);
+         setLoading(true);
 
          const SignInWithEmailLink = async () => {
             await signInWithEmailLink(auth, email, window.location.href)
                .then((res) => {
-                 return CreateUserInformation(res.user.uid);
+                  return CreateUserInformation(res.user.uid);
                })
                .catch((error) => {
-                  setIsLoading(false);
+                  setLoading(false);
                   Swal.fire({
                      icon: "error",
                      text: error.code,
@@ -41,6 +45,44 @@ const LandingPage = () => {
 
          SignInWithEmailLink();
       }
+
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+         if (user) {
+            const ref = doc(db, "users", user.uid);
+            onSnapshot(
+               ref,
+               (snapshot) => {
+                  if (!snapshot) return;
+
+                  if (snapshot.exists()) {
+                     const data = snapshot.data();
+
+                     const cookie = {
+                        ...data,
+                        id: snapshot.id,
+                     } as UserType;
+
+                     if (cookie.role.includes("admin")) {
+                        navigate("/admin/home");
+                     } else {
+                        navigate("/patient/home");
+                     }
+
+                     saveCookies(cookie);
+                  } else {
+                     console.log("No such document!");
+                  }
+               },
+               (error) => {
+                  console.log("snap err", error);
+               }
+            );
+         } else {
+            console.log("user not login");
+            navigate("/");
+         }
+      });
+      return () => unsubscribe();
    }, []);
 
    const CreateUserInformation = async (uid: string) => {
@@ -74,8 +116,10 @@ const LandingPage = () => {
                title: err.code,
             });
          });
-      setIsLoading(false);
+      setLoading(false);
    };
+
+   
 
    return (
       <>
@@ -92,12 +136,6 @@ const LandingPage = () => {
          <section className="health-condition">
             <HealthCondition />
          </section>
-         <Backdrop
-            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open={isLoading}
-         >
-            <CircularProgress color="inherit" />
-         </Backdrop>
       </>
    );
 };

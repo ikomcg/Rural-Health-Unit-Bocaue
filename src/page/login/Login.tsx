@@ -6,7 +6,7 @@ import { SignInWithEmailAndPassword } from "../../firebase/SignIn";
 import { InputPassword, Input } from "../../components/forms/Form";
 import { LightBlueButton } from "../../components/button/BlueButton";
 import DialogSlide from "../../components/mui/dialog/SlideModal";
-import { doc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/Base";
 import { GetDocFireBase } from "../../firebase/Document";
 import { UserProvider } from "../../context/UserProvider";
@@ -19,7 +19,7 @@ type LoginType = {
 };
 const Login = ({ open, setOpen }: LoginType) => {
    const navigate = useNavigate();
-   const context = useContext(UserProvider);
+   const { setLoading, saveCookies } = useContext(UserProvider);
    const [isRegister, setIsRegister] = useState(false);
    const [status, setStatus] = useState({
       remember: false,
@@ -65,7 +65,7 @@ const Login = ({ open, setOpen }: LoginType) => {
    const Login = async () => {
       const email = credential.username;
       const password = credential.password;
-
+      setLoading(true, "Please wait...");
       setStatus((prev) => ({
          ...prev,
          isLoading: true,
@@ -87,13 +87,26 @@ const Login = ({ open, setOpen }: LoginType) => {
             isLoading: false,
          }));
 
-         if (!set_cookie) return;
+         if (!set_cookie) return setLoading(false);
 
-         if (set_cookie.role.includes("admin")) {
-            navigate("/admin/home");
-         } else {
-            navigate("/patient/home");
-         }
+         await updateDoc(doc(db, "users", data.user.uid), {
+            status: "online",
+         })
+            .then(() => {
+               if (set_cookie.role.includes("admin")) {
+                  navigate("/admin/home");
+               } else {
+                  navigate("/patient/home");
+               }
+            })
+            .catch(() => {
+               Swal.fire({
+                  icon: "error",
+                  title: "Login Failed",
+                  text: "try again!",
+               });
+            });
+         setLoading(false);
       }
 
       if (!login.status) {
@@ -129,7 +142,7 @@ const Login = ({ open, setOpen }: LoginType) => {
 
       if (role.includes("patient")) {
          if (is_verify) {
-            context.saveCookies(cookie);
+            saveCookies(cookie);
             return cookie;
          } else {
             setOpen(false);
@@ -142,7 +155,7 @@ const Login = ({ open, setOpen }: LoginType) => {
             return false;
          }
       } else if (role.includes("admin")) {
-         context.saveCookies(cookie);
+         saveCookies(cookie);
          return cookie;
       }
 

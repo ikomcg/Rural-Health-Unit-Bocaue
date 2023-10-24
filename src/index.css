@@ -39,6 +39,9 @@ footer ul {
    display: grid;
    grid-template-columns: 25% 25%;
 }
+.swal2-actions {
+   font-size: 14px !important;
+}
 .swal2-actions .swal2-confirm {
    background-color: #2b90f9 !important;
    box-shadow: none !important;
