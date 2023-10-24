@@ -96,7 +96,8 @@ const Register = ({ open, setOpen }: RegisterType) => {
             window.localStorage.setItem("payload", JSON.stringify(payload));
             Swal.fire({
                icon: "success",
-               title: "We send to your email verification",
+               title: "Check you email",
+               text: "Confirm your Email address",
             });
          })
          .catch((error) => {

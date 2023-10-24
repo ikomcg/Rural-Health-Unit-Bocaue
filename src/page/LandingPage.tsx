@@ -19,21 +19,27 @@ const LandingPage = () => {
    const [isLoading, setIsLoading] = useState(false);
 
    useEffect(() => {
-      const email = window.localStorage.getItem("emailForSignIn");
-
       if (isSignInWithEmailLink(auth, window.location.href)) {
+         const email = window.localStorage.getItem("emailForSignIn");
+
          if (!email) return;
          setIsLoading(true);
-         signInWithEmailLink(auth, email, window.location.href)
-            .then((res) => {
-               CreateUserInformation(res.user.uid);
-            })
-            .catch((error) => {
-               Swal.fire({
-                  icon: "error",
-                  text: error.code,
+
+         const SignInWithEmailLink = async () => {
+            await signInWithEmailLink(auth, email, window.location.href)
+               .then((res) => {
+                 return CreateUserInformation(res.user.uid);
+               })
+               .catch((error) => {
+                  setIsLoading(false);
+                  Swal.fire({
+                     icon: "error",
+                     text: error.code,
+                  });
                });
-            });
+         };
+
+         SignInWithEmailLink();
       }
    }, []);
 
@@ -68,6 +74,7 @@ const LandingPage = () => {
                title: err.code,
             });
          });
+      setIsLoading(false);
    };
 
    return (
