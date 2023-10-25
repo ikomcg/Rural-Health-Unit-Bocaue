@@ -6,21 +6,20 @@ import Newsletter from "./landing-page/Newsletter";
 import {
    getAuth,
    isSignInWithEmailLink,
-   onAuthStateChanged,
    signInWithEmailLink,
 } from "firebase/auth";
 import Swal from "sweetalert2";
-import { doc, onSnapshot, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase/Base";
 import { TimeStampValue } from "../shared/TimeStamp";
 import { useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { UserProvider } from "../context/UserProvider";
 
 const LandingPage = () => {
    const auth = getAuth();
-   const navigate = useNavigate();
-   const { saveCookies, setLoading } = useContext(UserProvider);
+   // const navigate = useNavigate();
+   const { setLoading } = useContext(UserProvider);
 
    useEffect(() => {
       if (isSignInWithEmailLink(auth, window.location.href)) {
@@ -46,43 +45,63 @@ const LandingPage = () => {
          SignInWithEmailLink();
       }
 
-      const unsubscribe = onAuthStateChanged(auth, (user) => {
-         if (user) {
-            const ref = doc(db, "users", user.uid);
-            onSnapshot(
-               ref,
-               (snapshot) => {
-                  if (!snapshot) return;
+      //    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      //       if (user) {
+      //          const ref = doc(db, "users", user.uid);
+      //          onSnapshot(
+      //             ref,
+      //             (snapshot) => {
+      //                if (!snapshot) return;
 
-                  if (snapshot.exists()) {
-                     const data = snapshot.data();
+      //                if (snapshot.exists()) {
+      //                   const data = snapshot.data();
+      //                   // for patient account
+      //                   const is_verify = data.is_verify;
+      //                   const cookie = {
+      //                      ...data,
+      //                      id: user.uid,
+      //                   } as UserType;
 
-                     const cookie = {
-                        ...data,
-                        id: snapshot.id,
-                     } as UserType;
+      //                   if (role.includes("patient")) {
+      //                      if (is_verify) {
+      //                         saveCookies(cookie);
+      //                         return cookie;
+      //                      } else {
+      //                         setOpen(false);
+      //                         Swal.fire({
+      //                            icon: "info",
+      //                            title: "Account not Verify",
+      //                            text: "Contact Rural Health Unit to verify your account",
+      //                         });
 
-                     if (cookie.role.includes("admin")) {
-                        navigate("/admin/home");
-                     } else {
-                        navigate("/patient/home");
-                     }
+      //                         return false;
+      //                      }
+      //                   } else if (role.includes("admin")) {
+      //                      saveCookies(cookie);
+      //                      return cookie;
+      //                   }
 
-                     saveCookies(cookie);
-                  } else {
-                     console.log("No such document!");
-                  }
-               },
-               (error) => {
-                  console.log("snap err", error);
-               }
-            );
-         } else {
-            console.log("user not login");
-            navigate("/");
-         }
-      });
-      return () => unsubscribe();
+      //                   if (cookie.role.includes("admin")) {
+      //                      navigate("/admin/home");
+      //                   } else {
+      //                      navigate("/patient/home");
+      //                   }
+
+      //                   saveCookies(cookie);
+      //                } else {
+      //                   console.log("No such document!");
+      //                }
+      //             },
+      //             (error) => {
+      //                console.log("snap err", error);
+      //             }
+      //          );
+      //       } else {
+      //          console.log("user not login");
+      //          navigate("/");
+      //       }
+      //    });
+      //    return () => unsubscribe();
    }, []);
 
    const CreateUserInformation = async (uid: string) => {
@@ -118,8 +137,6 @@ const LandingPage = () => {
          });
       setLoading(false);
    };
-
-   
 
    return (
       <>
