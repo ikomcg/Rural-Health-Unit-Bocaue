@@ -110,6 +110,7 @@ const Login = ({ open, setOpen }: LoginType) => {
       }
 
       if (!login.status) {
+         setLoading(false);
          const data = JSON.parse(JSON.stringify(login.res)) as ErrorResponse;
          console.log(data.code);
          const message = data.code.split("/")[1];
