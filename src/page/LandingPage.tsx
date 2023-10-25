@@ -44,64 +44,6 @@ const LandingPage = () => {
 
          SignInWithEmailLink();
       }
-
-      //    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      //       if (user) {
-      //          const ref = doc(db, "users", user.uid);
-      //          onSnapshot(
-      //             ref,
-      //             (snapshot) => {
-      //                if (!snapshot) return;
-
-      //                if (snapshot.exists()) {
-      //                   const data = snapshot.data();
-      //                   // for patient account
-      //                   const is_verify = data.is_verify;
-      //                   const cookie = {
-      //                      ...data,
-      //                      id: user.uid,
-      //                   } as UserType;
-
-      //                   if (role.includes("patient")) {
-      //                      if (is_verify) {
-      //                         saveCookies(cookie);
-      //                         return cookie;
-      //                      } else {
-      //                         setOpen(false);
-      //                         Swal.fire({
-      //                            icon: "info",
-      //                            title: "Account not Verify",
-      //                            text: "Contact Rural Health Unit to verify your account",
-      //                         });
-
-      //                         return false;
-      //                      }
-      //                   } else if (role.includes("admin")) {
-      //                      saveCookies(cookie);
-      //                      return cookie;
-      //                   }
-
-      //                   if (cookie.role.includes("admin")) {
-      //                      navigate("/admin/home");
-      //                   } else {
-      //                      navigate("/patient/home");
-      //                   }
-
-      //                   saveCookies(cookie);
-      //                } else {
-      //                   console.log("No such document!");
-      //                }
-      //             },
-      //             (error) => {
-      //                console.log("snap err", error);
-      //             }
-      //          );
-      //       } else {
-      //          console.log("user not login");
-      //          navigate("/");
-      //       }
-      //    });
-      //    return () => unsubscribe();
    }, []);
 
    const CreateUserInformation = async (uid: string) => {
