@@ -22,28 +22,28 @@ const LandingPage = () => {
    const { setLoading } = useContext(UserProvider);
 
    useEffect(() => {
-      if (isSignInWithEmailLink(auth, window.location.href)) {
-         const email = window.localStorage.getItem("emailForSignIn");
+      if (!isSignInWithEmailLink(auth, window.location.href)) return;
 
-         if (!email) return;
-         setLoading(true);
+      const email = window.localStorage.getItem("emailForSignIn");
 
-         const SignInWithEmailLink = async () => {
-            await signInWithEmailLink(auth, email, window.location.href)
-               .then((res) => {
-                  return CreateUserInformation(res.user.uid);
-               })
-               .catch((error) => {
-                  setLoading(false);
-                  Swal.fire({
-                     icon: "error",
-                     text: error.code,
-                  });
+      if (!email) return;
+      setLoading(true);
+
+      const SignInWithEmailLink = async () => {
+         await signInWithEmailLink(auth, email, window.location.href)
+            .then((res) => {
+               window.localStorage.removeItem("emailForSignIn");
+               CreateUserInformation(res.user.uid);
+            })
+            .catch((error) => {
+               setLoading(false);
+               Swal.fire({
+                  icon: "error",
+                  text: error.code,
                });
-         };
-
-         SignInWithEmailLink();
-      }
+            });
+      };
+      SignInWithEmailLink();
    }, []);
 
    const CreateUserInformation = async (uid: string) => {
@@ -67,7 +67,6 @@ const LandingPage = () => {
                title: "Register Successfully",
                text: "Will send you a message once your account is verify",
             });
-            window.localStorage.removeItem("emailForSignIn");
             window.localStorage.removeItem("payload");
             window.history.pushState(null, "", import.meta.env.VITE_LOCATION);
          })
