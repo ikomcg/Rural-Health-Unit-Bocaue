@@ -16,8 +16,7 @@ const ViewService = () => {
             <BlueButton
                onClick={() => setIsAdd(true)}
                className="ml-auto px-2  mt-3"
-               form="schedule"
-               type="submit"
+               type="button"
             >
                Add Doctor
             </BlueButton>

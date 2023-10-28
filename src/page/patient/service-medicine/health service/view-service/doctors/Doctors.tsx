@@ -1,16 +1,15 @@
 import { useParams } from "react-router-dom";
 import Table from "../../../../../../components/table/Table";
 import useFetchSchedulesService from "../../../../../../hooks/Schedule";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Pagination } from "@mui/material";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import Pagination from "../../../../../../components/pagination/Pagination";
 import { AiOutlineSearch } from "react-icons/ai";
 const Doctors = () => {
    const { id } = useParams();
    const doctors = useFetchSchedulesService({ id: id });
 
-   const [currentPage, setCurrentPage] = useState(0);
+   const [currentPage, setCurrentPage] = useState(1);
    const [sliceDoctors, setSliceDoctors] = useState<ScheduleService[] | null>();
    const [search, setSearch] = useState("");
    const [refresh, setRefresh] = useState(false);
@@ -27,7 +26,9 @@ const Doctors = () => {
                .toLocaleLowerCase()
                .includes(search.toLocaleLowerCase().trim())
          );
-         setPages(filterData.length);
+         const pages = Math.ceil(filterData.length / 10);
+         setPages(pages);
+         
          const page = currentPage + 1;
          const lastPostIndex = page * 10;
          const firstPostIndex = lastPostIndex - 10;
@@ -109,11 +110,13 @@ const Doctors = () => {
 
          {doctors && (
             <Pagination
-               limit={10}
+               className="mt-2"
+               page={currentPage}
                count={pages}
-               currentPage={currentPage}
-               setCurrentPage={setCurrentPage}
-               className="mt-3"
+               variant="outlined"
+               shape="rounded"
+               color="primary"
+               onChange={(_e, page) => setCurrentPage(page)}
             />
          )}
       </>

@@ -14,10 +14,9 @@ const ViewService = () => {
          <div className="flex flex-col">
             <h1 className="text-blue text-2xl mt-10">{name}</h1>
             <BlueButton
+               type="button"
                onClick={() => setIsAdd(true)}
                className="ml-auto px-2  mt-3"
-               form="schedule"
-               type="submit"
             >
                Add Medecines
             </BlueButton>

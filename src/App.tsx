@@ -3,7 +3,6 @@ import LandingPageLayout from "./components/layout/LandingPage";
 import LandingPage from "./page/LandingPage";
 import AdminLayout from "./components/layout/admin/Layout";
 import UnderConstructionLogo from "./components/logo/UnderConstructionLogo";
-import Announcement from "./page/admin/Announcement/Announcement";
 import HomeAdmin from "./page/admin/home/Home";
 import ServiceMedicine from "./page/admin/service-medicine/ServiceMedicine";
 import HealthService from "./page/admin/service-medicine/health service/Health Service";
@@ -17,6 +16,12 @@ import PatientViewService from "./page/patient/service-medicine/health service/v
 import PatientMedicines from "./page/patient/service-medicine/medecines/Medecines";
 import MedecinesViewService from "./page/admin/service-medicine/medecines/view-service/View";
 import PatientViewMedecines from "./page/patient/service-medicine/medecines/view-service/View";
+import PatientSchedule from "./page/patient/schedule/Schedule";
+import AdminSchedule from "./page/admin/schedule/Schedule";
+import Announcements from "./page/admin/announcements/Announcements";
+import HealtWorkers from "./page/admin/health workers/HealtWorkers";
+import Patient from "./page/admin/Patient/Patient";
+import Messages from "./page/shared/message/Message";
 
 const App = () => {
    return (
@@ -27,7 +32,7 @@ const App = () => {
             </Route>
             <Route path="admin" element={<AdminLayout />}>
                <Route path="home" element={<HomeAdmin />} />
-               <Route path="announcement" element={<Announcement />} />
+               <Route path="announcement" element={<Announcements />} />
                <Route path="service-medicine" element={<ServiceMedicine />}>
                   <Route path="health-services">
                      <Route index element={<HealthService />} />
@@ -42,7 +47,10 @@ const App = () => {
                      />
                   </Route>
                </Route>
-
+               <Route path="messages" element={<Messages />} />
+               <Route path="schedule" element={<AdminSchedule />} />
+               <Route path="health-worker" element={<HealtWorkers />} />
+               <Route path="patient" element={<Patient />} />
                <Route
                   path="*"
                   element={
@@ -71,6 +79,8 @@ const App = () => {
                      />
                   </Route>
                </Route>
+               <Route path="schedule" element={<PatientSchedule />} />
+               <Route path="messages" element={<Messages />} />
                <Route
                   path="*"
                   element={
@@ -81,14 +91,7 @@ const App = () => {
                />
             </Route>
 
-            <Route
-               path="*"
-               element={
-                  <UnderConstructionLogo>
-                     Under Development
-                  </UnderConstructionLogo>
-               }
-            />
+            <Route path="*" element={<>Page Not Found</>} />
          </Routes>
       </BrowserRouter>
    );

@@ -1,59 +1,83 @@
-import { useContext, useEffect } from "react";
 import HealthCondition from "./landing-page/HealthCondition";
 import LivingHealthy from "./landing-page/Living_Healthy";
 import Main from "./landing-page/Main";
 import News from "./landing-page/News";
 import Newsletter from "./landing-page/Newsletter";
-import { doc, onSnapshot } from "firebase/firestore";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import {
+   getAuth,
+   isSignInWithEmailLink,
+   signInWithEmailLink,
+} from "firebase/auth";
+import Swal from "sweetalert2";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase/Base";
-import { useNavigate } from "react-router-dom";
+import { TimeStampValue } from "../shared/TimeStamp";
+import { useContext, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
 import { UserProvider } from "../context/UserProvider";
 
 const LandingPage = () => {
    const auth = getAuth();
-   const navigate = useNavigate();
-   const { saveCookies } = useContext(UserProvider);
+   // const navigate = useNavigate();
+   const { setLoading } = useContext(UserProvider);
+
    useEffect(() => {
-      const unsubscribe = onAuthStateChanged(auth, (user) => {
-         if (user) {
-            const ref = doc(db, "users", user.uid);
-            onSnapshot(
-               ref,
-               (snapshot) => {
-                  if (!snapshot) return;
+      if (!isSignInWithEmailLink(auth, window.location.href)) return;
 
-                  if (snapshot.exists()) {
-                     const data = snapshot.data();
+      const email = window.localStorage.getItem("emailForSignIn");
 
-                     const cookie = {
-                        ...data,
-                        id: snapshot.id,
-                     } as UserType;
+      if (!email) return;
+      setLoading(true);
 
-                     if (cookie.role.includes("admin")) {
-                        navigate("/admin/home");
-                     }else{
-                        navigate("/patient/home");
-                     }
-
-                     saveCookies(cookie);
-                  } else {
-                     console.log("No such document!");
-                  }
-               },
-               (error) => {
-                  console.log("snap err", error);
-               }
-            );
-         } else {
-            console.log("user not login");
-            navigate("/");
-         }
-      });
-
-      return () => unsubscribe();
+      const SignInWithEmailLink = async () => {
+         await signInWithEmailLink(auth, email, window.location.href)
+            .then((res) => {
+               window.localStorage.removeItem("emailForSignIn");
+               CreateUserInformation(res.user.uid);
+            })
+            .catch((error) => {
+               setLoading(false);
+               Swal.fire({
+                  icon: "error",
+                  text: error.code,
+               });
+            });
+      };
+      SignInWithEmailLink();
    }, []);
+
+   const CreateUserInformation = async (uid: string) => {
+      const ref = doc(db, "users", uid);
+      const payload = window.localStorage.getItem("payload");
+
+      if (!payload) return;
+      const _payload: Register = JSON.parse(payload);
+      const data = {
+         ..._payload,
+         age: Number(_payload.age),
+         birthday: TimeStampValue(_payload.birthday),
+         role: ["patient"],
+         is_verify: false,
+      };
+
+      await setDoc(ref, data)
+         .then(() => {
+            Swal.fire({
+               icon: "success",
+               title: "Register Successfully",
+               text: "Will send you a message once your account is verify",
+            });
+            window.localStorage.removeItem("payload");
+            window.history.pushState(null, "", import.meta.env.VITE_LOCATION);
+         })
+         .catch((err) => {
+            Swal.fire({
+               icon: "error",
+               title: err.code,
+            });
+         });
+      setLoading(false);
+   };
 
    return (
       <>

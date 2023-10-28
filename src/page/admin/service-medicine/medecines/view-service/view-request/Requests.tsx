@@ -1,8 +1,7 @@
 import { useParams } from "react-router-dom";
 import Table from "../../../../../../components/table/Table";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Pagination } from "@mui/material";
 import { useEffect, useState } from "react";
-import Pagination from "../../../../../../components/pagination/Pagination";
 import { BlueButton } from "../../../../../../components/button/BlueButton";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../../firebase/Base";
@@ -13,7 +12,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 const Request = () => {
    const { id } = useParams();
    const medecine = useFetchRequestMedecine({ id: id });
-   const [currentPage, setCurrentPage] = useState(0);
+   const [currentPage, setCurrentPage] = useState(1);
    const [sliceMedecines, setSliceMedecines] = useState<
       RequestMedecines[] | null
    >();
@@ -32,7 +31,8 @@ const Request = () => {
                .toLocaleLowerCase()
                .includes(search.toLocaleLowerCase().trim())
          );
-         setPages(filterData.length);
+         const pages = Math.ceil(filterData.length / 10);
+         setPages(pages);
          const page = currentPage + 1;
          const lastPostIndex = page * 10;
          const firstPostIndex = lastPostIndex - 10;
@@ -68,7 +68,7 @@ const Request = () => {
             <h1 className="text-blue text-2xl ">Patient's Request</h1>
             <div className="flex flex-row items-center w-[40%]">
                <button
-                  className="text-white bg-blue text-xl px-2 py-[6.5px] rounded-l border border-blue"
+                  className="text-white bg-blue text-xl px-2 py-[6px] rounded-l border border-blue"
                   onClick={HandleRefresh}
                >
                   <AiOutlineSearch />
@@ -118,10 +118,10 @@ const Request = () => {
                      <td>{item.quantity}</td>
                      <td className="flex flex-col gap-2 justify-center items-center">
                         <BlueButton
-                           disabled={item.status === "accept"}
-                           onClick={() => OnChangeStatus(item.id, "accept")}
+                           disabled={item.status === "approve"}
+                           onClick={() => OnChangeStatus(item.id, "approve")}
                         >
-                           Accept
+                           Approve
                         </BlueButton>
                         <RedButton
                            onClick={() => OnChangeStatus(item.id, "decline")}
@@ -136,11 +136,13 @@ const Request = () => {
 
          {medecine && (
             <Pagination
-               limit={5}
+               className="mt-2"
+               page={currentPage}
                count={pages}
-               currentPage={currentPage}
-               setCurrentPage={setCurrentPage}
-               className="mt-3"
+               variant="outlined"
+               shape="rounded"
+               color="primary"
+               onChange={(_e, page) => setCurrentPage(page)}
             />
          )}
       </>

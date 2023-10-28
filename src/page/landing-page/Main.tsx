@@ -1,5 +1,3 @@
-import React from "react";
-
 import FastingDiet from "../../images/section-topic/img-1.jpg";
 import FastFood from "../../images/section-topic/img-2.jpg";
 import DietRigh from "../../images/section-topic/img-3.jpg";
@@ -43,4 +41,4 @@ const Main = () => {
    );
 };
 
-export default React.memo(Main);
+export default Main;

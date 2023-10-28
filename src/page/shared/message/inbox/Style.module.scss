@@ -1,0 +1,58 @@
+.inbox_card {
+   display: flex;
+   cursor: pointer;
+   padding: 8px 5px;
+   border-radius: 3px;
+
+   &:hover {
+      background-color: rgb(128, 128, 128, 0.3);
+   }
+   img {
+      clip-path: circle();
+      max-width: 35px;
+      width: 100%;
+      height: 35px;
+   }
+}
+.to_message {
+   position: absolute;
+   z-index: 10;
+   top: calc(100% + 5px);
+   right: 0px;
+   background-color: #fff;
+   width: 85%;
+   max-height: 200px;
+   overflow-y: auto;
+   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px,
+      rgba(0, 0, 0, 0.23) 0px 6px 6px;
+   ul {
+      display: flex;
+      flex-flow: column;
+      gap: 5px;
+      padding: 0 10px;
+      li {
+         display: flex;
+         align-items: center;
+         flex-flow: row;
+
+         gap: 5px;
+         border-bottom: 1px solid rgb(128, 128, 128, 0.5);
+         padding: 8px;
+
+         cursor: pointer;
+
+         &:hover {
+            background-color: rgb(128, 128, 128, 0.5);
+         }
+      }
+   }
+}
+.search {
+   outline: none;
+   width: 90%;
+   border: 1px solid rgb(220, 220, 220);
+   border-radius: 5px;
+   padding: 4px 5px !important;
+
+
+}

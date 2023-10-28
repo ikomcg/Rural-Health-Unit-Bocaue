@@ -2,41 +2,44 @@ import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebase/Base";
 
-const useFetchDoctors = () => {
-   const [doctors, setDoctors] = useState<HealthWorkers[] | null>();
+type FetchUserType = {
+   role: string[];
+};
+const useFetchUsers = ({ role }: FetchUserType) => {
+   const [users, setUsers] = useState<UserType[] | null>();
    useEffect(() => {
-      GetSchedules();
+      GetUserList();
    }, []);
 
-   const GetSchedules = async () => {
+   const GetUserList = async () => {
       const queryDB = query(
          collection(db, `users`),
-         where("role", "array-contains-any", ["doctor", "health_worker"])
+         where("role", "array-contains-any", role)
       );
       onSnapshot(
          queryDB,
          (snapshot) => {
             const data = snapshot.docs.map((doc) => {
-               const name = `${doc.data().first_name} ${
+               const full_name = `${doc.data().first_name} ${
                   doc.data().middle_name
                } ${doc.data().last_name}`;
                return {
                   ...doc.data(),
-                  name,
+                  full_name,
                   id: doc.id,
                   created_at: doc.data().created_at.toDate(),
                };
-            }) as unknown as HealthWorkers[];
-            setDoctors(data);
+            }) as unknown as UserType[];
+            setUsers(data);
          },
          (error) => {
-            console.log("error doctors", error);
-            setDoctors(null);
+            console.log("error users", error);
+            setUsers(null);
          }
       );
    };
 
-   return doctors;
+   return users;
 };
 
-export default useFetchDoctors;
+export default useFetchUsers;

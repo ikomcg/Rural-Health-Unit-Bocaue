@@ -27,10 +27,20 @@ const News = () => {
                   visible={true}
                />
             ) : data !== undefined ? (
-               data.map((data: any, index: any) => {
-                  if (index > 5) return;
-                  return <NewsCard key={index} data={data} />;
-               })
+               data.map(
+                  (
+                     data: {
+                        link: string;
+                        media: string;
+                        title: string;
+                        summary: string;
+                     },
+                     index: number
+                  ) => {
+                     if (index > 5) return;
+                     return <NewsCard key={index} data={data} />;
+                  }
+               )
             ) : (
                <h2 className="text-5xl w-full text-center my-5 font-bold text-blue">
                   This section is free api only

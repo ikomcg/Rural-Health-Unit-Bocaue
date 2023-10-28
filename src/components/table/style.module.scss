@@ -1,6 +1,7 @@
 @use "../../color";
 
 .table {
+   width: 100%;
    margin-top: 20px;
    thead {
       font-size: 16px;
@@ -21,7 +22,7 @@
          }
          &:nth-child(even) {
             background-color: rgb(231, 231, 231);
-         }  
+         }
       }
    }
 }

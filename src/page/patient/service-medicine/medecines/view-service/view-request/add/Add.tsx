@@ -17,6 +17,7 @@ type PostType = {
 const AddRequest = ({ isPost, setIsPost }: PostType) => {
    const { id, name } = useParams();
    const { cookies } = useContext(UserProvider);
+   const [isLoading, setIsLoading] = useState(false);
    const medecines = useFetchMedecineListService({ id: id });
    const [payload, setPayload] = useState({
       medecine_id: "",
@@ -33,7 +34,7 @@ const AddRequest = ({ isPost, setIsPost }: PostType) => {
          (item) => item.id === payload.medecine_id
       );
       const { first_name, last_name, middle_name } = cookies;
-
+      setIsLoading(true);
       const _data = await CreateRequestMedecineFrb({
          data: {
             patient_id: cookies.id,
@@ -135,6 +136,7 @@ const AddRequest = ({ isPost, setIsPost }: PostType) => {
                type="submit"
                form="sendRequest"
                className="w-full mt-5 p-1"
+               disabled={isLoading}
             >
                Send
             </BlueButton>

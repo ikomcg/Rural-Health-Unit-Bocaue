@@ -12,12 +12,10 @@
       margin: 0 auto;
       height: 100%;
       cursor: pointer;
-
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center;
-
+      border-radius: 10px;
+      overflow: hidden;
       container-type: inline-size;
+
       h1 {
          position: relative;
          z-index: 10;
@@ -29,10 +27,14 @@
          width: 100%;
       }
 
-      &:hover {
-         transform: scale(1.02);
+      &:hover > img {
+         transform: scale(1.3);
       }
-
+      &:hover {
+         h1 {
+            color: color.$blue;
+         }
+      }
       img {
          position: absolute;
          z-index: -1;
@@ -42,6 +44,25 @@
          right: 0;
          height: 100%;
          width: 100%;
+         transition: transform ease-in-out 1s;
       }
+   }
+}
+.add-card-container {
+   display: flex;
+   flex-flow: column wrap;
+   align-items: center;
+   justify-content: center;
+   color: white;
+   font-size: 50px;
+   width: 25%;
+   height: 250px;
+   cursor: pointer;
+   border-radius: 10px;
+   background-color: rgba(0, 0, 0, 0.1);
+   transition: all ease-in-out 0.5s;
+   &:hover {
+      font-size: 55px;
+      color: color.$blue;
    }
 }

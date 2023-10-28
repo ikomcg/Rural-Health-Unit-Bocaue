@@ -1,9 +1,15 @@
 import React from "react";
+type CardType = {
+   topic : {
+     src : string
+     title: string
+   }[]
+ }
 
-const Topic = ({ topic }: any) => {
+const Topic = ({ topic }: CardType) => {
    return (
       <>
-         {topic.map((topic: any, index: any) => {
+         {topic.map((topic, index) => {
             return (
                <div
                   key={index}

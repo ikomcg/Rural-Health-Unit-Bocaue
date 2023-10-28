@@ -14,6 +14,7 @@ const AdminLayout = () => {
    const url = window.location.pathname;
    const [isMenu, setIsMenu] = useState(true);
 
+
    useEffect(() => {
       if (url === "/patient" && cookies) {
          navigate("/patient/home");
@@ -35,7 +36,7 @@ const AdminLayout = () => {
          </div>
          <div className="rgth_cldr w-[25%]">
             <Calendar />
-            <Schedule/>
+            <Schedule />
          </div>
       </div>
    );

@@ -1,4 +1,12 @@
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import {
+   and,
+   collection,
+   limit,
+   onSnapshot,
+   orderBy,
+   query,
+   where,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebase/Base";
 
@@ -7,7 +15,7 @@ type ScheduleType = {
 };
 
 const useFetchSchedulesService = ({ id }: ScheduleType) => {
-   const [schedules, setSchedules] = useState<ScheduleService[] | null>();
+   const [schedules, setSchedules] = useState<DoctorList[] | null>();
    useEffect(() => {
       if (!id) return;
       GetSchedules();
@@ -30,7 +38,7 @@ const useFetchSchedulesService = ({ id }: ScheduleType) => {
                   available_from: doc.data().available_from.toDate(),
                   available_to: doc.data().available_to.toDate(),
                };
-            }) as unknown as ScheduleService[];
+            }) as unknown as DoctorList[];
             setSchedules(data);
          },
          (error) => {
@@ -44,3 +52,79 @@ const useFetchSchedulesService = ({ id }: ScheduleType) => {
 };
 
 export default useFetchSchedulesService;
+
+interface MySchedule extends ScheduleType {
+   _limit: number;
+}
+export const useFetchMySchedules = ({ id, _limit }: MySchedule) => {
+   const [schedules, setSchedules] = useState<RequestService[] | null>();
+
+   useEffect(() => {
+      if (!id) return;
+      GetSchedules();
+   }, [id]);
+
+   const GetSchedules = async () => {
+      if (!id) return;
+
+      const queryDB = query(
+         collection(db, "schedules"),
+         and(where("patient_id", "==", id), where("status", "==", "approve")),
+         orderBy("request_date", "asc"),
+         limit(_limit)
+      );
+      onSnapshot(
+         queryDB,
+         (snapshot) => {
+            const data = snapshot.docs.map((doc) => {
+               return {
+                  ...doc.data(),
+                  id: doc.id,
+                  request_date: doc.data().request_date.toDate(),
+               };
+            }) as unknown as RequestService[];
+            setSchedules(data);
+         },
+         (error) => {
+            console.log("error requests", error);
+            setSchedules(null);
+         }
+      );
+   };
+
+   return schedules;
+};
+
+export const useFetchAllSchedules = () => {
+   const [schedules, setSchedules] = useState<RequestService[] | null>();
+
+   useEffect(() => {
+      GetSchedules();
+   }, []);
+
+   const GetSchedules = async () => {
+      const queryDB = query(
+         collection(db, "schedules"),
+         where("status", "==", "approve")
+      );
+      onSnapshot(
+         queryDB,
+         (snapshot) => {
+            const data = snapshot.docs.map((doc) => {
+               return {
+                  ...doc.data(),
+                  id: doc.id,
+                  request_date: doc.data().request_date.toDate(),
+               };
+            }) as unknown as RequestService[];
+            setSchedules(data);
+         },
+         (error) => {
+            console.log("error requests", error);
+            setSchedules(null);
+         }
+      );
+   };
+
+   return schedules;
+};

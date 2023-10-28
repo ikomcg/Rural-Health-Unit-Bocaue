@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import Table from "../../../../../../components/table/Table";
 import useFetchSchedulesService from "../../../../../../hooks/Schedule";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Pagination } from "@mui/material";
 import moment from "moment";
 import { FaTrash } from "react-icons/fa";
 import { AiFillEdit, AiOutlineSearch } from "react-icons/ai";
@@ -9,33 +9,47 @@ import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../../../../../firebase/Base";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
-import Pagination from "../../../../../../components/pagination/Pagination";
+import UpdateDoctors from "./UpdateDoctors";
+import DateTimeLocal from "../../../../../../shared/DateTimeLocal";
+
 const Doctors = () => {
    const { id } = useParams();
    const doctors = useFetchSchedulesService({ id: id });
+   const [currentPage, setCurrentPage] = useState(1);
+   const [pages, setPages] = useState(0);
+   const [sliceDoctors, setSliceDoctors] = useState<DoctorList[] | null>();
+   const [search, setSearch] = useState("");
+   const [refresh, setRefresh] = useState(false);
+   const [payload, setPayload] = useState<PayloadType | undefined>();
 
    const OnDeleteSchedule = async (schedule_id: string) => {
       if (!id) return;
-      return await deleteDoc(doc(db, "service", id, "schedules", schedule_id))
-         .then(() => {
-            return Swal.fire({
-               icon: "success",
-               text: "Deleted Schedule Successfuly",
-            });
-         })
-         .catch(() => {
-            return Swal.fire({
-               icon: "error",
-               text: "Failed to Deleted Schedule",
-            });
-         });
+      Swal.fire({
+         icon: "info",
+         title: "Are you sure you want to delete?",
+         showCancelButton: true,
+         showConfirmButton: true,
+      }).then(async (res) => {
+         if (res.isConfirmed) {
+            return await deleteDoc(
+               doc(db, "service", id, "schedules", schedule_id)
+            )
+               .then(() => {
+                  return Swal.fire({
+                     icon: "success",
+                     text: "Deleted Schedule Successfuly",
+                  });
+               })
+               .catch(() => {
+                  return Swal.fire({
+                     icon: "error",
+                     text: "Failed to Deleted Schedule",
+                  });
+               });
+         }
+      });
    };
 
-   const [currentPage, setCurrentPage] = useState(0);
-   const [pages, setPages] = useState(0);
-   const [sliceDoctors, setSliceDoctors] = useState<ScheduleService[] | null>();
-   const [search, setSearch] = useState("");
-   const [refresh, setRefresh] = useState(false);
    useEffect(() => {
       const SlicePagination = () => {
          if (doctors === null) return setSliceDoctors(null);
@@ -47,12 +61,15 @@ const Doctors = () => {
                .toLocaleLowerCase()
                .includes(search.toLocaleLowerCase().trim())
          );
-         setPages(filterData.length);
-         const page = currentPage + 1;
+
+         const pages = Math.ceil(filterData.length / 10);
+         setPages(pages);
+
+         const page = currentPage;
          const lastPostIndex = page * 10;
          const firstPostIndex = lastPostIndex - 10;
 
-         const currentPost = filterData?.slice(firstPostIndex, lastPostIndex);
+         const currentPost = doctors?.slice(firstPostIndex, lastPostIndex);
          setSliceDoctors(currentPost);
       };
 
@@ -62,6 +79,16 @@ const Doctors = () => {
    const HandleRefresh = () => {
       setCurrentPage(0);
       setRefresh((prev) => !prev);
+   };
+
+   const OnClickEdit = (item: DoctorList) => {
+      setPayload({
+         id: item.id,
+         user_id: item.user_id,
+         name: item.name,
+         available_from: DateTimeLocal(item.available_from),
+         available_to: DateTimeLocal(item.available_from),
+      });
    };
 
    return (
@@ -137,7 +164,10 @@ const Doctors = () => {
                         >
                            <FaTrash className="text-white" />
                         </button>
-                        <button className="bg-blue px-1 py-1 rounded text-xs">
+                        <button
+                           className="bg-blue px-1 py-1 rounded text-xs"
+                           onClick={() => OnClickEdit(item)}
+                        >
                            <AiFillEdit className="text-white" />
                         </button>
                      </td>
@@ -148,12 +178,17 @@ const Doctors = () => {
 
          {doctors && (
             <Pagination
-               limit={10}
+               className="mt-2"
+               page={currentPage}
                count={pages}
-               currentPage={currentPage}
-               setCurrentPage={setCurrentPage}
-               className="mt-3"
+               variant="outlined"
+               shape="rounded"
+               color="primary"
+               onChange={(_e, page) => setCurrentPage(page)}
             />
+         )}
+         {payload && (
+            <UpdateDoctors payload={payload} setPayload={setPayload} />
          )}
       </>
    );

@@ -1,7 +1,7 @@
 import style from "./UnderConstructionLogo.module.scss";
 import { BsGearWide, BsGearWideConnected } from "react-icons/bs";
 
-type UnderConstructionLogoType = {} & React.ComponentProps<"div">;
+type UnderConstructionLogoType = object & React.ComponentProps<"div">;
 
 const UnderConstructionLogo = (props: UnderConstructionLogoType) => {
    const { children, className, ...cleanProps } = props;

@@ -1,0 +1,30 @@
+@use "../../../color";
+
+.header {
+   display: flex;
+   flex-flow: column wrap;
+   gap: 3;
+   margin-top: 20px;
+   margin-bottom: 30px;
+   h1,
+   h2 {
+      text-align: center;
+      font-size: 22px;
+      font-weight: 500;
+   }
+   h1 {
+      color: #000;
+   }
+   h2 {
+      color: color.$blue;
+   }
+}
+.card_information {
+   display: flex;
+   flex-flow: row wrap;
+   row-gap: 10px;
+   > div {
+      padding: 0 10px;
+      width: 25%;
+   }
+}

@@ -22,7 +22,7 @@ type RequestService = {
    service_name: string;
    request_date: any;
    created_at: any;
-   status: "pending" | "accept" | "decline";
+   status: "pending" | "approve" | "decline";
 };
 type MedecineList = {
    id: string;
@@ -41,5 +41,5 @@ type RequestMedecines = {
    medecine_id: string;
    quantity: any;
    created_at: any;
-   status: "pending" | "accept" | "decline";
+   status: "pending" | "approve" | "decline";
 };

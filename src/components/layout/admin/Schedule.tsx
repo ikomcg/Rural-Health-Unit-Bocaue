@@ -22,7 +22,7 @@ const Schedule = () => {
 
       const queryDB = query(
          collection(db, "schedules"),
-         where("status", "==", "accept"),
+         where("status", "==", "approve"),
          orderBy("request_date", "asc"),
          limit(4)
       );
@@ -67,7 +67,11 @@ const Schedule = () => {
                   <li
                      key={item.id}
                      className="word-wrap line-clamp-1"
-                     title={item.patient_name}
+                     title={`${item.patient_name} - ${moment(
+                        item.request_date.toISOString()
+                     )
+                        .utcOffset(8)
+                        .format("LLLL")}} - ${item.service_name}`}
                   >
                      {item.patient_name} -{" "}
                      {moment(item.request_date.toISOString())

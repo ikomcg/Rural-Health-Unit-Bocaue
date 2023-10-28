@@ -18,7 +18,7 @@ const AddRequest = ({ isPost, setIsPost }: PostType) => {
    const { id, name } = useParams();
    const { cookies } = useContext(UserProvider);
    const [requestDate, setRequestDate] = useState("");
-
+   const [isLoading, seIsLoading] = useState(false);
    const OnClose = () => {
       setIsPost(false);
    };
@@ -28,7 +28,7 @@ const AddRequest = ({ isPost, setIsPost }: PostType) => {
       if (!id || !cookies || !name) return;
 
       const { first_name, last_name, middle_name } = cookies;
-
+      seIsLoading(true);
       const _data = await CreateRequestScheduleFrb({
          data: {
             patient_id: cookies.id,
@@ -50,9 +50,7 @@ const AddRequest = ({ isPost, setIsPost }: PostType) => {
       Swal.fire({
          icon: "success",
          title: "Send Request Successfully",
-      }).then(() => {
-         
-      });
+      }).then(() => {});
    };
 
    return (
@@ -87,6 +85,7 @@ const AddRequest = ({ isPost, setIsPost }: PostType) => {
                type="submit"
                form="sendRequest"
                className="w-full mt-5 p-1"
+               disabled={isLoading}
             >
                Send
             </BlueButton>
