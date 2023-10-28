@@ -1,4 +1,4 @@
-import { AiFillHome } from "react-icons/ai";
+import { AiFillHome, AiFillSchedule } from "react-icons/ai";
 import { BsFillMegaphoneFill } from "react-icons/bs";
 import { GiBattleGear } from "react-icons/gi";
 import { Link } from "react-router-dom";
@@ -40,6 +40,11 @@ const Module = ({ isMenu }: ModuleType) => {
          name: "Patient",
          icon: <FaUsers />,
          link: "patient",
+      },
+      {
+         name: "Schedule",
+         icon: <AiFillSchedule />,
+         link: "schedule",
       },
    ];
 

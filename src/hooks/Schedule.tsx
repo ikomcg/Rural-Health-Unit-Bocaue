@@ -94,3 +94,37 @@ export const useFetchMySchedules = ({ id, _limit }: MySchedule) => {
 
    return schedules;
 };
+
+export const useFetchAllSchedules = () => {
+   const [schedules, setSchedules] = useState<RequestService[] | null>();
+
+   useEffect(() => {
+      GetSchedules();
+   }, []);
+
+   const GetSchedules = async () => {
+      const queryDB = query(
+         collection(db, "schedules"),
+         where("status", "==", "approve")
+      );
+      onSnapshot(
+         queryDB,
+         (snapshot) => {
+            const data = snapshot.docs.map((doc) => {
+               return {
+                  ...doc.data(),
+                  id: doc.id,
+                  request_date: doc.data().request_date.toDate(),
+               };
+            }) as unknown as RequestService[];
+            setSchedules(data);
+         },
+         (error) => {
+            console.log("error requests", error);
+            setSchedules(null);
+         }
+      );
+   };
+
+   return schedules;
+};

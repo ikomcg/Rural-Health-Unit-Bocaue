@@ -16,7 +16,8 @@ import PatientViewService from "./page/patient/service-medicine/health service/v
 import PatientMedicines from "./page/patient/service-medicine/medecines/Medecines";
 import MedecinesViewService from "./page/admin/service-medicine/medecines/view-service/View";
 import PatientViewMedecines from "./page/patient/service-medicine/medecines/view-service/View";
-import Schedule from "./page/shared/schedule/Schedule";
+import PatientSchedule from "./page/patient/schedule/Schedule";
+import AdminSchedule from "./page/admin/schedule/Schedule";
 import Announcements from "./page/admin/announcements/Announcements";
 import HealtWorkers from "./page/admin/health workers/HealtWorkers";
 import Patient from "./page/admin/Patient/Patient";
@@ -47,6 +48,7 @@ const App = () => {
                   </Route>
                </Route>
                <Route path="messages" element={<Messages />} />
+               <Route path="schedule" element={<AdminSchedule />} />
                <Route path="health-worker" element={<HealtWorkers />} />
                <Route path="patient" element={<Patient />} />
                <Route
@@ -77,7 +79,7 @@ const App = () => {
                      />
                   </Route>
                </Route>
-               <Route path="schedule" element={<Schedule />} />
+               <Route path="schedule" element={<PatientSchedule />} />
                <Route path="messages" element={<Messages />} />
                <Route
                   path="*"
