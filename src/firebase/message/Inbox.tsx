@@ -62,9 +62,7 @@ const InboxFetch = (
          }
       };
 
-      return () => {
-         GetInbox();
-      };
+      GetInbox();
    }, []);
 
    return inbox;
