@@ -35,25 +35,17 @@ const LandingPage = () => {
 
                      if (role.includes("patient")) {
                         if (is_verify) {
+                           navigate("/patient/home");
                            saveCookies(cookie);
-                           return cookie;
                         } else {
                            SignOutFireBase();
 
                            return false;
                         }
                      } else if (role.includes("admin")) {
-                        saveCookies(cookie);
-                        return cookie;
-                     }
-
-                     if (cookie.role.includes("admin")) {
                         navigate("/admin/home");
-                     } else {
-                        navigate("/patient/home");
+                        saveCookies(cookie);
                      }
-
-                     saveCookies(cookie);
                   } else {
                      console.log("No such document!");
                   }
