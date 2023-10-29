@@ -10,8 +10,14 @@ import { UserProvider } from "../../../context/UserProvider";
 type ContentType = {
    item: AnnouncementType;
    OnDeletePost: (id: string) => Promise<boolean>;
-};
-const Content = ({ item, OnDeletePost }: ContentType) => {
+} & React.ComponentProps<"div">;
+
+const Content = ({
+   item,
+   OnDeletePost,
+   onClick,
+   ...cleanProps
+}: ContentType) => {
    const { cookies } = useContext(UserProvider);
    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
    const open = Boolean(anchorEl);
@@ -24,6 +30,7 @@ const Content = ({ item, OnDeletePost }: ContentType) => {
    return (
       <div
          className={`flex flex-col w-[75%] border border-1 border-gray-400 rounded-lg pt-5 overflow-hidden mb-3 py-10`}
+         {...cleanProps}
       >
          <div className="flex items-center gap-2 px-3 h-[10%] ">
             <img className={`${style.profile_img}`} src={item.user.profile} />
@@ -55,7 +62,9 @@ const Content = ({ item, OnDeletePost }: ContentType) => {
             >
                {item.images.map((item, i) => {
                   if (i > 3) return;
-                  return <img key={i} src={item} loading="lazy" />;
+                  return (
+                     <img key={i} src={item} loading="lazy" onClick={onClick} />
+                  );
                })}
 
                {item.images.length > 4 && (

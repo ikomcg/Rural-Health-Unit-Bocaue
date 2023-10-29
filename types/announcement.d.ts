@@ -13,3 +13,11 @@ type AnnouncementType = {
 type CreateAnnouncementType = {
    images?: string[];
 } & Pick<AnnouncementType, "descriptions" | "user">;
+
+type ToViewType = {
+   images: string[];
+   profile: string;
+   name: string;
+   datetime: string;
+   descriptions: string;
+};

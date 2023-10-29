@@ -5,8 +5,8 @@ import moment from "moment";
 
 type ContentType = {
    item: AnnouncementType;
-};
-const Content = ({ item }: ContentType) => {
+} & React.ComponentProps<"div">;
+const Content = ({ item, onClick }: ContentType) => {
    const image_len = item.images.length > 3 ? "4" : item.images.length;
 
    return (
@@ -35,7 +35,9 @@ const Content = ({ item }: ContentType) => {
             >
                {item.images.map((item, i) => {
                   if (i > 3) return;
-                  return <img key={i} src={item} loading="lazy" />;
+                  return (
+                     <img key={i} src={item} loading="lazy" onClick={onClick} />
+                  );
                })}
 
                {item.images.length > 4 && (
