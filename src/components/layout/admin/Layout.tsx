@@ -27,7 +27,7 @@ const AdminLayout = () => {
       <div className={style.container}>
          <SideBar isMenu={isMenu} setIsMenu={setIsMenu} />
          <div
-            className={`overflow-y-auto`}
+            className={`overflow-y-auto overflow-x-hidden`}
             style={{
                width: isMenu ? "60%" : "80%",
             }}
