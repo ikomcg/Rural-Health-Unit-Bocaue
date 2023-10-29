@@ -16,6 +16,7 @@ const Schedule = () => {
 
       const mySchedules = schedules.map((item) => ({
          title: item.service_name,
+         patient: item.patient_name,
          start: item.request_date,
       }));
 
@@ -45,11 +46,13 @@ const Schedule = () => {
                   placement: "top",
                   trigger: "hover",
                   customClass: "popoverStyle",
-                  content: `<p><strong>Schedule:</strong> ${moment(
-                     info.event.start
-                  )
-                     .utcOffset(8)
-                     .format("LLL")}</p>`,
+                  content: `
+                     <strong>Patient:</strong> 
+                     ${info.event.extendedProps.patient} 
+                     <br class='my-2'/>
+                     <p><strong>Schedule:</strong> ${moment(info.event.start)
+                        .utcOffset(8)
+                        .format("LLL")}</p>`,
                   html: true,
                });
             }}
