@@ -75,3 +75,10 @@ input[type="file"]::file-selector-button {
    color: white;
    font-size: 14px;
 }
+.apexcharts-canvas {
+   
+   margin: 0 auto !important;
+   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+      rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
+      rgba(0, 0, 0, 0.2) 0px -3px 0px inset !important;
+}

@@ -2,7 +2,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import style from "./Style.module.scss";
 import InboxFetch from "../../../../firebase/message/Inbox";
 import { BiSolidEdit } from "react-icons/bi";
-import { useContext, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import SendMessage from "./SendMessage";
 import { UserProvider } from "../../../../context/UserProvider";
 
@@ -17,11 +17,34 @@ const Inbox = ({ activeInbox, setActiveInbox }: InboxType) => {
    const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
    const [open, setOpen] = useState(false);
    const inbox = InboxFetch(setActiveInbox);
-
+   const [search, setSearch] = useState("");
    const HandleAddMessage = (event: React.MouseEvent<HTMLButtonElement>) => {
       setAnchorEl(event.currentTarget);
       setOpen((prev) => !prev);
    };
+
+   const InboxFilter = useMemo(() => {
+      if (!inbox) return [];
+
+      const filterInBox = inbox.filter((item) => {
+         const isReciever = cookies && item.to_id === cookies.id;
+
+         if (isReciever) {
+            return item.from_name
+               .toLocaleLowerCase()
+               .trim()
+               .includes(search.toLocaleLowerCase().trim());
+         }
+
+         return item.to_name
+            .toLocaleLowerCase()
+            .trim()
+            .includes(search.toLocaleLowerCase().trim());
+      });
+
+      return filterInBox;
+   }, [inbox, search]);
+
    return (
       <>
          <div className="w-[40%] h-full border-r mr-1 p-2">
@@ -32,13 +55,16 @@ const Inbox = ({ activeInbox, setActiveInbox }: InboxType) => {
                      <BiSolidEdit className="text-blue text-2xl" />
                   </button>
                </div>
-               <div className="relative mb-4">
-                  <AiOutlineSearch className="absolute top-2 right-3 text-xl text-blue" />
+               <div className="flex flex-row bg-gray-200 mb-4 rounded-lg px-2">
                   <input
                      type="text"
                      placeholder="search..."
-                     className="bg-gray-200 w-full py-2 px-2 rounded-lg"
+                     className="w-full py-2 outline-none bg-transparent"
+                     onChange={(e) => setSearch(e.target.value.trim())}
                   />
+                  <button className="text-xl text-blue">
+                     <AiOutlineSearch />
+                  </button>
                </div>
                <div className="flex flex-col h-full gap-3 overflow-y-auto">
                   {inbox === undefined ? (
@@ -48,7 +74,7 @@ const Inbox = ({ activeInbox, setActiveInbox }: InboxType) => {
                         Something went wrong
                      </h1>
                   ) : (
-                     inbox.map((item) => {
+                     InboxFilter.map((item) => {
                         const isReciever = cookies && item.to_id === cookies.id;
                         const profile = isReciever
                            ? item.from_profile

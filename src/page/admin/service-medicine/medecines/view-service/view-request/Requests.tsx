@@ -9,6 +9,10 @@ import { RedButton } from "../../../../../../components/button/RedButton";
 import Swal from "sweetalert2";
 import { useFetchRequestMedecine } from "../../../../../../hooks/Request";
 import { AiOutlineSearch } from "react-icons/ai";
+import { CreateRapidApi } from "../../../../../../api/SMS/SendSMS";
+
+const ENV = import.meta.env;
+
 const Request = () => {
    const { id } = useParams();
    const medecine = useFetchRequestMedecine({ id: id });
@@ -49,11 +53,25 @@ const Request = () => {
       setRefresh((prev) => !prev);
    };
 
-   const OnChangeStatus = async (requestID: string, status: string) => {
+   const OnChangeStatus = async (request: RequestMedecines, status: string) => {
       if (!id) return;
 
-      await updateDoc(doc(db, "medecine_request", requestID), { status })
-         .then(() => {})
+      await updateDoc(doc(db, "medecine_request", request.id), { status })
+         .then(async () => {
+            await CreateRapidApi({
+               endPoint: "sms/send",
+               token: ENV.VITE_TOKEN_SINCH,
+               data: {
+                  messages: [
+                     {
+                        from: "RHU",
+                        body: `Your Request ${request.medecine_name} in RHU Bocaue has been ${status}`,
+                        to: request.patient_no,
+                     },
+                  ],
+               },
+            });
+         })
          .catch((err) => {
             Swal.fire({
                icon: "error",
@@ -119,12 +137,12 @@ const Request = () => {
                      <td className="flex flex-col gap-2 justify-center items-center">
                         <BlueButton
                            disabled={item.status === "approve"}
-                           onClick={() => OnChangeStatus(item.id, "approve")}
+                           onClick={() => OnChangeStatus(item, "approve")}
                         >
                            Approve
                         </BlueButton>
                         <RedButton
-                           onClick={() => OnChangeStatus(item.id, "decline")}
+                           onClick={() => OnChangeStatus(item, "decline")}
                         >
                            Decline
                         </RedButton>

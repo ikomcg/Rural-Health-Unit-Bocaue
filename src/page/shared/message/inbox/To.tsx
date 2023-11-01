@@ -18,6 +18,7 @@ type ToType = {
          id: string;
          message: string;
          profile: string;
+         to_phone: string;
       }>
    >;
 };
@@ -90,6 +91,7 @@ const To = ({ toMessage, users, setToMessage, setUsers }: ToType) => {
                               name,
                               id: item.id,
                               profile: item.profile,
+                              to_phone: item.contact_no,
                            }));
                         }}
                      >

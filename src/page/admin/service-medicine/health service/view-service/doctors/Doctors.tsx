@@ -7,10 +7,10 @@ import { FaTrash } from "react-icons/fa";
 import { AiFillEdit, AiOutlineSearch } from "react-icons/ai";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../../../../../firebase/Base";
-import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import UpdateDoctors from "./UpdateDoctors";
 import DateTimeLocal from "../../../../../../shared/DateTimeLocal";
+import CSwal from "../../../../../../components/swal/Swal";
 
 const Doctors = () => {
    const { id } = useParams();
@@ -24,30 +24,28 @@ const Doctors = () => {
 
    const OnDeleteSchedule = async (schedule_id: string) => {
       if (!id) return;
-      Swal.fire({
+      const swal = await CSwal({
          icon: "info",
          title: "Are you sure you want to delete?",
          showCancelButton: true,
          showConfirmButton: true,
-      }).then(async (res) => {
-         if (res.isConfirmed) {
-            return await deleteDoc(
-               doc(db, "service", id, "schedules", schedule_id)
-            )
-               .then(() => {
-                  return Swal.fire({
-                     icon: "success",
-                     text: "Deleted Schedule Successfuly",
-                  });
-               })
-               .catch(() => {
-                  return Swal.fire({
-                     icon: "error",
-                     text: "Failed to Deleted Schedule",
-                  });
-               });
-         }
       });
+
+      if (!swal) return;
+
+      await deleteDoc(doc(db, "service", id, "schedules", schedule_id))
+         .then(() => {
+            return CSwal({
+               icon: "success",
+               text: "Deleted Schedule Successfuly",
+            });
+         })
+         .catch(() => {
+            return CSwal({
+               icon: "error",
+               text: "Failed to Deleted Schedule",
+            });
+         });
    };
 
    useEffect(() => {

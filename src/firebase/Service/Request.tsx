@@ -1,25 +1,7 @@
-import {
-   Timestamp,
-   addDoc,
-   collection,
-   serverTimestamp,
-} from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../Base";
 
-type CreateServiceSchedule = {
-   data: {
-      patient_id: string;
-      patient_name: string;
-      request_date: Timestamp;
-      service_id: string;
-      service_name: string;
-      status: string;
-   };
-};
-
-export const CreateRequestScheduleFrb = async ({
-   data,
-}: CreateServiceSchedule) => {
+export const CreateRequestScheduleFrb = async ({ data }: Params) => {
    const docData = {
       ...data,
       created_at: serverTimestamp(),
@@ -36,13 +18,7 @@ export const CreateRequestScheduleFrb = async ({
       });
 };
 
-type CreateRequestMedecine = {
-   data: Omit<RequestMedecines, "id" | "created_at">;
-};
-
-export const CreateRequestMedecineFrb = async ({
-   data,
-}: CreateRequestMedecine) => {
+export const CreateRequestMedecineFrb = async ({ data }: Params) => {
    const docData = {
       ...data,
       created_at: serverTimestamp(),

@@ -18,6 +18,8 @@ type RequestService = {
    id: string;
    patient_name: string;
    patient_id: string;
+   patient_email: string;
+   patient_no: string;
    service_id: string;
    service_name: string;
    request_date: any;
@@ -35,6 +37,8 @@ type RequestMedecines = {
    id: string;
    patient_name: string;
    patient_id: string;
+   patient_email: string;
+   patient_no: string;
    service_id: string;
    service_name: string;
    medecine_name: string;

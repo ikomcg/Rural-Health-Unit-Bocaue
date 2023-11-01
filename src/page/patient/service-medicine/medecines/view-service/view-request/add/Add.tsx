@@ -6,8 +6,8 @@ import { BlueButton } from "../../../../../../../components/button/BlueButton";
 import { useFetchMedecineListService } from "../../../../../../../hooks/Medecines";
 import { useParams } from "react-router-dom";
 import { UserProvider } from "../../../../../../../context/UserProvider";
-import Swal from "sweetalert2";
 import { CreateRequestMedecineFrb } from "../../../../../../../firebase/Service/Request";
+import CSwal from "../../../../../../../components/swal/Swal";
 
 type PostType = {
    isPost: boolean;
@@ -39,6 +39,8 @@ const AddRequest = ({ isPost, setIsPost }: PostType) => {
          data: {
             patient_id: cookies.id,
             patient_name: `${first_name} ${middle_name} ${last_name}`,
+            patient_email: cookies.email,
+            patient_no: cookies.contact_no,
             service_id: id,
             service_name: name,
             medecine_name: medecine?.name ?? "",
@@ -49,13 +51,13 @@ const AddRequest = ({ isPost, setIsPost }: PostType) => {
       });
 
       if (!_data) {
-         return Swal.fire({
+         return CSwal({
             icon: "error",
             title: "Error Send Request",
          });
       }
       OnClose();
-      Swal.fire({
+      CSwal({
          icon: "success",
          title: "Send Request Successfully",
       }).then(() => {});

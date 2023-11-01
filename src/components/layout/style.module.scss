@@ -1,45 +1,74 @@
 @use "../../color";
 .user_nav {
-    display: flex;
-    align-items: center;
+   display: flex;
+   align-items: center;
 
-    padding: 10px;
-    background-color: color.$blue;
-    color:  #ffffff;
+   padding: 10px;
+   background-color: color.$blue;
+   color: #ffffff;
 
-    img{
-        width: 60px;
-        margin-right: 10px;
-        clip-path: circle();
-    }
-    
-    h2{
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: flex-start;
-        font-size: 13px;
-        span{
-            display: flex;
-        }
-        button{
-            width: max-content;
-            margin-left: 10px;
-            font-size: 18px;
-        }
-        
-    }
+   img {
+      width: 60px;
+      margin-right: 10px;
+      clip-path: circle();
+   }
 
-   button{
-    margin-left: auto;
-    font-size: 32px;
-    margin-right: 8px;
+   h2 {
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: flex-start;
+      font-size: 16px;
+      span {
+         display: flex;
+      }
+      button {
+         width: max-content;
+         margin-left: 10px;
+         font-size: 18px;
+      }
+   }
+
+   button {
+      margin-left: auto;
+      font-size: 32px;
+      margin-right: 8px;
    }
 }
-.in_actv_ftr{
-    img{
-        display: none;
-    }
-    h2{
-        display: none;
-    }
+.in_actv_ftr {
+   img {
+      display: none;
+   }
+   h2 {
+      display: none;
+   }
+}
+.online_container {
+   > div {
+      display: flex;
+      flex-flow: row wrap;
+      div {
+         display: flex;
+         flex-flow: column wrap;
+         gap: 2px;
+         width: 20%;
+         > div {
+            width: 90%;
+            img {
+               clip-path: circle();
+               width: 80%;
+            }
+            span {
+               text-align: center;
+               font-size: 12px;
+               word-wrap: break-word;
+               white-space: normal;
+               overflow: hidden;
+               display: -webkit-box;
+               text-overflow: ellipsis;
+               -webkit-box-orient: vertical;
+               -webkit-line-clamp: 1;
+            }
+         }
+      }
+   }
 }

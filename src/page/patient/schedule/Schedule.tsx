@@ -8,6 +8,7 @@ import { UserProvider } from "../../../context/UserProvider";
 import * as bootstrap from "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import moment from "moment";
+import timeGridPlugin from "@fullcalendar/timegrid";
 
 const Schedule = () => {
    const { cookies } = useContext(UserProvider);
@@ -31,12 +32,11 @@ const Schedule = () => {
    return (
       <Container className="relative">
          <FullCalendar
-            plugins={[dayGridPlugin, interactionPlugin]}
-            initialView="dayGridMonth"
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             headerToolbar={{
-               start: "title",
-               center: "",
-               end: "today prev,next",
+               left: "prev,next today",
+               center: "title",
+               right: "dayGridMonth,timeGridWeek,timeGridDay",
             }}
             events={MySchedules}
             eventColor="#2b90f9"

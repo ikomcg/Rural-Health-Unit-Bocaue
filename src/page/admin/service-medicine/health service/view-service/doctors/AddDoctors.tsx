@@ -9,7 +9,7 @@ import { MdAssignmentAdd, MdOutlineRemoveCircleOutline } from "react-icons/md";
 import uuid from "react-uuid";
 import { TimeStampValue } from "../../../../../../shared/TimeStamp";
 import { CreateServiceScheduleFrb } from "../../../../../../firebase/Service/Create";
-import Swal from "sweetalert2";
+import CSwal from "../../../../../../components/swal/Swal";
 
 type PostType = {
    isPost: boolean;
@@ -109,14 +109,14 @@ const AddDoctors = ({ isPost, setIsPost }: PostType) => {
       if (pending) return;
 
       if (error) {
-         Swal.fire({
+         CSwal({
             icon: "error",
             title: "Something went wrong",
             text: "Failed to Save",
          });
          return;
       }
-      Swal.fire({
+      CSwal({
          icon: "success",
          title: "Schedule Added Successfully",
       });

@@ -4,14 +4,13 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import style from "./style.module.scss";
 import { BlueButton } from "../../../../../components/button/BlueButton";
 import { CreateServiceFrb } from "../../../../../firebase/Service/Create";
-import Swal from "sweetalert2";
-
 import {
    getStorage,
    ref,
    uploadBytesResumable,
    getDownloadURL,
 } from "firebase/storage";
+import CSwal from "../../../../../components/swal/Swal";
 
 type PostType = {
    isPost: boolean;
@@ -115,7 +114,7 @@ const NewService = ({ isPost, setIsPost }: PostType) => {
       });
       setIsCreate(false);
       if (!create) {
-         Swal.fire({
+         CSwal({
             icon: "error",
             title: "Filed Create Service",
          });

@@ -5,10 +5,10 @@ import { FaTrash } from "react-icons/fa";
 import { AiFillEdit, AiOutlineSearch } from "react-icons/ai";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../../../../../firebase/Base";
-import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import { useFetchMedecineListService } from "../../../../../../hooks/Medecines";
 import UpdateMedecine from "./UpdateMedecine";
+import CSwal from "../../../../../../components/swal/Swal";
 
 type PayloadType = object & Omit<MedecineList, "created_at">;
 
@@ -26,30 +26,28 @@ const Medecines = () => {
 
    const OnDeleteList = async (itemID: string) => {
       if (!id) return;
-      Swal.fire({
+      const swal = await CSwal({
          icon: "info",
          title: "Are you sure you want to delete?",
          showCancelButton: true,
          showConfirmButton: true,
-      }).then(async (res) => {
-         if (res.isConfirmed) {
-            return await deleteDoc(
-               doc(db, "medecines", id, "medecines", itemID)
-            )
-               .then(() => {
-                  return Swal.fire({
-                     icon: "success",
-                     text: "Deleted Medecines Successfuly",
-                  });
-               })
-               .catch(() => {
-                  return Swal.fire({
-                     icon: "error",
-                     text: "Failed to Deleted Medecines",
-                  });
-               });
-         }
       });
+
+      if (!swal) return;
+
+      await deleteDoc(doc(db, "medecines", id, "medecines", itemID))
+         .then(() => {
+            return CSwal({
+               icon: "success",
+               text: "Deleted Medecines Successfuly",
+            });
+         })
+         .catch(() => {
+            return CSwal({
+               icon: "error",
+               text: "Failed to Deleted Medecines",
+            });
+         });
    };
 
    useEffect(() => {

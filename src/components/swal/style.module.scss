@@ -1,0 +1,35 @@
+.actionContainer {
+   width: 100% !important;
+   display: flex;
+   justify-content: center !important;
+   align-items: center !important;
+   padding: 0 20px !important;
+   margin: 1em auto 0;
+}
+.cancelButton {
+   font-size: 12px !important;
+   background-color: red !important;
+   padding: 5px 20px !important;
+}
+.confirmButton {
+   font-size: 12px !important;
+   padding: 5px 20px;
+}
+.containerAlert {
+   max-width: 20em;
+   width: 100%;
+   border-radius: 1rem;
+}
+.ValidationMessage {
+   color: #000;
+   font-weight: 600;
+   font-size: 13px;
+}
+.iconAlert {
+   font-size: 8px !important;
+}
+
+.title {
+   font-size: 16px !important;
+   font-weight: 500px;
+}

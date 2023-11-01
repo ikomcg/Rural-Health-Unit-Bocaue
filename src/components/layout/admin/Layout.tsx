@@ -7,13 +7,13 @@ import { useContext, useEffect } from "react";
 import { UserProvider } from "../../../context/UserProvider";
 import { useState } from "react";
 import Schedule from "./Schedule";
+import Online from "../Online";
 
 const AdminLayout = () => {
    const { cookies } = useContext(UserProvider);
    const navigate = useNavigate();
    const url = window.location.pathname;
    const [isMenu, setIsMenu] = useState(true);
-
 
    useEffect(() => {
       if (url === "/patient" && cookies) {
@@ -27,7 +27,7 @@ const AdminLayout = () => {
       <div className={style.container}>
          <SideBar isMenu={isMenu} setIsMenu={setIsMenu} />
          <div
-            className={`overflow-y-auto`}
+            className={`overflow-y-auto overflow-x-hidden`}
             style={{
                width: isMenu ? "60%" : "80%",
             }}
@@ -37,6 +37,7 @@ const AdminLayout = () => {
          <div className="rgth_cldr w-[25%]">
             <Calendar />
             <Schedule />
+            <Online role={["admin", "health-doctor", "patient", "doctor"]} />
          </div>
       </div>
    );

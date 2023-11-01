@@ -1,19 +1,11 @@
-import {
-   Timestamp,
-   addDoc,
-   collection,
-   serverTimestamp,
-} from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../Base";
 
-type CreateService = {
-   data: {
-      name: string;
-      image: string;
-   };
-};
+type PayloadType = {
+   id: string;
+} & Params;
 
-export const CreateServiceFrb = async ({ data }: CreateService) => {
+export const CreateServiceFrb = async ({ data }: Params) => {
    const docData = {
       ...data,
       created_at: serverTimestamp(),
@@ -30,20 +22,7 @@ export const CreateServiceFrb = async ({ data }: CreateService) => {
       });
 };
 
-type CreateServiceSchedule = {
-   id: string;
-   data: {
-      user_id: string;
-      name: string;
-      available_from: Timestamp;
-      available_to: Timestamp;
-   };
-};
-
-export const CreateServiceScheduleFrb = async ({
-   data,
-   id,
-}: CreateServiceSchedule) => {
+export const CreateServiceScheduleFrb = async ({ data, id }: PayloadType) => {
    const docData = {
       ...data,
       created_at: serverTimestamp(),
@@ -60,7 +39,7 @@ export const CreateServiceScheduleFrb = async ({
       });
 };
 
-export const CreateMedecineFrb = async ({ data }: CreateService) => {
+export const CreateMedecineFrb = async ({ data }: Params) => {
    const docData = {
       ...data,
       created_at: serverTimestamp(),
@@ -75,15 +54,6 @@ export const CreateMedecineFrb = async ({ data }: CreateService) => {
 
          return null;
       });
-};
-
-type PayloadType = {
-   data: {
-      name: string;
-      descriptions: string;
-      stock: number;
-   };
-   id: string;
 };
 
 export const CreateMedecineListFrb = async ({ data, id }: PayloadType) => {

@@ -8,8 +8,12 @@ import { BlueButton } from "../../../../../../components/button/BlueButton";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../../firebase/Base";
 import { RedButton } from "../../../../../../components/button/RedButton";
-import Swal from "sweetalert2";
 import { AiOutlineSearch } from "react-icons/ai";
+import CSwal from "../../../../../../components/swal/Swal";
+import { CreateRapidApi } from "../../../../../../api/SMS/SendSMS";
+
+const ENV = import.meta.env;
+
 const Request = () => {
    const { id } = useParams();
    const requests = useFetchRequest({ id: id });
@@ -48,13 +52,31 @@ const Request = () => {
       setRefresh((prev) => !prev);
    };
 
-   const OnChangeStatus = async (requestID: string, status: string) => {
+   const OnChangeStatus = async (request: RequestService, status: string) => {
       if (!id) return;
 
-      await updateDoc(doc(db, "schedules", requestID), { status })
-         .then(() => {})
+      await updateDoc(doc(db, "schedules", request.id), { status })
+         .then(async () => {
+            await CreateRapidApi({
+               endPoint: "sms/send",
+               token: ENV.VITE_TOKEN_SINCH,
+               data: {
+                  messages: [
+                     {
+                        from: "RHU",
+                        body: `Your Schedule ${moment(
+                           request.request_date.toISOString()
+                        )
+                           .utcOffset(8)
+                           .format("LLL")} in RHU Bocaue has been ${status}`,
+                        to: request.patient_no,
+                     },
+                  ],
+               },
+            });
+         })
          .catch((err) => {
-            Swal.fire({
+            CSwal({
                icon: "error",
                title: err,
             });
@@ -122,12 +144,12 @@ const Request = () => {
                      <td className="flex flex-col gap-2 justify-center items-center">
                         <BlueButton
                            disabled={item.status === "approve"}
-                           onClick={() => OnChangeStatus(item.id, "approve")}
+                           onClick={() => OnChangeStatus(item, "approve")}
                         >
                            Approve
                         </BlueButton>
                         <RedButton
-                           onClick={() => OnChangeStatus(item.id, "decline")}
+                           onClick={() => OnChangeStatus(item, "decline")}
                         >
                            Decline
                         </RedButton>

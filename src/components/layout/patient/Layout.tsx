@@ -11,6 +11,7 @@ import { doc, onSnapshot } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { db } from "../../../firebase/Base";
 import { SignOutFireBase } from "../../../firebase/SignOut";
+import Online from "../Online";
 const PatientLayout = () => {
    const { cookies, saveCookies } = useContext(UserProvider);
    const navigate = useNavigate();
@@ -87,6 +88,7 @@ const PatientLayout = () => {
          <div className="rgth_cldr w-[25%]">
             <Calendar />
             <Schedule />
+            <Online role={["admin", "health-doctor", "patient", "doctor"]} />
          </div>
       </div>
    );

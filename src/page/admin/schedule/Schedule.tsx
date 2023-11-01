@@ -7,7 +7,8 @@ import { useMemo } from "react";
 import * as bootstrap from "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import moment from "moment";
-
+import timeGridPlugin from "@fullcalendar/timegrid";
+   
 const Schedule = () => {
    const schedules = useFetchAllSchedules();
 
@@ -16,6 +17,7 @@ const Schedule = () => {
 
       const mySchedules = schedules.map((item) => ({
          title: item.service_name,
+         patient: item.patient_name,
          start: item.request_date,
       }));
 
@@ -25,12 +27,11 @@ const Schedule = () => {
    return (
       <Container className="relative">
          <FullCalendar
-            plugins={[dayGridPlugin, interactionPlugin]}
-            initialView="dayGridMonth"
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             headerToolbar={{
-               start: "title",
-               center: "",
-               end: "today prev,next",
+               left: "prev,next today",
+               center: "title",
+               right: "dayGridMonth,timeGridWeek,timeGridDay",
             }}
             events={MySchedules}
             eventColor="#2b90f9"
@@ -45,11 +46,13 @@ const Schedule = () => {
                   placement: "top",
                   trigger: "hover",
                   customClass: "popoverStyle",
-                  content: `<p><strong>Schedule:</strong> ${moment(
-                     info.event.start
-                  )
-                     .utcOffset(8)
-                     .format("LLL")}</p>`,
+                  content: `
+                     <strong>Patient:</strong> 
+                     ${info.event.extendedProps.patient} 
+                     <br class='my-2'/>
+                     <p><strong>Schedule:</strong> ${moment(info.event.start)
+                        .utcOffset(8)
+                        .format("LLL")}</p>`,
                   html: true,
                });
             }}

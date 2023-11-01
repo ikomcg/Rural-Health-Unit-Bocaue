@@ -5,7 +5,6 @@ import style from "./Style.module.scss";
 import { UserProvider } from "../../../context/UserProvider";
 import { BlueButton } from "../../../components/button/BlueButton";
 import { CreateAnnouncementsFrb } from "../../../firebase/Announcement/Create";
-import Swal from "sweetalert2";
 import uuid from "react-uuid";
 import {
    getStorage,
@@ -13,6 +12,7 @@ import {
    uploadBytesResumable,
    getDownloadURL,
 } from "firebase/storage";
+import CSwal from "../../../components/swal/Swal";
 
 type PostType = {
    isPost: boolean;
@@ -147,7 +147,7 @@ const Post = ({ isPost, setIsPost }: PostType) => {
       });
 
       if (!create) {
-         Swal.fire({
+         CSwal({
             icon: "error",
             title: "Filed Post Announcement",
          });

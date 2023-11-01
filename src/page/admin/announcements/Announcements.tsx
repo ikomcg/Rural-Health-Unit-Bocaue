@@ -3,13 +3,22 @@ import { BsGear } from "react-icons/bs";
 import { useState } from "react";
 import Post from "./Post";
 import Container from "../../../components/container/Container";
+import Carousel from "./view-announcement/Carousel";
 
 const Announcements = () => {
    const [isPost, setIsPost] = useState(false);
-
+   const [isOpen, setIsOpen] = useState(false);
+   const [toView, setToView] = useState<ToViewType>({
+      images: [],
+      profile: "",
+      name: "",
+      datetime: "",
+      descriptions: "",
+   });
    const HandleOnClick = () => {
       setIsPost((prev) => !prev);
    };
+
    return (
       <>
          <Container>
@@ -37,10 +46,11 @@ const Announcements = () => {
                   Manage Post
                </button>
             </div>
-            <AnnouncementList />
+            <AnnouncementList setToView={setToView} setIsOpen={setIsOpen} />
          </Container>
 
          <Post isPost={isPost} setIsPost={setIsPost} />
+         <Carousel isOpen={isOpen} setIsOpen={setIsOpen} toView={toView} />
       </>
    );
 };
