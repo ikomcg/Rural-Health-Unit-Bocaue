@@ -13,7 +13,7 @@ export const BlueButton = (props: BlueButtonType) => {
             !disabled
                ? `${btn_style.blue_btn} ${btn_style.action_btn}`
                : "bg-[gray]"
-         } ${className ?? ""} ${btn_style.btn} border px-3 `}
+         } ${btn_style.btn} border px-3 ${className ?? ""}`}
       >
          {children}
       </button>
