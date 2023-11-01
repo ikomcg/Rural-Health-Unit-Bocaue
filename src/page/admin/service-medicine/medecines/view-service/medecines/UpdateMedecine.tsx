@@ -6,7 +6,7 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import { BlueButton } from "../../../../../../components/button/BlueButton";
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../../firebase/Base";
-import Swal from "sweetalert2";
+import CSwal from "../../../../../../components/swal/Swal";
 
 type PayloadType = object & Omit<MedecineList, "created_at">;
 
@@ -35,43 +35,37 @@ const UpdateMedecine = ({ payload, setPayload }: PostType) => {
       e.preventDefault();
       if (!id) return;
       setIsPost(false);
-      Swal.fire({
+      const swal = await CSwal({
          icon: "info",
          title: "Are you sure you want to save?",
          showCancelButton: true,
          showConfirmButton: true,
-      }).then(async (res) => {
-         if (res.isConfirmed) {
-            setIsCreate(true);
-
-            const data = {
-               name: payload.name,
-               descriptions: payload.descriptions,
-               stock: payload.stock,
-               update_at: serverTimestamp(),
-            };
-
-            await updateDoc(
-               doc(db, "medecines", id, "medecines", payload.id),
-               data
-            )
-               .then(() => {
-                  OnClose();
-                  Swal.fire({
-                     icon: "success",
-                     title: "Update Successfully",
-                  });
-               })
-               .catch((err) => {
-                  Swal.fire({
-                     icon: "error",
-                     title: err,
-                  });
-               });
-         } else {
-            setIsPost(true);
-         }
       });
+
+      if (!swal) return setIsPost(true);
+
+      setIsCreate(true);
+      const data = {
+         name: payload.name,
+         descriptions: payload.descriptions,
+         stock: payload.stock,
+         update_at: serverTimestamp(),
+      };
+
+      await updateDoc(doc(db, "medecines", id, "medecines", payload.id), data)
+         .then(() => {
+            OnClose();
+            CSwal({
+               icon: "success",
+               title: "Update Successfully",
+            });
+         })
+         .catch((err) => {
+            CSwal({
+               icon: "error",
+               title: err,
+            });
+         });
    };
 
    const OnChangeHandle = (

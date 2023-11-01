@@ -7,7 +7,7 @@ import { BlueButton } from "../../../../../../components/button/BlueButton";
 import { MdAssignmentAdd, MdOutlineRemoveCircleOutline } from "react-icons/md";
 import uuid from "react-uuid";
 import { CreateMedecineListFrb } from "../../../../../../firebase/Service/Create";
-import Swal from "sweetalert2";
+import CSwal from "../../../../../../components/swal/Swal";
 
 type PostType = {
    isPost: boolean;
@@ -64,7 +64,7 @@ const AddMedecines = ({ isPost, setIsPost }: PostType) => {
          });
 
          if (!data) {
-            Swal.fire({
+            CSwal({
                icon: "error",
                title: "Something went wrong",
                text: "Failed to Save",
@@ -86,7 +86,7 @@ const AddMedecines = ({ isPost, setIsPost }: PostType) => {
 
          index++;
          if (index === _data.length) {
-            Swal.fire({
+            CSwal({
                icon: "success",
                title: "Medecines Added Successfully",
             });

@@ -108,7 +108,7 @@ const Messages = ({ activeInbox, messages }: MessagesType) => {
 
                   <div ref={ref} />
                </div>
-               <Reply id={activeInbox.id} />
+               <Reply activeInbox={activeInbox} />
             </div>
          </div>
          <SimpleSnackbar

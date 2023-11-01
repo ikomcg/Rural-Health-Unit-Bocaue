@@ -7,8 +7,8 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import { BlueButton } from "../../../../../../components/button/BlueButton";
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../../firebase/Base";
-import Swal from "sweetalert2";
 import { TimeStampValue } from "../../../../../../shared/TimeStamp";
+import CSwal from "../../../../../../components/swal/Swal";
 
 type PostType = {
    payload: PayloadType;
@@ -36,45 +36,40 @@ const UpdateDoctors = ({ payload, setPayload }: PostType) => {
       e.preventDefault();
       if (!id || !doctors) return;
       setIsPost(false);
-      Swal.fire({
+      const swal = await CSwal({
          icon: "info",
          title: "Are you sure you want to save?",
          showCancelButton: true,
          showConfirmButton: true,
-      }).then(async (res) => {
-         if (res.isConfirmed) {
-            setIsCreate(true);
-            const doctor = doctors.find((item) => item.id === payload.user_id);
-
-            const data = {
-               user_id: payload.user_id,
-               name: doctor?.full_name,
-               available_from: TimeStampValue(payload.available_from),
-               available_to: TimeStampValue(payload.available_from),
-               update_at: serverTimestamp(),
-            };
-
-            await updateDoc(
-               doc(db, "service", id, "schedules", payload.id),
-               data
-            )
-               .then(() => {
-                  OnClose();
-                  Swal.fire({
-                     icon: "success",
-                     title: "Update Successfully",
-                  });
-               })
-               .catch((err) => {
-                  Swal.fire({
-                     icon: "error",
-                     title: err,
-                  });
-               });
-         } else {
-            setIsPost(true);
-         }
       });
+
+      if (!swal) return setIsPost(true);
+
+      setIsCreate(true);
+      const doctor = doctors.find((item) => item.id === payload.user_id);
+
+      const data = {
+         user_id: payload.user_id,
+         name: doctor?.full_name,
+         available_from: TimeStampValue(payload.available_from),
+         available_to: TimeStampValue(payload.available_from),
+         update_at: serverTimestamp(),
+      };
+
+      await updateDoc(doc(db, "service", id, "schedules", payload.id), data)
+         .then(() => {
+            OnClose();
+            CSwal({
+               icon: "success",
+               title: "Update Successfully",
+            });
+         })
+         .catch((err) => {
+            CSwal({
+               icon: "error",
+               title: err,
+            });
+         });
    };
 
    const OnChangeHandle = (
@@ -91,7 +86,7 @@ const UpdateDoctors = ({ payload, setPayload }: PostType) => {
          open={isPost}
          setOpen={OnClose}
       >
-         <div className="p-5">
+         <div className="p-3">
             <div className={style.header_post}>
                <h1>Update Schedule</h1>
                <button type="button" onClick={OnClose}>

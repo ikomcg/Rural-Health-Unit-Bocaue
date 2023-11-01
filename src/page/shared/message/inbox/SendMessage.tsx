@@ -5,13 +5,14 @@ import { IoMdClose } from "react-icons/io";
 import To from "./To";
 import { FormEvent, useContext, useEffect, useState } from "react";
 import style from "./Style.module.scss";
-
 import { BlueButton } from "../../../../components/button/BlueButton";
 import { UserProvider } from "../../../../context/UserProvider";
 import {
    CreateConversation,
    UpdateConversation,
 } from "../../../../firebase/message/message";
+import { CreateRapidApi } from "../../../../api/SMS/SendSMS";
+const ENV = import.meta.env;
 
 type SendMessageType = {
    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -28,6 +29,7 @@ const SendMessage = ({ anchorEl, open, setOpen, inbox }: SendMessageType) => {
       id: "",
       message: "",
       profile: "",
+      to_phone: "",
    });
 
    const OnClose = () => {
@@ -37,6 +39,7 @@ const SendMessage = ({ anchorEl, open, setOpen, inbox }: SendMessageType) => {
          id: "",
          message: "",
          profile: "",
+         to_phone: "",
       });
    };
    const SendMessage = async (event: FormEvent) => {
@@ -64,8 +67,24 @@ const SendMessage = ({ anchorEl, open, setOpen, inbox }: SendMessageType) => {
             from_id: cookies.id,
             from_name: `${first_name} ${middle_name} ${last_name}`,
             from_profile: profile,
+            from_phone: cookies.contact_no,
          });
       }
+
+      // await CreateRapidApi({
+      //    endPoint: "sms/send",
+      //    token: ENV.VITE_TOKEN_SINCH,
+      //    data: {
+      //       messages: [
+      //          {
+      //             from: "RHU",
+      //             body: `${cookies.full_name} sent a message`,
+      //             to: toMessage.to_phone,
+      //          },
+      //       ],
+      //    },
+      // });
+
       OnClose();
    };
 

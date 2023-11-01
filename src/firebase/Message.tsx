@@ -39,39 +39,11 @@ export const CreateMessages = async ({
       });
 };
 
-type SendMessagesType = {
-   from_profile: string;
-   from_id: string;
-   from_name: string;
-   to_id: string;
-   to_name: string;
-   to_profile: string;
-} & Omit<ReplyMessagesType, "id" | "from">;
-
 export const SendMessages = async ({
-   message,
-   from_id,
-   from_name,
-   from_profile,
-   to_id,
-   to_name,
-   to_profile,
-}: SendMessagesType) => {
-   if (message.trim() === "") return;
+   data
+}: Params) => {
 
-   const docData = {
-      latest_message: message,
-      from_id,
-      from_name,
-      from_profile,
-      to_id,
-      to_name,
-      to_profile,
-      created_at: serverTimestamp(),
-      update_at: serverTimestamp(),
-   };
-
-   return await addDoc(collection(db, "inbox"), docData)
+   return await addDoc(collection(db, "inbox"), data)
       .then((res) => {
          return res.id;
       })

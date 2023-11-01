@@ -47,13 +47,11 @@ const Message = () => {
       <div className="flex flex-row h-screen">
          <Inbox activeInbox={activeInbox} setActiveInbox={setActiveInbox} />
          {activeInbox && (
-            <>
-               <Messages
-                  activeInbox={activeInbox}
-                  messages={messages}
-                  setMessages={setMessages}
-               />
-            </>
+            <Messages
+               activeInbox={activeInbox}
+               messages={messages}
+               setMessages={setMessages}
+            />
          )}
       </div>
    );
