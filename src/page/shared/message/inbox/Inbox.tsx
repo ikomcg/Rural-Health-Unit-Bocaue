@@ -44,6 +44,7 @@ const Inbox = ({ activeInbox, setActiveInbox }: InboxType) => {
 
       return filterInBox;
    }, [inbox, search]);
+
    return (
       <>
          <div className="w-[40%] h-full border-r mr-1 p-2">

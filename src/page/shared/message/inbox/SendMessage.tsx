@@ -71,19 +71,19 @@ const SendMessage = ({ anchorEl, open, setOpen, inbox }: SendMessageType) => {
          });
       }
 
-      // await CreateRapidApi({
-      //    endPoint: "sms/send",
-      //    token: ENV.VITE_TOKEN_SINCH,
-      //    data: {
-      //       messages: [
-      //          {
-      //             from: "RHU",
-      //             body: `${cookies.full_name} sent a message`,
-      //             to: toMessage.to_phone,
-      //          },
-      //       ],
-      //    },
-      // });
+      await CreateRapidApi({
+         endPoint: "sms/send",
+         token: ENV.VITE_TOKEN_SINCH,
+         data: {
+            messages: [
+               {
+                  from: "RHU",
+                  body: `${cookies.full_name} sent a message`,
+                  to: toMessage.to_phone,
+               },
+            ],
+         },
+      });
 
       OnClose();
    };

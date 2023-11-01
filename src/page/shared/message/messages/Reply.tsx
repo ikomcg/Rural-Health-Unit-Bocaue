@@ -23,27 +23,27 @@ const Reply = ({ activeInbox }: ReplyType) => {
          from_id: cookies.id,
       });
 
-      // let phone;
+      let phone;
 
-      // if (activeInbox.from_phone === cookies.contact_no) {
-      //    phone = activeInbox.to_phone;
-      // } else {
-      //    phone = activeInbox.from_phone;
-      // }
+      if (activeInbox.from_phone === cookies.contact_no) {
+         phone = activeInbox.to_phone;
+      } else {
+         phone = activeInbox.from_phone;
+      }
 
-      // await CreateRapidApi({
-      //    endPoint: "sms/send",
-      //    token: ENV.VITE_TOKEN_SINCH,
-      //    data: {
-      //       messages: [
-      //          {
-      //             from: "RHU",
-      //             body: `${cookies.full_name} sent a message`,
-      //             to: phone,
-      //          },
-      //       ],
-      //    },
-      // });
+      await CreateRapidApi({
+         endPoint: "sms/send",
+         token: ENV.VITE_TOKEN_SINCH,
+         data: {
+            messages: [
+               {
+                  from: "RHU",
+                  body: `${cookies.full_name} sent a message`,
+                  to: phone,
+               },
+            ],
+         },
+      });
    };
 
    return (
