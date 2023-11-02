@@ -4,7 +4,7 @@ import { GiBattleGear } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import { FaUsers } from "react-icons/fa";
 import style from "./style.module.scss";
-import { MdEmail, MdHealthAndSafety } from "react-icons/md";
+import { MdEmail, MdHealthAndSafety, MdInventory } from "react-icons/md";
 
 type ModuleType = {
    isMenu: boolean;
@@ -30,6 +30,11 @@ const Module = ({ isMenu }: ModuleType) => {
          name: "Messages",
          icon: <MdEmail />,
          link: "messages",
+      },
+      {
+         name: "Inventory",
+         icon: <MdInventory />,
+         link: "inventory",
       },
       {
          name: "Health Workers",
