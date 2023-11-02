@@ -46,8 +46,8 @@ const Patient = () => {
 
    return (
       <Container>
-         <div className="flex flex-row justify-between mt-2 bg-blue py-2 items-center px-3">
-            <h1 className="text-white font-semibold text-lg">Patient</h1>
+         <div className="flex flex-row justify-between mt-2 py-2 items-center px-3">
+            <h1 className="text-blue font-semibold text-xl">Patient</h1>
             <div className="flex flex-row w-1/2">
                <button
                   className="text-white bg-blue text-xl px-3 py-[4px] rounded-l border border-blue"
