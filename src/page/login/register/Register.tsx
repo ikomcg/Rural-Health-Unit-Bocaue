@@ -2,11 +2,11 @@ import { FormEvent, SetStateAction, useState } from "react";
 import DialogSlide from "../../../components/mui/dialog/SlideModal";
 import style from "./style.module.scss";
 import PersonalInformation from "./PersonalInformation";
-import HealtInformation from "./HealtInformation";
+// import HealtInformation from "./HealtInformation";
 import { BlueButton } from "../../../components/button/BlueButton";
 import { sendSignInLinkToEmail, getAuth } from "firebase/auth";
 import Swal from "sweetalert2";
-import uuid from "react-uuid";
+// import uuid from "react-uuid";
 import { Input, InputPassword } from "../../../components/forms/Form";
 import { Backdrop, CircularProgress } from "@mui/material";
 
@@ -38,10 +38,11 @@ const initialPayload: Register = {
    birth_certificate: "",
    physical_examination: "",
    profile: "",
+   address: "",
 };
 const Register = ({ open, setOpen }: RegisterType) => {
    const auth = getAuth();
-   const [filesInformation, setFilesInformation] = useState<FilesType[]>([]);
+   // const [filesInformation, setFilesInformation] = useState<FilesType[]>([]);
    const [password, setPassword] = useState("");
    const [payload, setPayload] = useState<Register>(initialPayload);
    const [page, setPage] = useState(1);
@@ -54,30 +55,30 @@ const Register = ({ open, setOpen }: RegisterType) => {
       setPayload((prev) => ({ ...prev, [name]: value }));
    };
 
-   const OnChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { files, name } = e.target;
+   // const OnChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+   //    const { files, name } = e.target;
 
-      if (!files || files.length === 0) return;
-      const isChange = filesInformation?.find((item) => item.name === name);
-      console.log(files);
-      if (isChange) {
-         return setFilesInformation((prev) => [
-            ...prev.map((item) => {
-               if (item.name === name) {
-                  return {
-                     ...item,
-                     file: files[0],
-                  };
-               }
-               return item;
-            }),
-         ]);
-      }
+   //    if (!files || files.length === 0) return;
+   //    const isChange = filesInformation?.find((item) => item.name === name);
+   //    console.log(files);
+   //    if (isChange) {
+   //       return setFilesInformation((prev) => [
+   //          ...prev.map((item) => {
+   //             if (item.name === name) {
+   //                return {
+   //                   ...item,
+   //                   file: files[0],
+   //                };
+   //             }
+   //             return item;
+   //          }),
+   //       ]);
+   //    }
 
-      setFilesInformation((prev) => [
-         ...prev.concat({ id: uuid(), document: "", name, file: files[0] }),
-      ]);
-   };
+   //    setFilesInformation((prev) => [
+   //       ...prev.concat({ id: uuid(), document: "", name, file: files[0] }),
+   //    ]);
+   // };
 
    const RegisterSubmit = async (e: FormEvent) => {
       e.preventDefault();
@@ -167,15 +168,9 @@ const Register = ({ open, setOpen }: RegisterType) => {
                      HandleOnChange={HandleOnChange}
                      password={password}
                      setPassword={setPassword}
-                     OnChangeFile={OnChangeFile}
                   />
-                  <hr className="border-1 border-blue my-10" />
-                  <HealtInformation
-                     payload={payload}
-                     HandleOnChange={HandleOnChange}
-                     OnChangeFile={OnChangeFile}
-                  />
-                  <div className="flex flex-row gap-3 justify-end items-center m-3">
+
+                  <div className="flex flex-row gap-3 justify-end items-center m-3 mt-5">
                      <BlueButton
                         className="w-[8%] py-2"
                         type="button"

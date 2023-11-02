@@ -8,5 +8,17 @@ type UserType = {
    role: string[];
    status: string;
    contact_no: string;
-   email : string
+   email: string;
+   address: string;
+   age: number;
+   birth_Certificate: string;
+   birthday: string;
+   diagnosis: string;
+   gender: string;
+   is_verify: boolean;
+   marital_status: string;
+   past_medical: string;
+   physical_examination: string;
+   treatment: string;
+   vital_sign: string;
 };

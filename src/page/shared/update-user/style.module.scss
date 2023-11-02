@@ -6,6 +6,7 @@
    gap: 3;
    margin-top: 20px;
    margin-bottom: 30px;
+   margin-inline: auto;
    h1,
    h2 {
       text-align: center;
@@ -23,11 +24,13 @@
    display: flex;
    flex-flow: row wrap;
    row-gap: 10px;
+   width: 75%;
+   font-size: 14px;
    > div {
       padding: 0 10px;
       width: 25%;
 
-      &:last-child{
+      &:nth-last-child(3) {
          width: 50%;
       }
    }

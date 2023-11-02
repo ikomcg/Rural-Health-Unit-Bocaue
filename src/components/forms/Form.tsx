@@ -12,7 +12,7 @@ type InputType = object &
 
 export const Input = ({ label, message, error, ...props }: InputType) => {
    return (
-      <div className="flex flex-col gap-1 w-full">
+      <div className="flex flex-col justify-end gap-1 w-full">
          <label htmlFor={props.id} className="text-md">
             {label}
             {props.required && (

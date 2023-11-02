@@ -6,15 +6,14 @@ type PersonalInformationType = {
    HandleOnChange: (
       e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
    ) => void;
-   OnChangeFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
    setPassword: React.Dispatch<SetStateAction<string>>;
    payload: Register;
    password: string;
 };
+
 const PersonalInformation: React.FC<PersonalInformationType> = ({
    payload,
    HandleOnChange,
-   // OnChangeFile,
 }) => {
    return (
       <div className="px-5">
@@ -22,18 +21,6 @@ const PersonalInformation: React.FC<PersonalInformationType> = ({
             Personal Information
          </h3>
          <div className={style.card_information}>
-            {/* <div style={{ width: "100%" }} className="mb-5">
-               <Input
-                  type="file"
-                  name="profile"
-                  placeholder="Profile Picture"
-                  label="Profile Picture"
-                  style={{
-                     marginTop: 10,
-                  }}
-                  onChange={OnChangeFile}
-               />
-            </div> */}
             <Input
                type="text"
                name="last_name"
@@ -108,6 +95,15 @@ const PersonalInformation: React.FC<PersonalInformationType> = ({
                label="Marital Status"
                required
                value={payload.marital_status}
+               onChange={HandleOnChange}
+            />
+            <Input
+               type="text"
+               name="address"
+               placeholder="Address"
+               label="Address"
+               required
+               value={payload.address}
                onChange={HandleOnChange}
             />
          </div>
