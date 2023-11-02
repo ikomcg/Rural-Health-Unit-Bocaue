@@ -48,7 +48,7 @@ const Request = () => {
    }, [currentPage, requests, refresh]);
 
    const HandleRefresh = () => {
-      setCurrentPage(0);
+      setCurrentPage(1);
       setRefresh((prev) => !prev);
    };
 

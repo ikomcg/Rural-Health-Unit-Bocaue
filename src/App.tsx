@@ -22,6 +22,7 @@ import Announcements from "./page/admin/announcements/Announcements";
 import HealtWorkers from "./page/admin/health workers/HealtWorkers";
 import Patient from "./page/admin/Patient/Patient";
 import Messages from "./page/shared/message/Message";
+import Inventory from "./page/admin/inventory/Inventory";
 
 const App = () => {
    return (
@@ -33,6 +34,7 @@ const App = () => {
             <Route path="admin" element={<AdminLayout />}>
                <Route path="home" element={<HomeAdmin />} />
                <Route path="announcement" element={<Announcements />} />
+               <Route path="inventory" element={<Inventory />} />
                <Route path="service-medicine" element={<ServiceMedicine />}>
                   <Route path="health-services">
                      <Route index element={<HealthService />} />

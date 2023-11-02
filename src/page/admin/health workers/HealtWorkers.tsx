@@ -40,14 +40,14 @@ const HealtWorkers = () => {
    }, [currentPage, doctors, refresh]);
 
    const HandleRefresh = () => {
-      setCurrentPage(0);
+      setCurrentPage(1);
       setRefresh((prev) => !prev);
    };
 
    return (
       <Container>
          <div className="flex flex-row justify-between mt-2 py-2 items-center px-3">
-            <h1 className="text-blue font-semibold text-xl">Health Workers</h1>
+            <h1 className="text-blue font-semibold text-2xl">Health Workers</h1>
             <div className="flex flex-row w-1/2">
                <button
                   className="text-white bg-blue text-xl px-3 py-[4px] rounded-l border border-blue"
@@ -123,7 +123,7 @@ const HealtWorkers = () => {
                            {item.status}
                         </span>
                      </td>
-                     <td className="flex flex-row gap-2 justify-center">
+                     <td className="flex flex-row gap-2 items-center justify-center">
                         <button className="bg-blue text-white px-1 py-1 rounded text-xs">
                            <BsFillGearFill />
                         </button>

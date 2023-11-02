@@ -39,7 +39,7 @@ const Doctors = () => {
    }, [currentPage, doctors, refresh]);
 
    const HandleRefresh = () => {
-      setCurrentPage(0);
+      setCurrentPage(1);
       setRefresh((prev) => !prev);
    };
 

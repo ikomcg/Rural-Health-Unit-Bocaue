@@ -9,6 +9,7 @@ const CSwal = async (props: CSwalType) => {
 
    const res = await Swal.fire({
       customClass: {
+         container: style.container,
          popup: style.containerAlert,
          title: style.title,
          htmlContainer: style.ValidationMessage,
