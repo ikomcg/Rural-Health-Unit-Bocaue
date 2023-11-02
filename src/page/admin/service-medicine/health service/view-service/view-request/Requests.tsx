@@ -12,8 +12,6 @@ import { AiOutlineSearch } from "react-icons/ai";
 import CSwal from "../../../../../../components/swal/Swal";
 import { CreateRapidApi } from "../../../../../../api/SMS/SendSMS";
 
-const ENV = import.meta.env;
-
 const Request = () => {
    const { id } = useParams();
    const requests = useFetchRequest({ id: id });
@@ -59,7 +57,7 @@ const Request = () => {
          .then(async () => {
             await CreateRapidApi({
                endPoint: "sms/send",
-               token: ENV.VITE_TOKEN_SINCH,
+               token: "bWFyaWJlbGdlcnNhbGlhQGdtYWlsLmNvbTpGNkQwMTQ4OS01MzhELURBMTctRUE5Qi1GOTJCN0NDQzY3QUQ=",
                data: {
                   messages: [
                      {

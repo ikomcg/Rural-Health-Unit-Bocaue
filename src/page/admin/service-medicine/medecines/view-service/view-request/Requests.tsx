@@ -11,8 +11,6 @@ import { useFetchRequestMedecine } from "../../../../../../hooks/Request";
 import { AiOutlineSearch } from "react-icons/ai";
 import { CreateRapidApi } from "../../../../../../api/SMS/SendSMS";
 
-const ENV = import.meta.env;
-
 const Request = () => {
    const { id } = useParams();
    const medecine = useFetchRequestMedecine({ id: id });
@@ -60,7 +58,7 @@ const Request = () => {
          .then(async () => {
             await CreateRapidApi({
                endPoint: "sms/send",
-               token: ENV.VITE_TOKEN_SINCH,
+               token: "bGx1cmFnLjIyMTYxOUBiYWxhZ3Rhcy5zdGkuZWR1LnBoOjQ1RUJDMkVCLTRBMzQtMDhDOS03MjA2LTI2OUEwRjVEMzQ3Qw==",
                data: {
                   messages: [
                      {

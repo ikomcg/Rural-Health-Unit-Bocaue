@@ -12,7 +12,6 @@ import {
    UpdateConversation,
 } from "../../../../firebase/message/message";
 import { CreateRapidApi } from "../../../../api/SMS/SendSMS";
-const ENV = import.meta.env;
 
 type SendMessageType = {
    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -73,7 +72,7 @@ const SendMessage = ({ anchorEl, open, setOpen, inbox }: SendMessageType) => {
 
       await CreateRapidApi({
          endPoint: "sms/send",
-         token: ENV.VITE_TOKEN_SINCH,
+         token: "bWFyZmllZWNhbWFyQGdtYWlsLmNvbTpCOTVGRTA3Qi0wMUY5LTlDMzgtQTYxNS01RUJFNDQ4MUIwMkY=",
          data: {
             messages: [
                {

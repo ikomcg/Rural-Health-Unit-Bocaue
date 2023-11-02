@@ -3,7 +3,6 @@ import { UserProvider } from "../../../../context/UserProvider";
 import { RiSendPlaneFill } from "react-icons/ri";
 import { UpdateConversation } from "../../../../firebase/message/message";
 import { CreateRapidApi } from "../../../../api/SMS/SendSMS";
-const ENV = import.meta.env;
 type ReplyType = {
    activeInbox: Inbox;
 };
@@ -33,7 +32,7 @@ const Reply = ({ activeInbox }: ReplyType) => {
 
       await CreateRapidApi({
          endPoint: "sms/send",
-         token: ENV.VITE_TOKEN_SINCH,
+         token: "bWlrb2d1cnJvYmF0OjFFOUE4MkFFLTIyQTItQ0REMS1DRUFDLTNFQjEzRjgyNjhBMg==",
          data: {
             messages: [
                {
