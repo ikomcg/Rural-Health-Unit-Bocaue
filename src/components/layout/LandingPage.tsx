@@ -24,13 +24,14 @@ const LandingPage = () => {
 
                   if (snapshot.exists()) {
                      const data = snapshot.data();
-
+                     const full_name = `${data.first_name} ${data.middle_name} ${data.last_name}`;
                      const role = data.role;
                      // for patient account
                      const is_verify = data.is_verify;
                      const cookie = {
-                        ...data,
+                        full_name,
                         id: user.uid,
+                        ...data,
                      } as UserType;
 
                      if (role.includes("patient")) {

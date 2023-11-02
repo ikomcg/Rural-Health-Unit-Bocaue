@@ -136,8 +136,12 @@ const Login = ({ open, setOpen }: LoginType) => {
       const role = user.data().role;
       // for patient account
       const is_verify = user.data().is_verify;
+      const full_name = `${user.data().first_name} ${user.data().middle_name} ${
+         user.data().last_name
+      }`;
       const cookie = {
          ...user.data(),
+         full_name,
          id,
       } as UserType;
 
