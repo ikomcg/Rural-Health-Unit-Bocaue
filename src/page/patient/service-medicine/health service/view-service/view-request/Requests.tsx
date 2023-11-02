@@ -11,7 +11,7 @@ const Request = () => {
    const { id } = useParams();
    const { cookies } = useContext(UserProvider);
    const doctors = useFetchMyRequest({ id: id, user_id: cookies?.id });
-   const [currentPage, setCurrentPage] = useState(0);
+   const [currentPage, setCurrentPage] = useState(1);
    const [sliceDoctors, setSliceDoctors] = useState<RequestService[] | null>();
    const [isOpen, setIsOpen] = useState(false);
    const [pages, setPages] = useState(0);
@@ -22,8 +22,7 @@ const Request = () => {
 
          setPages(Math.ceil(doctors.length / 10));
 
-         const page = currentPage + 1;
-         const lastPostIndex = page * 5;
+         const lastPostIndex = currentPage * 5;
          const firstPostIndex = lastPostIndex - 5;
 
          const currentPost = doctors.slice(firstPostIndex, lastPostIndex);
