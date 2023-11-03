@@ -21,4 +21,7 @@ type UserType = {
    physical_examination: string;
    treatment: string;
    vital_sign: string;
+   account_status: "active" | "deactive" | "delete";
+   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   created_at: any;
 };

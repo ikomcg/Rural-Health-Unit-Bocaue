@@ -20,7 +20,14 @@ const Online = ({ role }: OnlineType) => {
                users.map((item) => (
                   <div key={item.id} title={item.full_name}>
                      <div>
-                        <img src={item.profile} alt={item.profile} />
+                        <img
+                           src={
+                              !item.profile || item.profile === ""
+                                 ? "/image/profile.png"
+                                 : item.profile
+                           }
+                           alt={item.profile}
+                        />
                         <span>{item.full_name}</span>
                      </div>
                   </div>

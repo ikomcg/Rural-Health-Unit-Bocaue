@@ -46,7 +46,7 @@ const Patient = () => {
       setCurrentPage(1);
       setRefresh((prev) => !prev);
    };
-   console.log(slicePatient);
+
    return (
       <>
          <Container>
@@ -108,7 +108,11 @@ const Patient = () => {
                            <div className="flex flex-row items-center gap-2">
                               <img
                                  className={style.profile}
-                                 src={item.profile}
+                                 src={
+                                    item.profile === "" || !item.profile
+                                       ? "/image/profile.png"
+                                       : item.profile
+                                 }
                                  alt={item.profile}
                               />{" "}
                               <span>{item.full_name}</span>

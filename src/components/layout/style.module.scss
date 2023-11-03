@@ -9,6 +9,7 @@
 
    img {
       width: 60px;
+      height: 60px;
       margin-right: 10px;
       clip-path: circle();
    }
@@ -56,6 +57,7 @@
             img {
                clip-path: circle();
                width: 80%;
+               height: 60px;
             }
             span {
                text-align: center;

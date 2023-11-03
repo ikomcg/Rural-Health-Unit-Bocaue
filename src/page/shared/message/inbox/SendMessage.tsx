@@ -134,6 +134,7 @@ const SendMessage = ({ anchorEl, open, setOpen, inbox }: SendMessageType) => {
                         placeholder="Aa"
                         type="text"
                         id="to"
+                        autoComplete="off"
                         value={toMessage.name}
                         onClick={(e) => {
                            e.stopPropagation();
@@ -170,9 +171,6 @@ const SendMessage = ({ anchorEl, open, setOpen, inbox }: SendMessageType) => {
                               ...prev,
                               message: e.target.value,
                            }));
-                        }}
-                        onKeyDown={(e) => {
-                           console.log(e.code);
                         }}
                      />
                      <BlueButton type="submit">Send</BlueButton>

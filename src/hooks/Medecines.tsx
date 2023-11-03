@@ -30,8 +30,7 @@ const useFetchMedecines = () => {
             }) as unknown as MedecinesType[];
             setMedecines(data);
          },
-         (error) => {
-            console.log("error Medecines", error);
+         () => {
             setMedecines(null);
          }
       );
@@ -59,21 +58,16 @@ export const useFetchMedecineListService = ({ id }: ParamsType) => {
       onSnapshot(
          queryDB,
          (snapshot) => {
-            try {
-               const data = snapshot.docs.map((doc) => {
-                  return {
-                     ...doc.data(),
-                     id: doc.id,
-                     created_at: doc.data().created_at.toDate(),
-                  };
-               }) as unknown as MedecineList[];
-               setMedecines(data);
-            } catch (err) {
-               console.log(err);
-            }
+            const data = snapshot.docs.map((doc) => {
+               return {
+                  ...doc.data(),
+                  id: doc.id,
+                  created_at: doc.data().created_at.toDate(),
+               };
+            }) as unknown as MedecineList[];
+            setMedecines(data);
          },
-         (error) => {
-            console.log("error medecines", error);
+         () => {
             setMedecines(null);
          }
       );

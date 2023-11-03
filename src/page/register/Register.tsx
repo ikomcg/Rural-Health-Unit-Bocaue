@@ -1,14 +1,18 @@
 import { FormEvent, SetStateAction, useState } from "react";
-import DialogSlide from "../../../components/mui/dialog/SlideModal";
+import DialogSlide from "../../components/mui/dialog/SlideModal";
 import style from "./style.module.scss";
 import PersonalInformation from "./PersonalInformation";
-// import HealtInformation from "./HealtInformation";
-import { BlueButton } from "../../../components/button/BlueButton";
+import { BlueButton } from "../../components/button/BlueButton";
 import { sendSignInLinkToEmail, getAuth } from "firebase/auth";
 import Swal from "sweetalert2";
-// import uuid from "react-uuid";
-import { Input, InputPassword } from "../../../components/forms/Form";
+import { Input, InputPassword } from "../../components/forms/Form";
 import { Backdrop, CircularProgress } from "@mui/material";
+import {
+   getDownloadURL,
+   getStorage,
+   ref,
+   uploadBytesResumable,
+} from "firebase/storage";
 
 type RegisterType = {
    open: boolean;
@@ -46,7 +50,8 @@ const Register = ({ open, setOpen }: RegisterType) => {
    const [password, setPassword] = useState("");
    const [payload, setPayload] = useState<Register>(initialPayload);
    const [page, setPage] = useState(1);
-   const [isLoading, setIsLoading] = useState(false);
+   const [isSaving, setIsSaving] = useState(false);
+
    const HandleOnChange = (
       e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
    ) => {
@@ -55,41 +60,71 @@ const Register = ({ open, setOpen }: RegisterType) => {
       setPayload((prev) => ({ ...prev, [name]: value }));
    };
 
-   // const OnChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-   //    const { files, name } = e.target;
+   const OnChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { files } = e.target;
 
-   //    if (!files || files.length === 0) return;
-   //    const isChange = filesInformation?.find((item) => item.name === name);
-   //    console.log(files);
-   //    if (isChange) {
-   //       return setFilesInformation((prev) => [
-   //          ...prev.map((item) => {
-   //             if (item.name === name) {
-   //                return {
-   //                   ...item,
-   //                   file: files[0],
-   //                };
-   //             }
-   //             return item;
-   //          }),
-   //       ]);
-   //    }
+      if (!files || files.length === 0) return;
 
-   //    setFilesInformation((prev) => [
-   //       ...prev.concat({ id: uuid(), document: "", name, file: files[0] }),
-   //    ]);
-   // };
+      const _url = URL.createObjectURL(files[0]);
+      setPayload((prev) => ({ ...prev, profile: _url }));
+      await UploadFile(files[0]);
+   };
+
+   const UploadFile = async (file: File) => {
+      const storage = getStorage();
+      const metadata = {
+         contentType: "image/*",
+      };
+      const storageRef = ref(storage, "profile/" + file.name);
+      const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+
+      uploadTask.on(
+         "state_changed",
+         (snapshot) => {
+            switch (snapshot.state) {
+               case "paused":
+                  "Upload is paused";
+                  break;
+               case "running":
+                  "Upload is running";
+                  break;
+            }
+         },
+         (error) => {
+            setIsSaving(false);
+            switch (error.code) {
+               case "storage/unauthorized":
+                  // User doesn't have permission to access the object
+                  break;
+               case "storage/canceled":
+                  // User canceled the upload
+                  break;
+
+               // ...
+
+               case "storage/unknown":
+                  // Unknown error occurred, inspect error.serverResponse
+                  break;
+            }
+         },
+         () => {
+            setIsSaving(false);
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+               setPayload((prev) => ({ ...prev, profile: downloadURL }));
+            });
+         }
+      );
+   };
 
    const RegisterSubmit = async (e: FormEvent) => {
       e.preventDefault();
-
+      setIsSaving(true);
       const email = payload.email;
       const actionCodeSettings = {
          url: window.location.href,
          handleCodeInApp: true,
       };
 
-      setIsLoading(true);
       await sendSignInLinkToEmail(auth, email, actionCodeSettings)
          .then(() => {
             setOpen(false);
@@ -125,7 +160,7 @@ const Register = ({ open, setOpen }: RegisterType) => {
             </div>
             {page === 1 ? (
                <form
-                  className="flex flex-col gap-3 mx-5 mb-5"
+                  className="flex flex-col gap-3 mx-3 mb-5"
                   onSubmit={(e) => {
                      e.preventDefault();
                      if (payload.email.trim() && password.trim()) {
@@ -168,6 +203,7 @@ const Register = ({ open, setOpen }: RegisterType) => {
                      HandleOnChange={HandleOnChange}
                      password={password}
                      setPassword={setPassword}
+                     OnChangeFile={OnChangeFile}
                   />
 
                   <div className="flex flex-row gap-3 justify-end items-center m-3 mt-5">
@@ -191,7 +227,7 @@ const Register = ({ open, setOpen }: RegisterType) => {
                color: "#fff",
                zIndex: (theme) => theme.zIndex.drawer + 99999,
             }}
-            open={isLoading}
+            open={isSaving}
          >
             <CircularProgress color="inherit" />
          </Backdrop>

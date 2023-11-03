@@ -15,8 +15,7 @@ export const CreateServiceFrb = async ({ data }: Params) => {
       .then((res) => {
          return res;
       })
-      .catch((err) => {
-         console.log("error service", err);
+      .catch(() => {
 
          return null;
       });
@@ -32,8 +31,7 @@ export const CreateServiceScheduleFrb = async ({ data, id }: PayloadType) => {
       .then((res) => {
          return res;
       })
-      .catch((err) => {
-         console.log("error service", err);
+      .catch(() => {
 
          return null;
       });
@@ -49,8 +47,7 @@ export const CreateMedecineFrb = async ({ data }: Params) => {
       .then((res) => {
          return res;
       })
-      .catch((err) => {
-         console.log("error service", err);
+      .catch(() => {
 
          return null;
       });
@@ -66,8 +63,7 @@ export const CreateMedecineListFrb = async ({ data, id }: PayloadType) => {
       .then((res) => {
          return res;
       })
-      .catch((err) => {
-         console.log("error medecines", err);
+      .catch(() => {
 
          return null;
       });

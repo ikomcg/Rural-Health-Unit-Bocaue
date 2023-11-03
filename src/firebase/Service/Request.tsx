@@ -11,8 +11,7 @@ export const CreateRequestScheduleFrb = async ({ data }: Params) => {
       .then((res) => {
          return res;
       })
-      .catch((err) => {
-         console.log("error schedules", err);
+      .catch(() => {
 
          return null;
       });
@@ -28,8 +27,7 @@ export const CreateRequestMedecineFrb = async ({ data }: Params) => {
       .then((res) => {
          return res;
       })
-      .catch((err) => {
-         console.log("error request", err);
+      .catch(() => {
 
          return null;
       });

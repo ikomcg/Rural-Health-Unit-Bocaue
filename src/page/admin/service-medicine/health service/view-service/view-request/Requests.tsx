@@ -20,7 +20,7 @@ const Request = () => {
    const [search, setSearch] = useState("");
    const [refresh, setRefresh] = useState(false);
    const [pages, setPages] = useState(0);
-
+   requests;
    useEffect(() => {
       const SlicePagination = () => {
          if (requests === null) return setSliceRequest(null);

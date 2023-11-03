@@ -30,8 +30,7 @@ const useFetchInventory = () => {
             }) as unknown as Inventory[];
             setInventory(data);
          },
-         (error) => {
-            console.log("error inventory", error);
+         () => {
             setInventory(null);
          }
       );

@@ -36,7 +36,11 @@ const Request = () => {
       <>
          <div className="flex flex-row items-center mt-10">
             <h1 className="text-blue text-2xl">My Request</h1>
-            <BlueButton className="ml-auto" onClick={() => setIsOpen(true)}>
+            <BlueButton
+               className="ml-auto py-1"
+               onClick={() => setIsOpen(true)}
+               disabled={cookies?.account_status !== "active"}
+            >
                Add Request
             </BlueButton>
          </div>

@@ -1,4 +1,4 @@
-import React, { FormEvent, SetStateAction, useState } from "react";
+import React, { FormEvent, SetStateAction, useRef, useState } from "react";
 import { BlueButton } from "../../../components/button/BlueButton";
 import DialogSlide from "../../../components/mui/dialog/SlideModal";
 import PersonalInformation from "./PersonalInformation";
@@ -13,17 +13,23 @@ import {
    ref,
    uploadBytesResumable,
 } from "firebase/storage";
-import { CreateRapidApi } from "../../../api/SMS/SendSMS";
-import { RedButton } from "../../../components/button/RedButton";
+import ChangePassword from "./PrivacySecurity/ChangePassword";
+import Account from "./PrivacySecurity/Account";
+import { deleteUser, getAuth } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { SignOutFireBase } from "../../../firebase/SignOut";
+import { RedButton } from "../../button/RedButton";
 
 type UpdateInventoryType = {
-   payload: UserType;
-   setPayload: React.Dispatch<SetStateAction<UserType | null>>;
+   payload: globalThis.UserType;
+   setPayload: React.Dispatch<SetStateAction<globalThis.UserType | null>>;
 };
 const UpdateUser = ({ setPayload, payload }: UpdateInventoryType) => {
+   const inputRef = useRef<HTMLInputElement>(null);
    const [isSaving, setIsSaving] = useState(false);
-
+   const navigate = useNavigate();
    const OnClose = () => {
+      if (isSaving) return;
       setPayload(null);
    };
 
@@ -43,6 +49,9 @@ const UpdateUser = ({ setPayload, payload }: UpdateInventoryType) => {
       const _url = URL.createObjectURL(files[0]);
       setPayload((prev) => (prev ? { ...prev, profile: _url } : null));
       await UploadFile(files[0]);
+
+      if (!inputRef.current) return;
+      inputRef.current.value = "";
    };
 
    const UploadFile = async (file: File) => {
@@ -94,53 +103,63 @@ const UpdateUser = ({ setPayload, payload }: UpdateInventoryType) => {
       );
    };
 
-   const UpdateAccount = async () => {
-      const _data = {
+   const UpdateInformation = async () => {
+      const data = {
          ...payload,
+         created_at: TimeStampValue(payload.created_at),
          birthday: TimeStampValue(payload.birthday),
          update_at: serverTimestamp(),
       };
 
-      const data = await updateDoc(doc(db, "users", payload.id), _data)
+      return await updateDoc(doc(db, "users", payload.id), data)
          .then(() => true)
          .catch((err) => {
             CSwal({
                icon: "error",
                title: err,
             });
-            return null;
+
+            return false;
          });
-
-      return data;
    };
 
-   const SendSMSVerify = async () => {
-      const isVerify = payload.is_verify;
+   const DeleteAccount = async () => {
+      const isDelete = payload.account_status === "delete";
+      if (!isDelete) return true;
 
-      if (!isVerify) return true;
+      const auth = getAuth();
+      const user = auth.currentUser;
 
-      return await CreateRapidApi({
-         endPoint: "sms/send",
-         token: "bWFyZmllZWNhbWFyQGdtYWlsLmNvbTpCOTVGRTA3Qi0wMUY5LTlDMzgtQTYxNS01RUJFNDQ4MUIwMkY=",
-         data: {
-            messages: [
-               {
-                  from: "RHU",
-                  body: `Hi ${payload.first_name} Your Account has been Verify`,
-                  to: payload.contact_no,
-               },
-            ],
-         },
-      });
+      if (!user) return false;
+
+      return await deleteUser(user)
+         .then(async () => {
+            await SignOutFireBase();
+            navigate("/");
+            CSwal({
+               icon: "success",
+               title: "Account Deleted",
+            });
+            return true;
+         })
+         .catch((err) => {
+            CSwal({
+               icon: "error",
+               title: err,
+            });
+            return false;
+         });
    };
 
-   const UpdatePatient = async (e: FormEvent) => {
+   const UpdateAccount = (e: FormEvent) => {
       e.preventDefault();
       setIsSaving(true);
+      const isDelete = payload.account_status === "delete";
 
-      Promise.all([UpdateAccount(), SendSMSVerify()])
+      Promise.all([UpdateInformation(), DeleteAccount()])
          .then((res) => {
-            if (!res[0]) return;
+            if (!res[0] || isDelete) return;
+
             OnClose();
             CSwal({
                icon: "success",
@@ -167,8 +186,8 @@ const UpdateUser = ({ setPayload, payload }: UpdateInventoryType) => {
          tabIndex={1}
       >
          <form
-            className="flex flex-row flex-wrap mb-3 pt-3"
-            onSubmit={UpdatePatient}
+            className="flex flex-col flex-wrap mb-3 pt-3"
+            onSubmit={UpdateAccount}
          >
             <div className={style.header}>
                <h1>Rural Health Unit Bocaue, Bulacan</h1>
@@ -176,11 +195,11 @@ const UpdateUser = ({ setPayload, payload }: UpdateInventoryType) => {
             </div>
             <PersonalInformation
                payload={payload}
-               setPayload={setPayload}
                HandleOnChange={OnChangeHandle}
                OnChangeFile={OnChangeFile}
             />
-            <hr className="border-1 border-blue my-3" />
+            <ChangePassword />
+            <Account payload={payload} setPayload={setPayload} />
             <div className="mx-auto">
                <BlueButton
                   className="mr-1 mt-5 py-1"

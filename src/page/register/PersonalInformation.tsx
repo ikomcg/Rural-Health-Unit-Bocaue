@@ -1,31 +1,25 @@
-import React from "react";
-import { Input, Select } from "../../../components/forms/Form";
+import React, { SetStateAction } from "react";
+import { Input, Select } from "../../components/forms/Form";
 import style from "./style.module.scss";
-import { FormControlLabel } from "@mui/material";
-import { IOSSwitch } from "../../../components/mui/switch/Switch";
 
 type PersonalInformationType = {
+   OnChangeFile: (e: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
    HandleOnChange: (
       e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
    ) => void;
-   payload: UserType;
-   setPayload: React.Dispatch<React.SetStateAction<UserType | null>>;
-   OnChangeFile: (e: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
+   setPassword: React.Dispatch<SetStateAction<string>>;
+   payload: Register;
+   password: string;
 };
+
 const PersonalInformation: React.FC<PersonalInformationType> = ({
    payload,
-   setPayload,
    HandleOnChange,
    OnChangeFile,
 }) => {
-   const OnChangeVerify = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { checked } = e.target;
-      setPayload((prev) => (prev ? { ...prev, is_verify: checked } : null));
-   };
-
    return (
-      <div className="px-3">
-         <h3 className="text-xl mb-3 text-blue font-semibold">
+      <div className="px-5">
+         <h3 className="text-xl mb-5 text-blue font-semibold">
             Personal Information
          </h3>
          <div className="flex flex-row mt-4">
@@ -47,7 +41,7 @@ const PersonalInformation: React.FC<PersonalInformationType> = ({
                   htmlFor="profile"
                   className="text-xs text-blue cursor-pointer hover:underline"
                >
-                  Change Profile
+                  Choose Profile
                   <input
                      type="file"
                      className="hidden"
@@ -55,15 +49,6 @@ const PersonalInformation: React.FC<PersonalInformationType> = ({
                      onChange={OnChangeFile}
                   />
                </label>
-               <h2 className="mt-3 text-sm text-center">{payload.full_name}</h2>
-               <span>{payload.address ?? "-"}</span>
-               <span
-                  className={
-                     payload.is_verify ? "text-green-500" : "text-gray-400"
-                  }
-               >
-                  {payload.is_verify ? "Verify" : "Not-Verify"}
-               </span>
             </div>
             <div className={style.card_information}>
                <Input
@@ -160,34 +145,6 @@ const PersonalInformation: React.FC<PersonalInformationType> = ({
                   value={payload.address}
                   onChange={HandleOnChange}
                />
-               <FormControlLabel
-                  className=" mt-auto font-semibold"
-                  label="Verify"
-                  labelPlacement="start"
-                  control={
-                     <IOSSwitch
-                        sx={{ m: 1 }}
-                        checked={payload.is_verify}
-                        onChange={OnChangeVerify}
-                     />
-                  }
-               />
-               <Select
-                  name="role"
-                  required
-                  placeholder="Role"
-                  label="Role"
-                  value={payload.role}
-                  onChange={HandleOnChange}
-               >
-                  <option value="" disabled>
-                     ----
-                  </option>
-                  <option value="admin">Admin</option>
-                  <option value="Health-worker">health-worker</option>
-                  <option value="doctor">Doctor</option>
-                  <option value="patient">Patient</option>
-               </Select>
             </div>
          </div>
       </div>

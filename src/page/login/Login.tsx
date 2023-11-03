@@ -10,7 +10,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/Base";
 import { GetDocFireBase } from "../../firebase/Document";
 import { UserProvider } from "../../context/UserProvider";
-import Register from "./register/Register";
+import Register from "../register/Register";
 import Swal from "sweetalert2";
 
 type LoginType = {
@@ -112,7 +112,6 @@ const Login = ({ open, setOpen }: LoginType) => {
       if (!login.status) {
          setLoading(false);
          const data = JSON.parse(JSON.stringify(login.res)) as ErrorResponse;
-         console.log(data.code);
          const message = data.code.split("/")[1];
 
          setStatus((prev) => ({
@@ -127,7 +126,6 @@ const Login = ({ open, setOpen }: LoginType) => {
       const ref = doc(db, "users", id);
 
       const user = await GetDocFireBase(ref);
-      console.log(user);
       if (!user) {
          return false;
       }
@@ -143,6 +141,8 @@ const Login = ({ open, setOpen }: LoginType) => {
          ...user.data(),
          full_name,
          id,
+         birthday: user.data().birthday.toDate(),
+         created_at: user.data().created_at.toDate(),
       } as UserType;
 
       if (role.includes("patient")) {

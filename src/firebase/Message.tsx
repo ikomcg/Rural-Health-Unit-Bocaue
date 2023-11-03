@@ -32,23 +32,18 @@ export const CreateMessages = async ({
       .then((res) => {
          return res;
       })
-      .catch((err) => {
-         console.log("sending message", err);
+      .catch(() => {
 
          return null;
       });
 };
 
-export const SendMessages = async ({
-   data
-}: Params) => {
-
+export const SendMessages = async ({ data }: Params) => {
    return await addDoc(collection(db, "inbox"), data)
       .then((res) => {
          return res.id;
       })
-      .catch((err) => {
-         console.log("sending message", err);
+      .catch(() => {
          return null;
       });
 };
@@ -63,7 +58,7 @@ export const UpdateMessage = async ({ id, data }: UpdateMessageType) => {
       })
       .catch((err) => {
          enqueueSnackbar(err, { variant: "error", autoHideDuration: 1000 });
-         console.log("update message", err);
+        
          return null;
       });
 };
