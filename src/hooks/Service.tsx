@@ -30,8 +30,7 @@ const useFetchService = () => {
             }) as unknown as ServiceType[];
             setService(data);
          },
-         (error) => {
-            "error service", error;
+         () => {
             setService(null);
          }
       );
