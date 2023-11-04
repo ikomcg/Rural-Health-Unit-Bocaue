@@ -151,7 +151,12 @@ const DataPrivacy = ({ open, setOpen }: DataPrivacyType) => {
                </ol>
             </article>
          </div>
-         <RedButton className="w-max mx-auto my-3 py-1" onClick={() => setOpen(false)}>Close</RedButton>
+         <RedButton
+            className="w-max mx-auto my-3 py-1"
+            onClick={() => setOpen(false)}
+         >
+            Close
+         </RedButton>
       </DialogSlide>
    );
 };
