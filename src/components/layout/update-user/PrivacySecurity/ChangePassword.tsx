@@ -1,9 +1,8 @@
 import style from "./style.module.scss";
-import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { BlueButton } from "../../../button/BlueButton";
-import CSwal from "../../../swal/Swal";
 import { useContext } from "react";
 import { UserProvider } from "../../../../context/UserProvider";
+import ResetPassword from "../../../../firebase/ResetPassword";
 
 const ChangePassword = () => {
    const { cookies } = useContext(UserProvider);
@@ -12,24 +11,11 @@ const ChangePassword = () => {
       if (!cookies) return;
 
       const { email } = cookies;
-      const auth = getAuth();
-      email;
-      await sendPasswordResetEmail(auth, email)
-         .then((res) => {
-            res;
-            CSwal({
-               icon: "success",
-               text: "Check your email",
-            });
-         })
-         .catch((error) => {
-            const errorCode = error.code;
-            CSwal({
-               icon: "error",
-               text: errorCode,
-            });
-         });
+      return await ResetPassword({
+         email,
+      });
    };
+
    return (
       <div className="px-3 mt-5 mb-3">
          <h3 className="text-xl mb-3 text-blue font-semibold">

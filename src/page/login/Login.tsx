@@ -12,6 +12,7 @@ import { GetDocFireBase } from "../../firebase/Document";
 import { UserProvider } from "../../context/UserProvider";
 import Register from "../register/Register";
 import Swal from "sweetalert2";
+import ForgotPassword from "../forgot-password/Forgot-Password";
 
 type LoginType = {
    open: boolean;
@@ -21,6 +22,7 @@ const Login = ({ open, setOpen }: LoginType) => {
    const navigate = useNavigate();
    const { setLoading, saveCookies } = useContext(UserProvider);
    const [isRegister, setIsRegister] = useState(false);
+   const [forgotPassword, setForgotPassword] = useState(false);
    const [status, setStatus] = useState({
       remember: false,
       isUserName: false,
@@ -206,7 +208,14 @@ const Login = ({ open, setOpen }: LoginType) => {
                         label="Password"
                      />
                      <div className="flex flex-row items-center justify-end text-sm">
-                        <button type="button" className="text-sm text-blue">
+                        <button
+                           type="button"
+                           className="text-sm text-blue"
+                           onClick={() => {
+                              setOpen(false);
+                              setForgotPassword(true);
+                           }}
+                        >
                            Forgot Password
                         </button>
                      </div>
@@ -236,6 +245,9 @@ const Login = ({ open, setOpen }: LoginType) => {
             </div>
          </DialogSlide>
          {isRegister && <Register open={isRegister} setOpen={setIsRegister} />}
+         {forgotPassword && (
+            <ForgotPassword open={forgotPassword} setOpen={setForgotPassword} />
+         )}
       </>
    );
 };
