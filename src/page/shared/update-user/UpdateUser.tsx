@@ -22,7 +22,7 @@ type UpdateInventoryType = {
 };
 const UpdateUser = ({ setPayload, payload }: UpdateInventoryType) => {
    const [isSaving, setIsSaving] = useState(false);
-
+   const [isVerify, setIsVerify] = useState(payload.is_verify);
    const OnClose = () => {
       setPayload(null);
    };
@@ -115,23 +115,23 @@ const UpdateUser = ({ setPayload, payload }: UpdateInventoryType) => {
    };
 
    const SendSMSVerify = async () => {
-      const isVerify = payload.is_verify;
-
-      if (!isVerify) return true;
-
-      return await CreateRapidApi({
+      const _isVerify = payload.is_verify;
+      if (!_isVerify || isVerify === _isVerify) return true;
+      setIsVerify(_isVerify);
+      await CreateRapidApi({
          endPoint: "sms/send",
-         token: "bWFyZmllZWNhbWFyQGdtYWlsLmNvbTpCOTVGRTA3Qi0wMUY5LTlDMzgtQTYxNS01RUJFNDQ4MUIwMkY=",
+         token: "bWlrb2d1cnJvYmF0OjFFOUE4MkFFLTIyQTItQ0REMS1DRUFDLTNFQjEzRjgyNjhBMg==",
          data: {
             messages: [
                {
                   from: "RHU",
-                  body: `Hi ${payload.first_name} Your Account has been Verify`,
+                  body: `Hi ${payload.first_name} your account has been verify`,
                   to: payload.contact_no,
                },
             ],
          },
-      });
+      }).then((res) => console.log(res));
+      return true;
    };
 
    const UpdatePatient = async (e: FormEvent) => {

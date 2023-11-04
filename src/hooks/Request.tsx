@@ -136,10 +136,10 @@ export const useFetchRequestMedecine = ({ id }: ParamsType) => {
                   };
                }) as unknown as RequestMedecines[]
             ).then((res) => {
-               res;
                const data = res.filter(
                   (item) => item.user.account_status === "active"
                );
+
                setRequests(data);
             });
          },

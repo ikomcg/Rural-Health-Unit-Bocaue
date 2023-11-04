@@ -71,7 +71,7 @@ const Request = () => {
                      },
                   ],
                },
-            });
+            }).then((res) => console.log(res));
          })
          .catch((err) => {
             CSwal({
