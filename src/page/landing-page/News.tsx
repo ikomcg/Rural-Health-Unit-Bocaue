@@ -1,7 +1,6 @@
 import TopicHeader from "../../components/home/TopicHeader";
 import { useFetch } from "../../hooks/Hooks";
 import { RotatingLines } from "react-loader-spinner";
-
 import NewsCard from "../../components/home/NewsCard";
 
 const News = () => {

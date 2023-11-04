@@ -13,7 +13,6 @@ import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "../firebase/Base";
 import { TimeStampValue } from "../shared/TimeStamp";
 import { useContext, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
 import { UserProvider } from "../context/UserProvider";
 
 const LandingPage = () => {
@@ -86,18 +85,10 @@ const LandingPage = () => {
    return (
       <>
          <Main />
-         <section className="living-healthy-page">
-            <LivingHealthy />
-         </section>
-         <section className="newsletter-page">
-            <News />
-         </section>
-         <section className="subcription-page">
-            <Newsletter />
-         </section>
-         <section className="health-condition">
-            <HealthCondition />
-         </section>
+         <LivingHealthy />
+         <News />
+         <Newsletter />
+         <HealthCondition />
       </>
    );
 };
