@@ -32,3 +32,31 @@
       }
    }
 }
+.container_data_privacy {
+   margin-top: 10px;
+   padding: 0 20px;
+
+   article{
+      margin-bottom: 10px;
+      h2{
+         font-size: 18px;
+         font-weight: 500;
+         color : color.$blue
+      }
+      p{
+         margin-bottom: 5px;
+      }
+      p, ol{
+         text-align: left;
+         margin-left: 15px;
+         font-size: 14px;
+      }
+      ol{
+         margin-left: 40px;
+         li{
+            list-style: decimal;
+            line-height: 25px;
+         }
+      }
+   }
+}

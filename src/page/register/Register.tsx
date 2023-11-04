@@ -6,13 +6,19 @@ import { BlueButton } from "../../components/button/BlueButton";
 import { sendSignInLinkToEmail, getAuth } from "firebase/auth";
 import Swal from "sweetalert2";
 import { Input, InputPassword } from "../../components/forms/Form";
-import { Backdrop, CircularProgress } from "@mui/material";
+import {
+   Backdrop,
+   Checkbox,
+   CircularProgress,
+   FormControlLabel,
+} from "@mui/material";
 import {
    getDownloadURL,
    getStorage,
    ref,
    uploadBytesResumable,
 } from "firebase/storage";
+import DataPrivacy from "./Data-Privacy";
 
 type RegisterType = {
    open: boolean;
@@ -51,7 +57,7 @@ const Register = ({ open, setOpen }: RegisterType) => {
    const [payload, setPayload] = useState<Register>(initialPayload);
    const [page, setPage] = useState(1);
    const [isSaving, setIsSaving] = useState(false);
-
+   const [dataPrivacy, setDataPrivacy] = useState(false);
    const HandleOnChange = (
       e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
    ) => {
@@ -160,7 +166,7 @@ const Register = ({ open, setOpen }: RegisterType) => {
             </div>
             {page === 1 ? (
                <form
-                  className="flex flex-col gap-3 mx-3 mb-5"
+                  className="flex flex-col gap-1 mx-3 mb-5"
                   onSubmit={(e) => {
                      e.preventDefault();
                      if (payload.email.trim() && password.trim()) {
@@ -168,26 +174,46 @@ const Register = ({ open, setOpen }: RegisterType) => {
                      }
                   }}
                >
-                  <Input
-                     value={payload.email}
-                     onChange={HandleOnChange}
-                     type="email"
-                     name="email"
-                     id="email"
-                     placeholder="Email"
-                     label="Email"
-                     message="We'll never share your email with anyone else."
-                     required
-                  />
-                  <InputPassword
-                     value={password}
-                     onChange={(e) => setPassword(e.target.value)}
-                     id="password"
-                     name="password"
-                     placeholder="Password"
-                     label="Password"
-                     required
-                  />
+                  <div>
+                     <Input
+                        value={payload.email}
+                        onChange={HandleOnChange}
+                        type="email"
+                        name="email"
+                        id="email"
+                        placeholder="Email"
+                        label="Email"
+                        message="We'll never share your email with anyone else."
+                        required
+                     />
+                     <InputPassword
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        id="password"
+                        name="password"
+                        placeholder="Password"
+                        label="Password"
+                        required
+                     />
+                  </div>
+                  <div className="flex flex-row items-center">
+                     <FormControlLabel
+                        required
+                        style={{
+                           marginRight: "3px",
+                        }}
+                        control={<Checkbox />}
+                        label="I understand and agree with the"
+                     />
+                     <button
+                        type="button"
+                        className="text-blue hover:underline"
+                        onClick={() => setDataPrivacy(true)}
+                     >
+                        Privacy Policy
+                     </button>
+                  </div>
+
                   <BlueButton className="mx-auto py-2" type="submit">
                      Next
                   </BlueButton>
@@ -221,6 +247,7 @@ const Register = ({ open, setOpen }: RegisterType) => {
                </form>
             )}
          </DialogSlide>
+         <DataPrivacy open={dataPrivacy} setOpen={setDataPrivacy} />
 
          <Backdrop
             sx={{
