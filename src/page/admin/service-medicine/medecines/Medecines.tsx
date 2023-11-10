@@ -2,8 +2,8 @@ import style from "./style.module.scss";
 import Card, { AddCard } from "../../../../components/card/Card";
 import useFetchMedecines from "../../../../hooks/Medecines";
 import { useState } from "react";
-import NewMedecine from "./add/Add";
 import { useNavigate } from "react-router-dom";
+import NewService from "../../../shared/add-service/AddService";
 
 const Medicines = () => {
    const medecines = useFetchMedecines();
@@ -35,7 +35,11 @@ const Medicines = () => {
          </div>
 
          {isMedecine && (
-            <NewMedecine isPost={isMedecine} setIsPost={setIsMedecine} />
+            <NewService
+               storagepPath="medecines/"
+               isPost={isMedecine}
+               setIsPost={setIsMedecine}
+            />
          )}
       </>
    );

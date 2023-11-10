@@ -3,7 +3,6 @@ type ServiceType = {
    id: string;
    name: string;
    image: string;
-
    create_at: any;
 };
 type ScheduleService = {

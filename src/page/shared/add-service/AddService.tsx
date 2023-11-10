@@ -1,22 +1,23 @@
 import React, { SetStateAction, useRef, useState } from "react";
-import DialogSlide from "../../../../../components/mui/dialog/SlideModal";
+import DialogSlide from "../../../components/mui/dialog/SlideModal";
 import { AiFillCloseCircle } from "react-icons/ai";
 import style from "./style.module.scss";
-import { BlueButton } from "../../../../../components/button/BlueButton";
-import { CreateServiceFrb } from "../../../../../firebase/Service/Create";
+import { BlueButton } from "../../../components/button/BlueButton";
+import { CreateServiceFrb } from "../../../firebase/Service/Create";
 import {
    getStorage,
    ref,
    uploadBytesResumable,
    getDownloadURL,
 } from "firebase/storage";
-import CSwal from "../../../../../components/swal/Swal";
+import CSwal from "../../../components/swal/Swal";
 
 type PostType = {
+   storagepPath: "service/" | "department/" | "medecines/";
    isPost: boolean;
    setIsPost: React.Dispatch<SetStateAction<boolean>>;
 };
-const NewService = ({ isPost, setIsPost }: PostType) => {
+const NewService = ({ isPost, setIsPost, storagepPath }: PostType) => {
    const [title, setTitle] = useState("");
    const [isCreate, setIsCreate] = useState(false);
    const [image, setImage] = useState<{
@@ -38,7 +39,7 @@ const NewService = ({ isPost, setIsPost }: PostType) => {
       const metadata = {
          contentType: "image/*",
       };
-      const storageRef = ref(storage, "service/" + file.name);
+      const storageRef = ref(storage, storagepPath + file.name);
       const uploadTask = uploadBytesResumable(storageRef, file, metadata);
 
       uploadTask.on(

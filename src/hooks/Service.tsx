@@ -1,8 +1,10 @@
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebase/Base";
-
-const useFetchService = () => {
+type useFetchServiceType = {
+   path: string;
+};
+const useFetchService = ({ path }: useFetchServiceType) => {
    const [service, setService] = useState<ServiceType[] | null>();
    useEffect(() => {
       GetService();
@@ -10,7 +12,7 @@ const useFetchService = () => {
 
    const GetService = async () => {
       const queryDB = query(
-         collection(db, "service"),
+         collection(db, path),
          orderBy("created_at", "desc")
       );
       onSnapshot(

@@ -3,10 +3,10 @@ import Card, { AddCard } from "../../../../components/card/Card";
 import useFetchService from "../../../../hooks/Service";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import NewService from "./add/Add";
+import NewService from "../../../shared/add-service/AddService";
 
 const HealthService = () => {
-   const service = useFetchService();
+   const service = useFetchService({ path: "service" });
    const navigate = useNavigate();
    const [isService, setIsService] = useState(false);
 
@@ -36,7 +36,11 @@ const HealthService = () => {
             {service && <AddCard onClick={HandleClickService} />}
          </div>
          {isService && (
-            <NewService isPost={isService} setIsPost={setIsService} />
+            <NewService
+               storagepPath="service/"
+               isPost={isService}
+               setIsPost={setIsService}
+            />
          )}
       </>
    );

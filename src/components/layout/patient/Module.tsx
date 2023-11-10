@@ -2,7 +2,7 @@ import { AiFillHome, AiFillSchedule } from "react-icons/ai";
 import { GiBattleGear } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import style from "./style.module.scss";
-import { MdEmail } from "react-icons/md";
+import { MdEmail, MdOutlineQueuePlayNext } from "react-icons/md";
 import { useState } from "react";
 
 type ModuleType = {
@@ -29,6 +29,11 @@ const Module = ({ isMenu }: ModuleType) => {
          name: "Messages",
          icon: <MdEmail />,
          link: "messages",
+      },
+      {
+         name: "Queueing",
+         icon: <MdOutlineQueuePlayNext />,
+         link: "queueing",
       },
    ];
 

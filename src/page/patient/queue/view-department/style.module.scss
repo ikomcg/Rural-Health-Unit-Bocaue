@@ -1,0 +1,53 @@
+@use "../../../../color";
+
+$shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+.waiting_Card {
+   padding: 10px 0;
+   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+      rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+   height: 100px;
+   display: flex;
+   flex-flow: column nowrap;
+   justify-content: center;
+   align-items: center;
+
+   h3 {
+      font-size: 24px;
+      font-weight: 500;
+      line-height: normal;
+   }
+   span {
+      &:last-child {
+         color: red;
+      }
+   }
+}
+.proceed_Card {
+   display: flex;
+   flex-flow: column nowrap;
+   justify-content: center;
+   align-items: center;
+   padding: 20px;
+   box-shadow: $shadow;
+   text-align: center;
+   max-height: 250px;
+
+   h3 {
+      text-align: center;
+      font-size: 45px;
+   }
+   h2 {
+      text-align: center;
+      color: color.$blue;
+      font-size: 30px;
+      font-weight: 500;
+   }
+   span {
+      text-align: center;
+      font-size: 18px;
+
+      &:last-child {
+         font-size: 30px;
+      }
+   }
+}

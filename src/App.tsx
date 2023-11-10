@@ -23,6 +23,8 @@ import HealtWorkers from "./page/admin/health workers/HealtWorkers";
 import Patient from "./page/admin/Patient/Patient";
 import Messages from "./page/shared/message/Message";
 import Inventory from "./page/admin/inventory/Inventory";
+import Queue from "./page/patient/queue/Queue";
+import ViewDepartment from "./page/patient/queue/view-department/ViewDepartment";
 
 const App = () => {
    return (
@@ -83,6 +85,11 @@ const App = () => {
                </Route>
                <Route path="schedule" element={<PatientSchedule />} />
                <Route path="messages" element={<Messages />} />
+               <Route path="queueing">
+                  <Route index element={<Queue />} />
+                  <Route path=":name/:id" element={<ViewDepartment />} />
+               </Route>
+
                <Route
                   path="*"
                   element={
