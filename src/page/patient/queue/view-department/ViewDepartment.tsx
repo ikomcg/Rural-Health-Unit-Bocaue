@@ -47,7 +47,9 @@ const ViewDepartment = () => {
          data: {
             patient: cookies?.id,
             department: id,
-            token_number: `MTRC-${Number(token_number) + 1}`,
+            token_number: `MTRC-${
+               Number(token_number) + Math.floor(Math.random() * (99 - 1) + 1)
+            }`,
             status: "waiting",
             created_at: serverTimestamp(),
          },
