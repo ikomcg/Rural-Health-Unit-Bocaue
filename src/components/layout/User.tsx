@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/Base";
 import UpdateUser from "./update-user/UpdateUser";
+import CSwal from "../swal/Swal";
 
 type UserType = {
    isMenu: boolean;
@@ -20,6 +21,15 @@ const User = ({ isMenu }: UserType) => {
    const profile = cookies?.profile ? cookies?.profile : "/image/profile.png";
    const navigate = useNavigate();
    const LogOut = async () => {
+      const swal = await CSwal({
+         icon: "info",
+         title: "Logout",
+         text: "Are you sure?",
+         showCancelButton: true,
+      });
+
+      if (!swal) return;
+
       setLoading(true, "Logout...");
       const logout = await SignOutFireBase();
 

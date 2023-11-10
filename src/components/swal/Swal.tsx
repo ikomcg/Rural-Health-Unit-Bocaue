@@ -12,6 +12,7 @@ const CSwal = async (props: CSwalType) => {
          container: style.container,
          popup: style.containerAlert,
          title: style.title,
+         validationMessage: style.text,
          htmlContainer: style.ValidationMessage,
          actions: style.actionContainer,
          cancelButton: style.cancelButton,

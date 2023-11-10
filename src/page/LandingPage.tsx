@@ -17,7 +17,6 @@ import { UserProvider } from "../context/UserProvider";
 
 const LandingPage = () => {
    const auth = getAuth();
-   // const navigate = useNavigate();
    const { setLoading } = useContext(UserProvider);
 
    useEffect(() => {
