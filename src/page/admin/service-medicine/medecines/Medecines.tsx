@@ -10,7 +10,7 @@ const Medicines = () => {
    const navigate = useNavigate();
    const HandleClickMedecine = () => {
       JSXCSwal({
-         children: <NewService storagepPath="medecines/" />,
+         children: <NewService path='medecines' storagepPath="medecines/" />,
          showConfirmButton: false,
       });
    };

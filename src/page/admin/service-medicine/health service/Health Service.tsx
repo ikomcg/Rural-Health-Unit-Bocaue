@@ -11,7 +11,7 @@ const HealthService = () => {
 
    const HandleClickService = () => {
       JSXCSwal({
-         children: <NewService storagepPath="service/" />,
+         children: <NewService storagepPath="service/" path="service"/>,
          showConfirmButton: false,
       });
    };

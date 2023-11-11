@@ -58,9 +58,9 @@ export const useFetchQueueList = ({ id }: List) => {
          (snapshot) => {
             const data = snapshot.docs.map((doc) => {
                return {
-                  ...doc.data(),
                   id: doc.id,
                   created_at: doc.data().created_at.toDate(),
+                  ...doc.data(),
                };
             }) as unknown as QueueList[];
             setQueueList(data);

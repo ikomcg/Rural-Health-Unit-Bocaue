@@ -4,7 +4,7 @@ import { GiBattleGear } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import { FaUsers } from "react-icons/fa";
 import style from "./style.module.scss";
-import { MdEmail, MdHealthAndSafety, MdInventory } from "react-icons/md";
+import { MdEmail, MdHealthAndSafety, MdInventory, MdOutlineQueuePlayNext } from "react-icons/md";
 import { useState } from "react";
 
 type ModuleType = {
@@ -51,6 +51,11 @@ const Module = ({ isMenu }: ModuleType) => {
          name: "Schedule",
          icon: <AiFillSchedule />,
          link: "schedule",
+      },
+      {
+         name: "Queueing",
+         icon: <MdOutlineQueuePlayNext />,
+         link: "queueing",
       },
    ];
 

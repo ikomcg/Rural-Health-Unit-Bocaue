@@ -5,18 +5,19 @@ type PayloadType = {
    id: string;
 } & Params;
 
-export const CreateServiceFrb = async ({ data }: Params) => {
+export const CreateServiceFrb = async ({ data, path }: Params) => {
    const docData = {
       ...data,
       created_at: serverTimestamp(),
    };
 
-   return await addDoc(collection(db, "service"), docData)
+   if (!path) return null;
+
+   return await addDoc(collection(db, path), docData)
       .then((res) => {
          return res;
       })
       .catch(() => {
-
          return null;
       });
 };
@@ -32,7 +33,6 @@ export const CreateServiceScheduleFrb = async ({ data, id }: PayloadType) => {
          return res;
       })
       .catch(() => {
-
          return null;
       });
 };
@@ -48,7 +48,6 @@ export const CreateMedecineFrb = async ({ data }: Params) => {
          return res;
       })
       .catch(() => {
-
          return null;
       });
 };
@@ -64,7 +63,6 @@ export const CreateMedecineListFrb = async ({ data, id }: PayloadType) => {
          return res;
       })
       .catch(() => {
-
          return null;
       });
 };

@@ -17,7 +17,7 @@ import { CreateRequestQueueFrb } from "../../../../firebase/queue/Create";
 import CSwal from "../../../../components/swal/Swal";
 
 const ViewDepartment = () => {
-   const { id } = useParams();
+   const { id, name } = useParams();
    const { cookies } = useContext(UserProvider);
    const queueLists = useFetchQueueList({ id });
    const currentQueue = queueLists?.find((item) => item.status === "current");
@@ -41,6 +41,10 @@ const ViewDepartment = () => {
       console.log(data);
 
       const token_number = data[data.length - 1].token_number.split("-")[1];
+      const words = name?.split(" ");
+      const firstLetters = words?.map((word) => word.charAt(0));
+      const result = firstLetters?.join("");
+      console.log(result);
 
       const create = await CreateRequestQueueFrb({
          id,
@@ -90,7 +94,7 @@ const ViewDepartment = () => {
                         </h2>
                         <span>Please Proceed to</span>
                         <span className="text-blue">
-                           {currentQueue ? "Maternity Room" : "-----"}
+                           {currentQueue ? name?.toLocaleUpperCase() : "-----"}
                         </span>
                      </div>
                      <div className={`mt-5 ${style.proceed_Card}`}>
@@ -102,7 +106,7 @@ const ViewDepartment = () => {
                               : "-----"}
                         </span>
                         <span className="text-blue">
-                           {userToken ? "Maternity Room" : "-----"}
+                           {name?.toLocaleUpperCase()}
                         </span>
                      </div>
                      <BlueButton
@@ -124,7 +128,9 @@ const ViewDepartment = () => {
                               className={`${style.waiting_Card}`}
                            >
                               <h3>{item.token_number}</h3>
-                              <span className="text-blue">Maternity Room</span>
+                              <span className="text-blue">
+                                 {name?.toLocaleUpperCase()}
+                              </span>
                               <span>Waiting</span>
                            </div>
                         ))}

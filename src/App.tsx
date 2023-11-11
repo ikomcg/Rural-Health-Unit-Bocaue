@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LandingPageLayout from "./components/layout/LandingPage";
 import LandingPage from "./page/LandingPage";
 import AdminLayout from "./components/layout/admin/Layout";
-import UnderConstructionLogo from "./components/logo/UnderConstructionLogo";
 import HomeAdmin from "./page/admin/home/Home";
 import ServiceMedicine from "./page/admin/service-medicine/ServiceMedicine";
 import HealthService from "./page/admin/service-medicine/health service/Health Service";
@@ -25,6 +24,8 @@ import Messages from "./page/shared/message/Message";
 import Inventory from "./page/admin/inventory/Inventory";
 import Queue from "./page/patient/queue/Queue";
 import ViewDepartment from "./page/patient/queue/view-department/ViewDepartment";
+import AdminQueue from "./page/admin/queue/Queue";
+import AdminViewDepartment from "./page/admin/queue/view-department/ViewDepartment";
 
 const App = () => {
    return (
@@ -55,14 +56,10 @@ const App = () => {
                <Route path="schedule" element={<AdminSchedule />} />
                <Route path="health-worker" element={<HealtWorkers />} />
                <Route path="patient" element={<Patient />} />
-               <Route
-                  path="*"
-                  element={
-                     <UnderConstructionLogo>
-                        Under Development
-                     </UnderConstructionLogo>
-                  }
-               />
+               <Route path="queueing">
+                  <Route index element={<AdminQueue />} />
+                  <Route path=":name/:id" element={<AdminViewDepartment />} />
+               </Route>
             </Route>
             <Route path="patient" element={<PatientLayout />}>
                <Route path="home" element={<HomePatient />} />
@@ -89,15 +86,6 @@ const App = () => {
                   <Route index element={<Queue />} />
                   <Route path=":name/:id" element={<ViewDepartment />} />
                </Route>
-
-               <Route
-                  path="*"
-                  element={
-                     <UnderConstructionLogo>
-                        Under Development
-                     </UnderConstructionLogo>
-                  }
-               />
             </Route>
 
             <Route path="*" element={<>Page Not Found</>} />

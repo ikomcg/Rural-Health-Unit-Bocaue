@@ -13,9 +13,10 @@ import CSwal from "../../../components/swal/Swal";
 import Swal from "sweetalert2";
 
 type PostType = {
-   storagepPath: "service/" | "department/" | "medecines/";
+   path: string;
+   storagepPath: "service/" | "department/" | "medecines/" | "queue/";
 };
-const NewService = ({ storagepPath }: PostType) => {
+const NewService = ({ path, storagepPath }: PostType) => {
    const [title, setTitle] = useState("");
    const [isCreate, setIsCreate] = useState(false);
    const [image, setImage] = useState<{
@@ -104,6 +105,7 @@ const NewService = ({ storagepPath }: PostType) => {
             name: title,
             image: _image,
          },
+         path,
       });
       setIsCreate(false);
       if (!create) {
