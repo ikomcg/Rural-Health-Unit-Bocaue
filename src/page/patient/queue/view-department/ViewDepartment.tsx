@@ -43,15 +43,14 @@ const ViewDepartment = () => {
       const token_number = data[data.length - 1].token_number.split("-")[1];
       const words = name?.split(" ");
       const firstLetters = words?.map((word) => word.charAt(0));
-      const result = firstLetters?.join("");
-      console.log(result);
+      const tokenName = firstLetters?.join("");
 
       const create = await CreateRequestQueueFrb({
          id,
          data: {
             patient: cookies?.id,
             department: id,
-            token_number: `MTRC-${
+            token_number: `${tokenName}-${
                Number(token_number) + Math.floor(Math.random() * (99 - 1) + 1)
             }`,
             status: "waiting",
