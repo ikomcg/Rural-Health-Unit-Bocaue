@@ -5,54 +5,34 @@ import { useFetchQueueList } from "../../../../hooks/Department";
 import { BlueButton } from "../../../../components/button/BlueButton";
 import { useContext, useState } from "react";
 import { UserProvider } from "../../../../context/UserProvider";
-import {
-   collection,
-   getDocs,
-   orderBy,
-   query,
-   serverTimestamp,
-} from "firebase/firestore";
-import { db } from "../../../../firebase/Base";
+import { serverTimestamp } from "firebase/firestore";
 import { CreateRequestQueueFrb } from "../../../../firebase/queue/Create";
 import CSwal from "../../../../components/swal/Swal";
 
 const ViewDepartment = () => {
    const { id, name } = useParams();
    const { cookies } = useContext(UserProvider);
+
    const queueLists = useFetchQueueList({ id });
    const currentQueue = queueLists?.find((item) => item.status === "current");
    const userToken = queueLists?.find((item) => item.patient === cookies?.id);
    const [isLoading, setIsLoading] = useState(false);
+  
 
    const GetToken = async () => {
       if (!id) return;
       setIsLoading(true);
-      const q = query(
-         collection(db, `queue`, id, "queue-list"),
-         orderBy("created_at", "asc")
-      );
-
-      const querySnapshot = await getDocs(q);
-      const data = querySnapshot.docs.map((doc) => ({
-         id: doc.id,
-         ...doc.data(),
-      })) as unknown as QueueList[];
-
-      console.log(data);
-
-      const token_number = data[data.length - 1].token_number.split("-")[1];
       const words = name?.split(" ");
       const firstLetters = words?.map((word) => word.charAt(0));
       const tokenName = firstLetters?.join("");
 
       const create = await CreateRequestQueueFrb({
-         id,
          data: {
             patient: cookies?.id,
             department: id,
-            token_number: `${tokenName}-${
-               Number(token_number) + Math.floor(Math.random() * (99 - 1) + 1)
-            }`,
+            token_number: `${tokenName}-${Math.floor(
+               Math.random() * (99 - 1) + 1
+            )}`,
             status: "waiting",
             created_at: serverTimestamp(),
          },
@@ -78,9 +58,11 @@ const ViewDepartment = () => {
 
          <div className={`flex flex-row gap-5 mt-10 h-full overflow-hidden`}>
             {queueLists === undefined ? (
-               <h1 className="text-center text-gray-400 w-full">Loading...</h1>
+               <h1 className="text-center text-gray-400 w-full mt-20">
+                  Loading...
+               </h1>
             ) : queueLists === null ? (
-               <h1 className="text-center text-gray-400">
+               <h1 className="text-center text-gray-400 mt-20 w-full">
                   OOPS! Something went wrong
                </h1>
             ) : (
