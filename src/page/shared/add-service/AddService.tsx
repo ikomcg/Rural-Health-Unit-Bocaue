@@ -1,5 +1,4 @@
-import React, { SetStateAction, useRef, useState } from "react";
-import DialogSlide from "../../../components/mui/dialog/SlideModal";
+import React, { useRef, useState } from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
 import style from "./style.module.scss";
 import { BlueButton } from "../../../components/button/BlueButton";
@@ -11,13 +10,12 @@ import {
    getDownloadURL,
 } from "firebase/storage";
 import CSwal from "../../../components/swal/Swal";
+import Swal from "sweetalert2";
 
 type PostType = {
    storagepPath: "service/" | "department/" | "medecines/";
-   isPost: boolean;
-   setIsPost: React.Dispatch<SetStateAction<boolean>>;
 };
-const NewService = ({ isPost, setIsPost, storagepPath }: PostType) => {
+const NewService = ({ storagepPath }: PostType) => {
    const [title, setTitle] = useState("");
    const [isCreate, setIsCreate] = useState(false);
    const [image, setImage] = useState<{
@@ -31,7 +29,7 @@ const NewService = ({ isPost, setIsPost, storagepPath }: PostType) => {
    const OnClose = () => {
       setTitle("");
       setImage({ url: "", link: "", status: "" });
-      setIsPost(false);
+      Swal.close();
    };
 
    const UploadFile = async (file: File) => {
@@ -122,7 +120,7 @@ const NewService = ({ isPost, setIsPost, storagepPath }: PostType) => {
    const isUploading = image.status === "uploading";
 
    return (
-      <DialogSlide open={isPost} setOpen={OnClose}>
+      <>
          <div className={style.create_post}>
             <div className={style.header_post}>
                <h1>Add Service</h1>
@@ -132,9 +130,11 @@ const NewService = ({ isPost, setIsPost, storagepPath }: PostType) => {
             </div>
 
             <div className={style.content}>
+               <label htmlFor="name">Name:</label>
                <input
                   value={title}
-                  placeholder="Name..."
+                  id="name"
+                  placeholder="Type here..."
                   onChange={(e) => {
                      setTitle(e.target.value);
                   }}
@@ -151,7 +151,6 @@ const NewService = ({ isPost, setIsPost, storagepPath }: PostType) => {
                   </div>
                </div>
             )}
-
             <label className={style.add_to_post} htmlFor="image">
                <span>Add to your post</span>
                <img
@@ -173,13 +172,13 @@ const NewService = ({ isPost, setIsPost, storagepPath }: PostType) => {
             </label>
             <BlueButton
                disabled={isUploading || isCreate}
-               className="w-full text-center py-1"
+               className="w-full text-center py-2 mt-8"
                onClick={CreateService}
             >
                Create
             </BlueButton>
          </div>
-      </DialogSlide>
+      </>
    );
 };
 
