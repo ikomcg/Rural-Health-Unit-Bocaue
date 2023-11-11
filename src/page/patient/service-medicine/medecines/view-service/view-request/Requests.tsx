@@ -14,7 +14,7 @@ const Request = () => {
       id: id,
       user_id: cookies?.id,
    });
-   const [currentPage, setCurrentPage] = useState(0);
+   const [currentPage, setCurrentPage] = useState(1);
    const [sliceMedecines, setSliceMedecines] = useState<
       RequestMedecines[] | null
    >();
@@ -28,8 +28,7 @@ const Request = () => {
          const pages = Math.ceil(medecines.length / 10);
          setPages(pages);
 
-         const page = currentPage + 1;
-         const lastPostIndex = page * 5;
+         const lastPostIndex = currentPage * 5;
          const firstPostIndex = lastPostIndex - 5;
 
          const currentPost = medecines?.slice(firstPostIndex, lastPostIndex);
@@ -43,7 +42,11 @@ const Request = () => {
       <>
          <div className="flex flex-row items-center mt-10">
             <h1 className="text-blue text-2xl">My Request</h1>
-            <BlueButton className="ml-auto" onClick={() => setIsOpen(true)}>
+            <BlueButton
+               className="ml-auto py-1"
+               onClick={() => setIsOpen(true)}
+               disabled={cookies?.account_status !== "active"}
+            >
                Add Request
             </BlueButton>
          </div>

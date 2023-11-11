@@ -12,8 +12,6 @@ import { AiOutlineSearch } from "react-icons/ai";
 import CSwal from "../../../../../../components/swal/Swal";
 import { CreateRapidApi } from "../../../../../../api/SMS/SendSMS";
 
-const ENV = import.meta.env;
-
 const Request = () => {
    const { id } = useParams();
    const requests = useFetchRequest({ id: id });
@@ -22,7 +20,7 @@ const Request = () => {
    const [search, setSearch] = useState("");
    const [refresh, setRefresh] = useState(false);
    const [pages, setPages] = useState(0);
-
+   requests;
    useEffect(() => {
       const SlicePagination = () => {
          if (requests === null) return setSliceRequest(null);
@@ -36,8 +34,8 @@ const Request = () => {
          );
          const pages = Math.ceil(filterData.length / 10);
          setPages(pages);
-         const page = currentPage;
-         const lastPostIndex = page * 10;
+
+         const lastPostIndex = currentPage * 10;
          const firstPostIndex = lastPostIndex - 10;
 
          const currentPost = filterData?.slice(firstPostIndex, lastPostIndex);
@@ -48,7 +46,7 @@ const Request = () => {
    }, [currentPage, requests, refresh]);
 
    const HandleRefresh = () => {
-      setCurrentPage(0);
+      setCurrentPage(1);
       setRefresh((prev) => !prev);
    };
 
@@ -59,7 +57,7 @@ const Request = () => {
          .then(async () => {
             await CreateRapidApi({
                endPoint: "sms/send",
-               token: ENV.VITE_TOKEN_SINCH,
+               token: "bWFyaWJlbGdlcnNhbGlhQGdtYWlsLmNvbTpGNkQwMTQ4OS01MzhELURBMTctRUE5Qi1GOTJCN0NDQzY3QUQ=",
                data: {
                   messages: [
                      {
@@ -73,7 +71,7 @@ const Request = () => {
                      },
                   ],
                },
-            });
+            }).then((res) => console.log(res));
          })
          .catch((err) => {
             CSwal({
@@ -149,6 +147,7 @@ const Request = () => {
                            Approve
                         </BlueButton>
                         <RedButton
+                           disabled={item.status === "decline"}
                            onClick={() => OnChangeStatus(item, "decline")}
                         >
                            Decline

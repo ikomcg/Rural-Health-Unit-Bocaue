@@ -1,14 +1,24 @@
 import { FormEvent, SetStateAction, useState } from "react";
-import DialogSlide from "../../../components/mui/dialog/SlideModal";
+import DialogSlide from "../../components/mui/dialog/SlideModal";
 import style from "./style.module.scss";
 import PersonalInformation from "./PersonalInformation";
-import HealtInformation from "./HealtInformation";
-import { BlueButton } from "../../../components/button/BlueButton";
+import { BlueButton } from "../../components/button/BlueButton";
 import { sendSignInLinkToEmail, getAuth } from "firebase/auth";
 import Swal from "sweetalert2";
-import uuid from "react-uuid";
-import { Input, InputPassword } from "../../../components/forms/Form";
-import { Backdrop, CircularProgress } from "@mui/material";
+import { Input, InputPassword } from "../../components/forms/Form";
+import {
+   Backdrop,
+   Checkbox,
+   CircularProgress,
+   FormControlLabel,
+} from "@mui/material";
+import {
+   getDownloadURL,
+   getStorage,
+   ref,
+   uploadBytesResumable,
+} from "firebase/storage";
+import DataPrivacy from "./Data-Privacy";
 
 type RegisterType = {
    open: boolean;
@@ -38,14 +48,16 @@ const initialPayload: Register = {
    birth_certificate: "",
    physical_examination: "",
    profile: "",
+   address: "",
 };
 const Register = ({ open, setOpen }: RegisterType) => {
    const auth = getAuth();
-   const [filesInformation, setFilesInformation] = useState<FilesType[]>([]);
+   // const [filesInformation, setFilesInformation] = useState<FilesType[]>([]);
    const [password, setPassword] = useState("");
    const [payload, setPayload] = useState<Register>(initialPayload);
    const [page, setPage] = useState(1);
-   const [isLoading, setIsLoading] = useState(false);
+   const [isSaving, setIsSaving] = useState(false);
+   const [dataPrivacy, setDataPrivacy] = useState(false);
    const HandleOnChange = (
       e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
    ) => {
@@ -54,41 +66,71 @@ const Register = ({ open, setOpen }: RegisterType) => {
       setPayload((prev) => ({ ...prev, [name]: value }));
    };
 
-   const OnChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { files, name } = e.target;
+   const OnChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { files } = e.target;
 
       if (!files || files.length === 0) return;
-      const isChange = filesInformation?.find((item) => item.name === name);
-      console.log(files);
-      if (isChange) {
-         return setFilesInformation((prev) => [
-            ...prev.map((item) => {
-               if (item.name === name) {
-                  return {
-                     ...item,
-                     file: files[0],
-                  };
-               }
-               return item;
-            }),
-         ]);
-      }
 
-      setFilesInformation((prev) => [
-         ...prev.concat({ id: uuid(), document: "", name, file: files[0] }),
-      ]);
+      const _url = URL.createObjectURL(files[0]);
+      setPayload((prev) => ({ ...prev, profile: _url }));
+      await UploadFile(files[0]);
+   };
+
+   const UploadFile = async (file: File) => {
+      const storage = getStorage();
+      const metadata = {
+         contentType: "image/*",
+      };
+      const storageRef = ref(storage, "profile/" + file.name);
+      const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+
+      uploadTask.on(
+         "state_changed",
+         (snapshot) => {
+            switch (snapshot.state) {
+               case "paused":
+                  "Upload is paused";
+                  break;
+               case "running":
+                  "Upload is running";
+                  break;
+            }
+         },
+         (error) => {
+            setIsSaving(false);
+            switch (error.code) {
+               case "storage/unauthorized":
+                  // User doesn't have permission to access the object
+                  break;
+               case "storage/canceled":
+                  // User canceled the upload
+                  break;
+
+               // ...
+
+               case "storage/unknown":
+                  // Unknown error occurred, inspect error.serverResponse
+                  break;
+            }
+         },
+         () => {
+            setIsSaving(false);
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+               setPayload((prev) => ({ ...prev, profile: downloadURL }));
+            });
+         }
+      );
    };
 
    const RegisterSubmit = async (e: FormEvent) => {
       e.preventDefault();
-
+      setIsSaving(true);
       const email = payload.email;
       const actionCodeSettings = {
          url: window.location.href,
          handleCodeInApp: true,
       };
 
-      setIsLoading(true);
       await sendSignInLinkToEmail(auth, email, actionCodeSettings)
          .then(() => {
             setOpen(false);
@@ -124,7 +166,7 @@ const Register = ({ open, setOpen }: RegisterType) => {
             </div>
             {page === 1 ? (
                <form
-                  className="flex flex-col gap-3 mx-5 mb-5"
+                  className="flex flex-col gap-1 mx-3 mb-5"
                   onSubmit={(e) => {
                      e.preventDefault();
                      if (payload.email.trim() && password.trim()) {
@@ -132,26 +174,46 @@ const Register = ({ open, setOpen }: RegisterType) => {
                      }
                   }}
                >
-                  <Input
-                     value={payload.email}
-                     onChange={HandleOnChange}
-                     type="email"
-                     name="email"
-                     id="email"
-                     placeholder="Email"
-                     label="Email"
-                     message="We'll never share your email with anyone else."
-                     required
-                  />
-                  <InputPassword
-                     value={password}
-                     onChange={(e) => setPassword(e.target.value)}
-                     id="password"
-                     name="password"
-                     placeholder="Password"
-                     label="Password"
-                     required
-                  />
+                  <div>
+                     <Input
+                        value={payload.email}
+                        onChange={HandleOnChange}
+                        type="email"
+                        name="email"
+                        id="email"
+                        placeholder="Email"
+                        label="Email"
+                        message="We'll never share your email with anyone else."
+                        required
+                     />
+                     <InputPassword
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        id="password"
+                        name="password"
+                        placeholder="Password"
+                        label="Password"
+                        required
+                     />
+                  </div>
+                  <div className="flex flex-row items-center">
+                     <FormControlLabel
+                        required
+                        style={{
+                           marginRight: "3px",
+                        }}
+                        control={<Checkbox />}
+                        label="I understand and agree with the"
+                     />
+                     <button
+                        type="button"
+                        className="text-blue hover:underline"
+                        onClick={() => setDataPrivacy(true)}
+                     >
+                        Privacy Policy
+                     </button>
+                  </div>
+
                   <BlueButton className="mx-auto py-2" type="submit">
                      Next
                   </BlueButton>
@@ -169,13 +231,8 @@ const Register = ({ open, setOpen }: RegisterType) => {
                      setPassword={setPassword}
                      OnChangeFile={OnChangeFile}
                   />
-                  <hr className="border-1 border-blue my-10" />
-                  <HealtInformation
-                     payload={payload}
-                     HandleOnChange={HandleOnChange}
-                     OnChangeFile={OnChangeFile}
-                  />
-                  <div className="flex flex-row gap-3 justify-end items-center m-3">
+
+                  <div className="flex flex-row gap-3 justify-end items-center m-3 mt-5">
                      <BlueButton
                         className="w-[8%] py-2"
                         type="button"
@@ -190,13 +247,14 @@ const Register = ({ open, setOpen }: RegisterType) => {
                </form>
             )}
          </DialogSlide>
+         <DataPrivacy open={dataPrivacy} setOpen={setDataPrivacy} />
 
          <Backdrop
             sx={{
                color: "#fff",
                zIndex: (theme) => theme.zIndex.drawer + 99999,
             }}
-            open={isLoading}
+            open={isSaving}
          >
             <CircularProgress color="inherit" />
          </Backdrop>

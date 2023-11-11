@@ -6,7 +6,6 @@ type CreateAnnouncement = {
 };
 
 export const CreateAnnouncementsFrb = async ({ data }: CreateAnnouncement) => {
-    
    const docData = {
       ...data,
       created_at: serverTimestamp(),
@@ -16,8 +15,7 @@ export const CreateAnnouncementsFrb = async ({ data }: CreateAnnouncement) => {
       .then((res) => {
          return res;
       })
-      .catch((err) => {
-         console.log("error announcement", err);
+      .catch(() => {
 
          return null;
       });

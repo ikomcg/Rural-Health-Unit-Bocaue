@@ -26,6 +26,8 @@ const Inbox = ({ activeInbox, setActiveInbox }: InboxType) => {
    const InboxFilter = useMemo(() => {
       if (!inbox) return [];
 
+      inbox;
+
       const filterInBox = inbox.filter((item) => {
          const isReciever = cookies && item.to_id === cookies.id;
 
@@ -47,12 +49,21 @@ const Inbox = ({ activeInbox, setActiveInbox }: InboxType) => {
 
    return (
       <>
-         <div className="w-[40%] h-full border-r mr-1 p-2">
+         <div className="w-[40%] h-full border-r p-2">
             <div className="flex flex-col pr-3 h-full">
                <div className="flex items-center justify-between mb-5">
                   <h1 className="text-lg font-semibold text-blue">Inbox</h1>
-                  <button onClick={HandleAddMessage}>
-                     <BiSolidEdit className="text-blue text-2xl" />
+                  <button
+                     onClick={HandleAddMessage}
+                     disabled={cookies?.account_status !== "active"}
+                  >
+                     <BiSolidEdit
+                        className={`${
+                           cookies?.account_status !== "active"
+                              ? "text-gray-500"
+                              : "text-blue"
+                        } text-2xl`}
+                     />
                   </button>
                </div>
                <div className="flex flex-row bg-gray-200 mb-4 rounded-lg px-2">

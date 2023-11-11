@@ -4,9 +4,8 @@ import useFetchService from "../../../../hooks/Service";
 import { useNavigate } from "react-router-dom";
 
 const HealthService = () => {
-   const service = useFetchService();
+   const service = useFetchService({ path: "service" });
    const navigate = useNavigate();
-
 
    return (
       <>

@@ -36,8 +36,7 @@ const Message = () => {
 
             setMessages(data);
          },
-         (error) => {
-            console.log(error);
+         () => {
             setMessages(null);
          }
       );

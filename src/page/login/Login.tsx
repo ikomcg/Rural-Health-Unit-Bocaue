@@ -10,8 +10,9 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/Base";
 import { GetDocFireBase } from "../../firebase/Document";
 import { UserProvider } from "../../context/UserProvider";
-import Register from "./register/Register";
+import Register from "../register/Register";
 import Swal from "sweetalert2";
+import ForgotPassword from "../forgot-password/Forgot-Password";
 
 type LoginType = {
    open: boolean;
@@ -21,6 +22,7 @@ const Login = ({ open, setOpen }: LoginType) => {
    const navigate = useNavigate();
    const { setLoading, saveCookies } = useContext(UserProvider);
    const [isRegister, setIsRegister] = useState(false);
+   const [forgotPassword, setForgotPassword] = useState(false);
    const [status, setStatus] = useState({
       remember: false,
       isUserName: false,
@@ -112,7 +114,6 @@ const Login = ({ open, setOpen }: LoginType) => {
       if (!login.status) {
          setLoading(false);
          const data = JSON.parse(JSON.stringify(login.res)) as ErrorResponse;
-         console.log(data.code);
          const message = data.code.split("/")[1];
 
          setStatus((prev) => ({
@@ -127,7 +128,6 @@ const Login = ({ open, setOpen }: LoginType) => {
       const ref = doc(db, "users", id);
 
       const user = await GetDocFireBase(ref);
-      console.log(user);
       if (!user) {
          return false;
       }
@@ -136,9 +136,15 @@ const Login = ({ open, setOpen }: LoginType) => {
       const role = user.data().role;
       // for patient account
       const is_verify = user.data().is_verify;
+      const full_name = `${user.data().first_name} ${user.data().middle_name} ${
+         user.data().last_name
+      }`;
       const cookie = {
          ...user.data(),
+         full_name,
          id,
+         birthday: user.data().birthday.toDate(),
+         created_at: user.data().created_at.toDate(),
       } as UserType;
 
       if (role.includes("patient")) {
@@ -202,7 +208,14 @@ const Login = ({ open, setOpen }: LoginType) => {
                         label="Password"
                      />
                      <div className="flex flex-row items-center justify-end text-sm">
-                        <button type="button" className="text-sm text-blue">
+                        <button
+                           type="button"
+                           className="text-sm text-blue"
+                           onClick={() => {
+                              setOpen(false);
+                              setForgotPassword(true);
+                           }}
+                        >
                            Forgot Password
                         </button>
                      </div>
@@ -232,6 +245,9 @@ const Login = ({ open, setOpen }: LoginType) => {
             </div>
          </DialogSlide>
          {isRegister && <Register open={isRegister} setOpen={setIsRegister} />}
+         {forgotPassword && (
+            <ForgotPassword open={forgotPassword} setOpen={setForgotPassword} />
+         )}
       </>
    );
 };

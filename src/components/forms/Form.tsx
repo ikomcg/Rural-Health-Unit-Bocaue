@@ -5,14 +5,19 @@ type TextBox = {
    label: string;
    message?: string;
    error?: boolean;
+   flex?: "row" | "col";
 };
 type InputType = object &
    Omit<React.ComponentProps<"input">, "className"> &
    TextBox;
 
-export const Input = ({ label, message, error, ...props }: InputType) => {
+export const Input = ({ label, message, error, flex, ...props }: InputType) => {
    return (
-      <div className="flex flex-col gap-1 w-full">
+      <div
+         className={`flex flex-${flex ?? "col"} ${
+            !flex ? "items-start" : "items-center"
+         } justify-end gap-1 w-full`}
+      >
          <label htmlFor={props.id} className="text-md">
             {label}
             {props.required && (

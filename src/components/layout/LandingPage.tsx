@@ -12,6 +12,8 @@ const LandingPage = () => {
    const auth = getAuth();
    const { saveCookies } = useContext(UserProvider);
    const navigate = useNavigate();
+   const path = window.location.pathname;
+   path;
 
    useEffect(() => {
       const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -19,18 +21,19 @@ const LandingPage = () => {
             const ref = doc(db, "users", user.uid);
             onSnapshot(
                ref,
-               (snapshot) => {
+               async (snapshot) => {
                   if (!snapshot) return;
-
                   if (snapshot.exists()) {
                      const data = snapshot.data();
-
+                     const full_name = `${data.first_name} ${data.middle_name} ${data.last_name}`;
                      const role = data.role;
-                     // for patient account
                      const is_verify = data.is_verify;
                      const cookie = {
                         ...data,
+                        full_name,
                         id: user.uid,
+                        birthday: data.birthday.toDate(),
+                        created_at: data.created_at.toDate(),
                      } as UserType;
 
                      if (role.includes("patient")) {
@@ -38,24 +41,19 @@ const LandingPage = () => {
                            navigate("/patient/home");
                            saveCookies(cookie);
                         } else {
-                           SignOutFireBase();
-
-                           return false;
+                           await SignOutFireBase();
                         }
                      } else if (role.includes("admin")) {
                         navigate("/admin/home");
                         saveCookies(cookie);
                      }
-                  } else {
-                     console.log("No such document!");
                   }
                },
                (error) => {
-                  console.log("snap err", error);
+                  console.log("snap,", error);
                }
             );
          } else {
-            console.log("user not login");
             navigate("/");
          }
       });

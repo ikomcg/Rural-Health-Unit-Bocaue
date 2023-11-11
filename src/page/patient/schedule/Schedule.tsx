@@ -15,7 +15,7 @@ const Schedule = () => {
 
    const schedules = useFetchMySchedules({
       id: cookies?.id,
-      _limit: 4,
+      _limit: 100,
    });
 
    const MySchedules = useMemo(() => {

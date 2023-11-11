@@ -21,4 +21,5 @@ type RequestApi = {
 
 type Params = {
    data?: { [key: string]: unknown };
+   path?: string;
 };

@@ -18,6 +18,9 @@ type MessagesType = {
 const Messages = ({ activeInbox, messages }: MessagesType) => {
    const ref = useRef<HTMLDivElement | null>(null);
    const { cookies } = useContext(UserProvider);
+   const isNotActive =
+      activeInbox.to_user.account_status !== "active" ||
+      activeInbox.from_user.account_status !== "active";
 
    useEffect(() => {
       if (!ref.current) return;
@@ -33,9 +36,6 @@ const Messages = ({ activeInbox, messages }: MessagesType) => {
    });
 
    const DeleteMessage = async (id: string) => {
-      if (navigator.onLine) {
-         console.log(navigator.onLine);
-      }
       if (!messages) return;
 
       const message = messages.find((item) => item.id === id);
@@ -54,11 +54,7 @@ const Messages = ({ activeInbox, messages }: MessagesType) => {
       await updateDoc(
          doc(db, "inbox", activeInbox.id, "messages", message.id),
          docData
-      )
-         .then(() => {})
-         .catch((err) => {
-            console.log("sending message error", err);
-         });
+      );
    };
 
    return (
@@ -94,6 +90,7 @@ const Messages = ({ activeInbox, messages }: MessagesType) => {
                                  id={cookies.id}
                                  message={item}
                                  onClick={() => {
+                                    if (isNotActive) return;
                                     setMessageInformation((prev) => ({
                                        ...prev,
                                        open: true,
@@ -108,7 +105,15 @@ const Messages = ({ activeInbox, messages }: MessagesType) => {
 
                   <div ref={ref} />
                </div>
-               <Reply activeInbox={activeInbox} />
+               {isNotActive ? (
+                  <div className="bg-gray-100 p-2 text-center">
+                     <small className="text-center text-gray-400">
+                        Account is not Available
+                     </small>
+                  </div>
+               ) : (
+                  <Reply activeInbox={activeInbox} />
+               )}
             </div>
          </div>
          <SimpleSnackbar

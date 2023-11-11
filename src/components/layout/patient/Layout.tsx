@@ -1,76 +1,16 @@
 import SideBar from "./SideBar";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import Calendar from "../Calendar";
 import style from "./style.module.scss";
 import "../calendar.scss";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { UserProvider } from "../../../context/UserProvider";
 import { useState } from "react";
 import Schedule from "./Schedule";
-import { doc, onSnapshot } from "firebase/firestore";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { db } from "../../../firebase/Base";
-import { SignOutFireBase } from "../../../firebase/SignOut";
 import Online from "../Online";
 const PatientLayout = () => {
-   const { cookies, saveCookies } = useContext(UserProvider);
-   const navigate = useNavigate();
-   const url = window.location.pathname;
+   const { cookies } = useContext(UserProvider);
    const [isMenu, setIsMenu] = useState(true);
-
-   useEffect(() => {
-      if (url === "/patient" && cookies) {
-         navigate("/patient/home");
-      }
-   }, [url]);
-
-   const auth = getAuth();
-   useEffect(() => {
-      const unsubscribe = onAuthStateChanged(auth, (user) => {
-         if (user) {
-            const ref = doc(db, "users", user.uid);
-            onSnapshot(
-               ref,
-               (snapshot) => {
-                  if (!snapshot) return;
-
-                  if (snapshot.exists()) {
-                     const role = snapshot.data().role;
-                     const is_verify = snapshot.data().is_verify;
-
-                     if (role.includes("patient")) {
-                        if (is_verify) {
-                           const data = snapshot.data();
-                           const cookie = {
-                              ...data,
-                              id: snapshot.id,
-                           } as UserType;
-                           if (cookie.role.includes("admin")) {
-                              navigate("/admin/home");
-                           } else {
-                              navigate("/patient/home");
-                           }
-                           saveCookies(cookie);
-                        }
-                     } else {
-                        SignOutFireBase();
-                     }
-                  } else {
-                     console.log("No such document!");
-                  }
-               },
-               (error) => {
-                  console.log("snap err", error);
-               }
-            );
-         } else {
-            console.log("user not login");
-            navigate("/");
-         }
-      });
-
-      return () => unsubscribe();
-   }, []);
 
    return !cookies ? (
       Navigate({ to: "/" })

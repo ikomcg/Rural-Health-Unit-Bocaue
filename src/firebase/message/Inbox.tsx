@@ -1,5 +1,7 @@
 import {
    collection,
+   doc,
+   getDoc,
    onSnapshot,
    or,
    orderBy,
@@ -34,30 +36,42 @@ const InboxFetch = (
             onSnapshot(
                queryDb,
                (snapshot) => {
-                  const data = snapshot.docs.map((doc) => {
-                     return {
-                        id: doc.id,
-                        created_at: doc.data().created_at.toDate(),
-                        ...doc.data(),
-                     };
-                  }) as Inbox[];
-                  setInbox(data);
+                  Promise.all(
+                     snapshot.docs.map(async (docu) => {
+                        const data = docu.data() as Inbox;
+                        const ref = doc(db, "users", data.from_id);
+                        const docSnap = await getDoc(ref);
+                        const from_user = docSnap.data();
 
-                  if (data.length > 0) {
-                     const _data = data[0];
+                        const ref2 = doc(db, "users", data.to_id);
+                        const docSnap2 = await getDoc(ref2);
+                        const to_user = docSnap2.data();
 
-                     setActiveInbox({
-                        ..._data,
-                     });
-                  }
+                        return {
+                           ...data,
+                           id: docu.id,
+                           from_user,
+                           to_user,
+                           created_at: data.created_at.toDate(),
+                        };
+                     }) as unknown as Inbox[]
+                  ).then((res) => {
+                     setInbox(res);
+
+                     if (res.length > 0) {
+                        const _data = res[0];
+
+                        setActiveInbox({
+                           ..._data,
+                        });
+                     }
+                  });
                },
-               (error) => {
-                  console.log(error);
+               () => {
                   setInbox(null);
                }
             );
          } catch (error) {
-            console.log(error);
             setInbox(null);
          }
       };

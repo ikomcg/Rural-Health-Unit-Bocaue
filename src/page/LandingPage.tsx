@@ -9,16 +9,14 @@ import {
    signInWithEmailLink,
 } from "firebase/auth";
 import Swal from "sweetalert2";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "../firebase/Base";
 import { TimeStampValue } from "../shared/TimeStamp";
 import { useContext, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
 import { UserProvider } from "../context/UserProvider";
 
 const LandingPage = () => {
    const auth = getAuth();
-   // const navigate = useNavigate();
    const { setLoading } = useContext(UserProvider);
 
    useEffect(() => {
@@ -32,7 +30,6 @@ const LandingPage = () => {
       const SignInWithEmailLink = async () => {
          await signInWithEmailLink(auth, email, window.location.href)
             .then((res) => {
-               window.localStorage.removeItem("emailForSignIn");
                CreateUserInformation(res.user.uid);
             })
             .catch((error) => {
@@ -58,6 +55,9 @@ const LandingPage = () => {
          birthday: TimeStampValue(_payload.birthday),
          role: ["patient"],
          is_verify: false,
+         status: "offline",
+         account_status: "active",
+         created_at: serverTimestamp(),
       };
 
       await setDoc(ref, data)
@@ -67,7 +67,9 @@ const LandingPage = () => {
                title: "Register Successfully",
                text: "Will send you a message once your account is verify",
             });
+
             window.localStorage.removeItem("payload");
+            window.localStorage.removeItem("email");
             window.history.pushState(null, "", import.meta.env.VITE_LOCATION);
          })
          .catch((err) => {
@@ -82,18 +84,10 @@ const LandingPage = () => {
    return (
       <>
          <Main />
-         <section className="living-healthy-page">
-            <LivingHealthy />
-         </section>
-         <section className="newsletter-page">
-            <News />
-         </section>
-         <section className="subcription-page">
-            <Newsletter />
-         </section>
-         <section className="health-condition">
-            <HealthCondition />
-         </section>
+         <LivingHealthy />
+         <News />
+         <Newsletter />
+         <HealthCondition />
       </>
    );
 };

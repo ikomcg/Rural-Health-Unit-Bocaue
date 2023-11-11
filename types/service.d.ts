@@ -3,7 +3,6 @@ type ServiceType = {
    id: string;
    name: string;
    image: string;
-
    create_at: any;
 };
 type ScheduleService = {
@@ -24,6 +23,7 @@ type RequestService = {
    service_name: string;
    request_date: any;
    created_at: any;
+   user: UserType;
    status: "pending" | "approve" | "decline";
 };
 type MedecineList = {
@@ -45,5 +45,6 @@ type RequestMedecines = {
    medecine_id: string;
    quantity: any;
    created_at: any;
+   user: UserType;
    status: "pending" | "approve" | "decline";
 };

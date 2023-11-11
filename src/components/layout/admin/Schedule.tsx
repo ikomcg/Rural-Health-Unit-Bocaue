@@ -38,8 +38,7 @@ const Schedule = () => {
             }) as unknown as RequestService[];
             setRequests(data);
          },
-         (error) => {
-            console.log("error requests", error);
+         () => {
             setRequests(null);
          }
       );

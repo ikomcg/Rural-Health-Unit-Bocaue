@@ -20,7 +20,6 @@ const UpdateDoctors = ({ payload, setPayload }: PostType) => {
    const { id } = useParams();
    const [isPost, setIsPost] = useState(false);
    const [isCreate, setIsCreate] = useState(false);
-
    useEffect(() => {
       if (!payload) return;
 

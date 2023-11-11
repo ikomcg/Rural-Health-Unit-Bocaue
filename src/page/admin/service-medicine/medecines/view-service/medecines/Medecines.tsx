@@ -63,8 +63,8 @@ const Medecines = () => {
          );
          const pages = Math.ceil(filterData.length / 10);
          setPages(pages);
-         const page = currentPage;
-         const lastPostIndex = page * 10;
+
+         const lastPostIndex = currentPage * 10;
          const firstPostIndex = lastPostIndex - 10;
 
          const currentPost = filterData?.slice(firstPostIndex, lastPostIndex);
@@ -75,7 +75,7 @@ const Medecines = () => {
    }, [currentPage, medecines, refresh]);
 
    const HandleRefresh = () => {
-      setCurrentPage(0);
+      setCurrentPage(1);
       setRefresh((prev) => !prev);
    };
 

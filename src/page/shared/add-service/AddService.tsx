@@ -1,23 +1,22 @@
-import React, { SetStateAction, useRef, useState } from "react";
-import DialogSlide from "../../../../../components/mui/dialog/SlideModal";
+import React, { useRef, useState } from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
 import style from "./style.module.scss";
-import { BlueButton } from "../../../../../components/button/BlueButton";
-import { CreateMedecineFrb } from "../../../../../firebase/Service/Create";
-import Swal from "sweetalert2";
-
+import { BlueButton } from "../../../components/button/BlueButton";
+import { CreateServiceFrb } from "../../../firebase/Service/Create";
 import {
    getStorage,
    ref,
    uploadBytesResumable,
    getDownloadURL,
 } from "firebase/storage";
+import CSwal from "../../../components/swal/Swal";
+import Swal from "sweetalert2";
 
 type PostType = {
-   isPost: boolean;
-   setIsPost: React.Dispatch<SetStateAction<boolean>>;
+   path: string;
+   storagepPath: "service/" | "department/" | "medecines/" | "queue/";
 };
-const NewMedecine = ({ isPost, setIsPost }: PostType) => {
+const NewService = ({ path, storagepPath }: PostType) => {
    const [title, setTitle] = useState("");
    const [isCreate, setIsCreate] = useState(false);
    const [image, setImage] = useState<{
@@ -31,7 +30,7 @@ const NewMedecine = ({ isPost, setIsPost }: PostType) => {
    const OnClose = () => {
       setTitle("");
       setImage({ url: "", link: "", status: "" });
-      setIsPost(false);
+      Swal.close();
    };
 
    const UploadFile = async (file: File) => {
@@ -39,22 +38,16 @@ const NewMedecine = ({ isPost, setIsPost }: PostType) => {
       const metadata = {
          contentType: "image/*",
       };
-      const storageRef = ref(storage, "medecines/" + file.name);
+      const storageRef = ref(storage, storagepPath + file.name);
       const uploadTask = uploadBytesResumable(storageRef, file, metadata);
 
       uploadTask.on(
          "state_changed",
          (snapshot) => {
-            const progress =
-               (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log("Upload is " + progress + "% done");
-
             switch (snapshot.state) {
                case "paused":
-                  console.log("Upload is paused");
                   break;
                case "running":
-                  console.log("Upload is running");
                   break;
             }
          },
@@ -101,24 +94,24 @@ const NewMedecine = ({ isPost, setIsPost }: PostType) => {
       setImage({ url: "", link: "", status: "" });
    };
 
-   const CreateMedecine = async () => {
+   const CreateService = async () => {
       setIsCreate(true);
       const _image =
          image.link === ""
             ? "https://firebasestorage.googleapis.com/v0/b/rural-health-unit-72880.appspot.com/o/medecines%2F22.webp?alt=media&token=b87d6565-432c-44c4-b0c6-2c88bb556600&_gl=1*1xh88mo*_ga*MzM1MjM3ODExLjE2ODk0MDg3NjA.*_ga_CW55HF8NVT*MTY5NzI0NDY0OC45MC4xLjE2OTcyNDc3OTMuNDUuMC4w"
             : image.link;
-
-      const create = await CreateMedecineFrb({
+      const create = await CreateServiceFrb({
          data: {
             name: title,
             image: _image,
          },
+         path,
       });
       setIsCreate(false);
       if (!create) {
-         Swal.fire({
+         CSwal({
             icon: "error",
-            title: "Filed Create Medecine",
+            title: "Filed Create Service",
          });
 
          return;
@@ -129,19 +122,21 @@ const NewMedecine = ({ isPost, setIsPost }: PostType) => {
    const isUploading = image.status === "uploading";
 
    return (
-      <DialogSlide open={isPost} setOpen={OnClose}>
+      <>
          <div className={style.create_post}>
             <div className={style.header_post}>
-               <h1>Add Medecine</h1>
+               <h1>Add Service</h1>
                <button onClick={OnClose}>
                   <AiFillCloseCircle />
                </button>
             </div>
 
             <div className={style.content}>
+               <label htmlFor="name">Name:</label>
                <input
                   value={title}
-                  placeholder="Name..."
+                  id="name"
+                  placeholder="Type here..."
                   onChange={(e) => {
                      setTitle(e.target.value);
                   }}
@@ -158,7 +153,6 @@ const NewMedecine = ({ isPost, setIsPost }: PostType) => {
                   </div>
                </div>
             )}
-
             <label className={style.add_to_post} htmlFor="image">
                <span>Add to your post</span>
                <img
@@ -180,14 +174,14 @@ const NewMedecine = ({ isPost, setIsPost }: PostType) => {
             </label>
             <BlueButton
                disabled={isUploading || isCreate}
-               className="w-full text-center py-1"
-               onClick={CreateMedecine}
+               className="w-full text-center py-2 mt-8"
+               onClick={CreateService}
             >
                Create
             </BlueButton>
          </div>
-      </DialogSlide>
+      </>
    );
 };
 
-export default NewMedecine;
+export default NewService;

@@ -11,8 +11,6 @@ import { useFetchRequestMedecine } from "../../../../../../hooks/Request";
 import { AiOutlineSearch } from "react-icons/ai";
 import { CreateRapidApi } from "../../../../../../api/SMS/SendSMS";
 
-const ENV = import.meta.env;
-
 const Request = () => {
    const { id } = useParams();
    const medecine = useFetchRequestMedecine({ id: id });
@@ -37,8 +35,8 @@ const Request = () => {
          );
          const pages = Math.ceil(filterData.length / 10);
          setPages(pages);
-         const page = currentPage + 1;
-         const lastPostIndex = page * 10;
+
+         const lastPostIndex = currentPage * 10;
          const firstPostIndex = lastPostIndex - 10;
 
          const currentPost = filterData?.slice(firstPostIndex, lastPostIndex);
@@ -49,7 +47,7 @@ const Request = () => {
    }, [currentPage, medecine, refresh]);
 
    const HandleRefresh = () => {
-      setCurrentPage(0);
+      setCurrentPage(1);
       setRefresh((prev) => !prev);
    };
 
@@ -60,7 +58,7 @@ const Request = () => {
          .then(async () => {
             await CreateRapidApi({
                endPoint: "sms/send",
-               token: ENV.VITE_TOKEN_SINCH,
+               token: "bGx1cmFnLjIyMTYxOUBiYWxhZ3Rhcy5zdGkuZWR1LnBoOjQ1RUJDMkVCLTRBMzQtMDhDOS03MjA2LTI2OUEwRjVEMzQ3Qw==",
                data: {
                   messages: [
                      {

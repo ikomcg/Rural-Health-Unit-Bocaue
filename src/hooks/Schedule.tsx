@@ -1,6 +1,8 @@
 import {
    and,
    collection,
+   doc,
+   getDoc,
    limit,
    onSnapshot,
    orderBy,
@@ -41,8 +43,7 @@ const useFetchSchedulesService = ({ id }: ScheduleType) => {
             }) as unknown as DoctorList[];
             setSchedules(data);
          },
-         (error) => {
-            console.log("error schedule", error);
+         () => {
             setSchedules(null);
          }
       );
@@ -76,17 +77,29 @@ export const useFetchMySchedules = ({ id, _limit }: MySchedule) => {
       onSnapshot(
          queryDB,
          (snapshot) => {
-            const data = snapshot.docs.map((doc) => {
-               return {
-                  ...doc.data(),
-                  id: doc.id,
-                  request_date: doc.data().request_date.toDate(),
-               };
-            }) as unknown as RequestService[];
-            setSchedules(data);
+            Promise.all(
+               snapshot.docs.map(async (docu) => {
+                  const data = docu.data();
+                  const ref = doc(db, "users", data.patient_id);
+
+                  const docSnap = await getDoc(ref);
+                  const _user = docSnap.data();
+
+                  return {
+                     ...data,
+                     id: docu.id,
+                     user: _user,
+                     request_date: data.request_date.toDate(),
+                  };
+               }) as unknown as RequestService[]
+            ).then((res) => {
+               const data = res.filter(
+                  (item) => item.user.account_status === "active"
+               );
+               setSchedules(data);
+            });
          },
-         (error) => {
-            console.log("error requests", error);
+         () => {
             setSchedules(null);
          }
       );
@@ -110,17 +123,29 @@ export const useFetchAllSchedules = () => {
       onSnapshot(
          queryDB,
          (snapshot) => {
-            const data = snapshot.docs.map((doc) => {
-               return {
-                  ...doc.data(),
-                  id: doc.id,
-                  request_date: doc.data().request_date.toDate(),
-               };
-            }) as unknown as RequestService[];
-            setSchedules(data);
+            Promise.all(
+               snapshot.docs.map(async (docu) => {
+                  const data = docu.data();
+                  const ref = doc(db, "users", data.patient_id);
+
+                  const docSnap = await getDoc(ref);
+                  const _user = docSnap.data();
+
+                  return {
+                     ...data,
+                     id: docu.id,
+                     user: _user,
+                     request_date: data.request_date.toDate(),
+                  };
+               }) as unknown as RequestService[]
+            ).then((res) => {
+               const data = res.filter(
+                  (item) => item.user.account_status === "active"
+               );
+               setSchedules(data);
+            });
          },
-         (error) => {
-            console.log("error requests", error);
+         () => {
             setSchedules(null);
          }
       );

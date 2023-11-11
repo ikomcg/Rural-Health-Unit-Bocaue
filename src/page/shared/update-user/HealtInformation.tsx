@@ -2,8 +2,7 @@ import { Input } from "../../../components/forms/Form";
 import style from "./style.module.scss";
 
 type PersonalInformationType = {
-   payload: Register;
-   OnChangeFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
+   payload: UserType;
    HandleOnChange: (
       e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
    ) => void;
@@ -12,7 +11,6 @@ type PersonalInformationType = {
 const HealtInformation: React.FC<PersonalInformationType> = ({
    payload,
    HandleOnChange,
-   // OnChangeFile,
 }) => {
    return (
       <div className="px-5 mb-10">
@@ -60,6 +58,7 @@ const HealtInformation: React.FC<PersonalInformationType> = ({
                label="Treatment"
                onChange={HandleOnChange}
             />
+
             {/* <Input
                required
                type="file"

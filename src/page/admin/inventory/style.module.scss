@@ -1,0 +1,23 @@
+.table {
+   width: 100%;
+   font-size: 14px !important;
+
+   thead {
+      tr {
+         th {
+            font-size: 14px !important;
+            &:last-child {
+               width: 8%;
+            }
+            &:first-child {
+               width: 5%;
+            }
+         }
+      }
+   }
+}
+.profile {
+   width: 35px;
+   height: 35px;
+   clip-path: circle();
+}

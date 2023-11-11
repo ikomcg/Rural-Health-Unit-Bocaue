@@ -2,16 +2,18 @@ import style from "./style.module.scss";
 import Card, { AddCard } from "../../../../components/card/Card";
 import useFetchService from "../../../../hooks/Service";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import NewService from "./add/Add";
+import NewService from "../../../shared/add-service/AddService";
+import { JSXCSwal } from "../../../../components/swal/Swal";
 
 const HealthService = () => {
-   const service = useFetchService();
+   const service = useFetchService({ path: "service" });
    const navigate = useNavigate();
-   const [isService, setIsService] = useState(false);
 
    const HandleClickService = () => {
-      setIsService((prev) => !prev);
+      JSXCSwal({
+         children: <NewService storagepPath="service/" path="service"/>,
+         showConfirmButton: false,
+      });
    };
 
    return (
@@ -35,9 +37,6 @@ const HealthService = () => {
             )}
             {service && <AddCard onClick={HandleClickService} />}
          </div>
-         {isService && (
-            <NewService isPost={isService} setIsPost={setIsService} />
-         )}
       </>
    );
 };

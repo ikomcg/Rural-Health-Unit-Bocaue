@@ -1,8 +1,6 @@
-import { memo } from "react";
 import TopicHeader from "../../components/home/TopicHeader";
 import { useFetch } from "../../hooks/Hooks";
 import { RotatingLines } from "react-loader-spinner";
-
 import NewsCard from "../../components/home/NewsCard";
 
 const News = () => {
@@ -11,7 +9,7 @@ const News = () => {
    });
 
    return (
-      <div className="covid-news wrap mx-5">
+      <div className="covid-news wrap">
          <TopicHeader title="Covid-19 News" />
          <div
             className={`flex flex-row flex-wrap gap-y-5 ${
@@ -51,4 +49,4 @@ const News = () => {
    );
 };
 
-export default memo(News);
+export default News;

@@ -24,17 +24,21 @@ const useFetchUsers = ({ role }: FetchUserType) => {
                const full_name = `${doc.data().first_name} ${
                   doc.data().middle_name
                } ${doc.data().last_name}`;
+               const birthday = doc.data().birthday.toDate();
                return {
                   ...doc.data(),
                   full_name,
                   id: doc.id,
-                  created_at: doc.data().created_at.toDate(),
+                  birthday,
                };
             }) as unknown as UserType[];
-            setUsers(data);
+
+            const filterData = data.filter(
+               (item) => item.account_status === "active"
+            );
+            setUsers(filterData);
          },
-         (error) => {
-            console.log("error users", error);
+         () => {
             setUsers(null);
          }
       );
@@ -60,7 +64,8 @@ export const useFetchOnlineUsers = ({ role }: FetchUserType) => {
          collection(db, `users`),
          and(
             where("role", "array-contains-any", role),
-            where("status", "==", "online")
+            where("status", "==", "online"),
+            where("account_status", "==", "active")
          )
       );
       onSnapshot(
@@ -74,13 +79,11 @@ export const useFetchOnlineUsers = ({ role }: FetchUserType) => {
                   ...doc.data(),
                   full_name,
                   id: doc.id,
-                  created_at: doc.data().created_at.toDate(),
                };
             }) as unknown as UserType[];
             setUsers(data);
          },
-         (error) => {
-            console.log("error users", error);
+         () => {
             setUsers(null);
          }
       );

@@ -1,0 +1,23 @@
+@use "../../../color";
+.card {
+   display: flex;
+   flex-flow: row wrap;
+   row-gap: 13px;
+   margin-top: 54px;
+   > div {
+      > div {
+         position: relative;
+         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+         &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(43, 143, 249, 0.5);
+         }
+      }
+   }
+}

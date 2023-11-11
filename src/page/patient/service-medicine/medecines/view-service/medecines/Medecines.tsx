@@ -9,7 +9,7 @@ const Medecines = () => {
    const { id } = useParams();
    const medecines = useFetchMedecineListService({ id: id });
 
-   const [currentPage, setCurrentPage] = useState(0);
+   const [currentPage, setCurrentPage] = useState(1);
    const [sliceMedecines, setSliceMedecines] = useState<
       MedecineList[] | null
    >();
@@ -31,8 +31,7 @@ const Medecines = () => {
          const pages = Math.ceil(filterData.length / 10);
          setPages(pages);
 
-         const page = currentPage + 1;
-         const lastPostIndex = page * 10;
+         const lastPostIndex = currentPage * 10;
          const firstPostIndex = lastPostIndex - 10;
 
          const currentPost = filterData?.slice(firstPostIndex, lastPostIndex);
@@ -43,7 +42,7 @@ const Medecines = () => {
    }, [currentPage, medecines, refresh]);
 
    const HandleRefresh = () => {
-      setCurrentPage(0);
+      setCurrentPage(1);
       setRefresh((prev) => !prev);
    };
    return (

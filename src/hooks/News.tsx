@@ -30,8 +30,7 @@ const NewsFetch = () => {
             }) as AnnouncementType[];
             setNews(data);
          },
-         (error) => {
-            console.log("error news", error);
+         () => {
             setNews(null);
          }
       );

@@ -36,7 +36,8 @@
     "react-loader-spinner": "^5.4.5",
     "react-uuid": "^2.0.0",
     "sass": "^1.68.0",
-    "sweetalert2": "^11.7.32"
+    "sweetalert2": "^11.7.32",
+    "sweetalert2-react-content": "^5.0.7"
   },
   "devDependencies": {
     "@types/bootstrap": "^5.2.8",
