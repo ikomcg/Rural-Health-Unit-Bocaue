@@ -21,7 +21,7 @@ const Post = ({ cookies }: PostType) => {
    const name = `${cookies.first_name} ${cookies.middle_name} ${cookies.last_name}`;
    const profile =
       cookies.profile !== "" ? cookies.profile : "/image/profile.png";
-
+   const [isSaving, setIsSaving] = useState(false);
    const [post, setPost] = useState<CreateAnnouncementType>({
       user: cookies.id,
       descriptions: "",
@@ -123,6 +123,7 @@ const Post = ({ cookies }: PostType) => {
       const _images = images.map((item) => {
          return item.link;
       });
+      setIsSaving(true);
 
       const create = await CreateAnnouncementsFrb({
          data: {
@@ -130,6 +131,7 @@ const Post = ({ cookies }: PostType) => {
             images: [..._images],
          },
       });
+      setIsSaving(false);
 
       if (!create) {
          CSwal({
@@ -208,7 +210,7 @@ const Post = ({ cookies }: PostType) => {
                />
             </label>
             <BlueButton
-               disabled={isUploading}
+               disabled={isUploading || isSaving}
                className="w-full text-center py-1"
                onClick={CreateAnnouncement}
             >

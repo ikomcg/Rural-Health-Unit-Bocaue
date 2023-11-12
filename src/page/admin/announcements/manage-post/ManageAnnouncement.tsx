@@ -24,7 +24,7 @@ const ManagePost = ({ cookies, payload, announcementId }: ManagePostType) => {
    const name = `${cookies.first_name} ${cookies.middle_name} ${cookies.last_name}`;
    const profile =
       cookies?.profile !== "" ? cookies?.profile : "/image/profile.png";
-
+   const [isSaving, setIsSaving] = useState(false);
    const [post, setPost] = useState<CreateAnnouncementType>({
       user: payload.user.id,
       descriptions: payload.descriptions,
@@ -44,6 +44,7 @@ const ManagePost = ({ cookies, payload, announcementId }: ManagePostType) => {
          : []
    );
    const inputRef = useRef<HTMLInputElement>(null);
+
    const OnClose = () => {
       setPost((prev) => ({
          ...prev,
@@ -136,13 +137,11 @@ const ManagePost = ({ cookies, payload, announcementId }: ManagePostType) => {
       const _images = images.map((item) => {
          return item.link;
       });
-
+      setIsSaving(true);
       await updateDoc(doc(db, "announcements", announcementId), {
-         data: {
-            desription: post.descriptions,
-            images: [..._images],
-            update_at: serverTimestamp(),
-         },
+         descriptions: post.descriptions,
+         images: [..._images],
+         update_at: serverTimestamp(),
       })
          .then(() => {
             OnClose();
@@ -152,6 +151,9 @@ const ManagePost = ({ cookies, payload, announcementId }: ManagePostType) => {
                icon: "error",
                title: err.code ?? "Network Error",
             });
+         })
+         .finally(() => {
+            setIsSaving(false);
          });
    };
 
@@ -218,7 +220,7 @@ const ManagePost = ({ cookies, payload, announcementId }: ManagePostType) => {
                />
             </label>
             <BlueButton
-               disabled={isUploading}
+               disabled={isUploading || isSaving}
                className="w-full text-center py-1"
                onClick={UpdateAnnouncement}
             >
