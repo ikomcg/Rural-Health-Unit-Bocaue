@@ -1,8 +1,8 @@
 import "react-lazy-load-image-component/src/effects/blur.css";
-import NewsFetch from "../../../hooks/News";
+import NewsFetch from "../../../../hooks/News";
 import "./GridStyle.scss";
 import { doc, deleteDoc } from "firebase/firestore";
-import { db } from "../../../firebase/Base";
+import { db } from "../../../../firebase/Base";
 import Content from "./Content";
 import moment from "moment";
 

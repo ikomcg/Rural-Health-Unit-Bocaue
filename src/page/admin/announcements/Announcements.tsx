@@ -1,12 +1,12 @@
-import AnnouncementList from "./List";
+import AnnouncementList from "./content/List";
 import { BsGear } from "react-icons/bs";
 import { useState } from "react";
-import Post from "./Post";
+import PostAnnouncement from "./create-announcement/Post";
 import Container from "../../../components/container/Container";
 import Carousel from "./view-announcement/Carousel";
+import { JSXCSwal } from "../../../components/swal/Swal";
 
 const Announcements = () => {
-   const [isPost, setIsPost] = useState(false);
    const [isOpen, setIsOpen] = useState(false);
    const [toView, setToView] = useState<ToViewType>({
       images: [],
@@ -15,8 +15,12 @@ const Announcements = () => {
       datetime: "",
       descriptions: "",
    });
-   const HandleOnClick = () => {
-      setIsPost((prev) => !prev);
+
+   const CreateAnnouncement = () => {
+      JSXCSwal({
+         children: <PostAnnouncement />,
+         showConfirmButton: false,
+      });
    };
 
    return (
@@ -25,13 +29,13 @@ const Announcements = () => {
             <div className="flex flex-row gap-2 w-[90%] bg-blue rounded-md mx-auto py-2 px-4 mb-8">
                <button
                   className="rounded-md bg-white p-2 w-1/2 text-left mr-auto"
-                  onClick={HandleOnClick}
+                  onClick={CreateAnnouncement}
                >
                   New Announcement...
                </button>
                <button
                   className="flex flex-row gap-2 bg-white items-center px-2 rounded-md"
-                  onClick={HandleOnClick}
+                  onClick={CreateAnnouncement}
                >
                   <img
                      width="30"
@@ -48,8 +52,6 @@ const Announcements = () => {
             </div>
             <AnnouncementList setToView={setToView} setIsOpen={setIsOpen} />
          </Container>
-
-         <Post isPost={isPost} setIsPost={setIsPost} />
          <Carousel isOpen={isOpen} setIsOpen={setIsOpen} toView={toView} />
       </>
    );

@@ -1,10 +1,9 @@
-import React, { SetStateAction, useContext, useRef, useState } from "react";
-import DialogSlide from "../../../components/mui/dialog/SlideModal";
+import React, { useContext, useRef, useState } from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
-import style from "./Style.module.scss";
-import { UserProvider } from "../../../context/UserProvider";
-import { BlueButton } from "../../../components/button/BlueButton";
-import { CreateAnnouncementsFrb } from "../../../firebase/Announcement/Create";
+import style from "../Style.module.scss";
+import { UserProvider } from "../../../../context/UserProvider";
+import { BlueButton } from "../../../../components/button/BlueButton";
+import { CreateAnnouncementsFrb } from "../../../../firebase/Announcement/Create";
 import uuid from "react-uuid";
 import {
    getStorage,
@@ -12,13 +11,10 @@ import {
    uploadBytesResumable,
    getDownloadURL,
 } from "firebase/storage";
-import CSwal from "../../../components/swal/Swal";
+import CSwal from "../../../../components/swal/Swal";
+import Swal from "sweetalert2";
 
-type PostType = {
-   isPost: boolean;
-   setIsPost: React.Dispatch<SetStateAction<boolean>>;
-};
-const Post = ({ isPost, setIsPost }: PostType) => {
+const Post = () => {
    const { cookies } = useContext(UserProvider);
    const name = `${cookies?.first_name} ${cookies?.middle_name} ${cookies?.last_name}`;
    const profile =
@@ -48,7 +44,7 @@ const Post = ({ isPost, setIsPost }: PostType) => {
          descriptions: "",
       });
       setImages([]);
-      setIsPost(false);
+      Swal.close();
    };
 
    const OnChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -155,7 +151,7 @@ const Post = ({ isPost, setIsPost }: PostType) => {
 
    const isUploading = images.some((item) => item.status === "uploading");
    return (
-      <DialogSlide open={isPost} setOpen={OnClose}>
+      <div>
          <div className={style.create_post}>
             <div className={style.header_post}>
                <h1>Create Post</h1>
@@ -227,7 +223,7 @@ const Post = ({ isPost, setIsPost }: PostType) => {
                Post
             </BlueButton>
          </div>
-      </DialogSlide>
+      </div>
    );
 };
 
