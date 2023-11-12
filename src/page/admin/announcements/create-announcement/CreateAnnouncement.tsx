@@ -31,7 +31,6 @@ const Post = ({ cookies }: PostType) => {
    >([]);
 
    const inputRef = useRef<HTMLInputElement>(null);
-   console.log(cookies);
    const OnClose = () => {
       setPost({
          user: cookies.id,
@@ -103,7 +102,6 @@ const Post = ({ cookies }: PostType) => {
          },
          () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-               console.log(downloadURL, uploadTask.snapshot.ref);
                setImages((prev) => [
                   ...prev.map((item) => {
                      if (item.id === id) {

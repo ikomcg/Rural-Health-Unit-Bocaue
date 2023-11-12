@@ -17,7 +17,6 @@ const PatientLayout = () => {
 
    useEffect(() => {
       Notification.requestPermission().then((perm) => {
-         console.log(perm);
          if (perm === "granted" && currentQueue) {
             const len = currentQueue.length;
             if (len === 0) return;

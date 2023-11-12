@@ -57,7 +57,6 @@ const NewsFetch = ({ id }: NewsFetchType) => {
             });
          },
          (err) => {
-            console.log(err);
             setNews(null);
          }
       );

@@ -43,7 +43,6 @@ const ManagePost = ({ cookies, payload, announcementId }: ManagePostType) => {
            ]
          : []
    );
-   console.log(post);
    const inputRef = useRef<HTMLInputElement>(null);
    const OnClose = () => {
       setPost((prev) => ({
