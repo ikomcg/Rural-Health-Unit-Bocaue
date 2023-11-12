@@ -1,36 +1,63 @@
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import {
+   collection,
+   doc,
+   getDoc,
+   onSnapshot,
+   orderBy,
+   query,
+   where,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebase/Base";
-
-const NewsFetch = () => {
+type NewsFetchType = {
+   id?: string;
+};
+const NewsFetch = ({ id }: NewsFetchType) => {
    const [news, setNews] = useState<AnnouncementType[] | null>();
    useEffect(() => {
       GetNews();
    }, []);
 
    const GetNews = async () => {
-      const queryDB = query(
+      let queryDB = query(
          collection(db, "announcements"),
          orderBy("created_at", "desc")
       );
+      if (id) {
+         queryDB = query(
+            collection(db, "announcements"),
+            where("user", "==", id),
+            orderBy("created_at", "desc")
+         );
+      }
+
       onSnapshot(
          queryDB,
          (snapshot) => {
-            const data = snapshot.docs.map((doc) => {
-               const timestamp =
-                  doc.data().created_at.seconds * 1000 +
-                  Math.floor(doc.data().created_at.nanoseconds / 1e6);
-               const created_at = new Date(timestamp);
+            Promise.all(
+               snapshot.docs.map(async (docu) => {
+                  const data = docu.data() as AnnouncementType;
+                  const userRef = doc(db, "users", docu.data().user);
+                  const docUser = await getDoc(userRef);
+                  const userData = docUser.data() as UserType;
+                  const full_name = `${userData.first_name} ${userData.middle_name} ${userData.last_name}`;
 
-               return {
-                  ...doc.data(),
-                  id: doc.id,
-                  created_at,
-               };
-            }) as AnnouncementType[];
-            setNews(data);
+                  return {
+                     ...data,
+                     id: docu.id,
+                     user: {
+                        ...userData,
+                        full_name,
+                     },
+                     created_at: data.created_at.toDate(),
+                  };
+               }) as unknown as AnnouncementType[]
+            ).then((res) => {
+               setNews(res);
+            });
          },
-         () => {
+         (err) => {
+            console.log(err);
             setNews(null);
          }
       );

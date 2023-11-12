@@ -3,6 +3,7 @@ import * as React from "react";
 type SettingMenu = {
    open: boolean;
    anchorEl: HTMLElement | null;
+   OnEditPost: () => void;
    OnDeletePost: () => Promise<void>;
    setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
 };
@@ -58,6 +59,7 @@ const StyledMenu = styled((props: MenuProps) => (
 export default function CustomizedMenus({
    open,
    anchorEl,
+   OnEditPost,
    setAnchorEl,
    OnDeletePost,
 }: SettingMenu) {
@@ -89,7 +91,10 @@ export default function CustomizedMenus({
                <MdDelete />
                Delete
             </button>
-            <button className="flex flex-row items-center gap-2 pl-2 w-full">
+            <button
+               className="flex flex-row items-center gap-2 pl-2 w-full"
+               onClick={OnEditPost}
+            >
                <BiSolidPencil />
                Edit
             </button>

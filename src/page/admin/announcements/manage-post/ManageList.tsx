@@ -1,17 +1,19 @@
 import "react-lazy-load-image-component/src/effects/blur.css";
 import NewsFetch from "../../../../hooks/News";
-import "./GridStyle.scss";
 import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../../../../firebase/Base";
-import Content from "./Content";
+import Content from "../content/Content";
 import moment from "moment";
+import { useContext } from "react";
+import { UserProvider } from "../../../../context/UserProvider";
 
 type ListType = {
    setToView: React.Dispatch<React.SetStateAction<ToViewType>>;
    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
-const List = ({ setToView, setIsOpen }: ListType) => {
-   const { news } = NewsFetch();
+const ManageList = ({ setToView, setIsOpen }: ListType) => {
+   const { cookies } = useContext(UserProvider);
+   const { news } = NewsFetch({ id: cookies?.id });
 
    const OnDeletePost = async (id: string) => {
       return await deleteDoc(doc(db, "announcements", id))
@@ -26,7 +28,7 @@ const List = ({ setToView, setIsOpen }: ListType) => {
    const OnViewPost = (item: AnnouncementType) => {
       setToView({
          images: item.images,
-         name: item.user.name,
+         name: item.user.full_name,
          descriptions: item.descriptions,
          datetime: moment(item.created_at.toISOString())
             .utcOffset(8)
@@ -63,4 +65,4 @@ const List = ({ setToView, setIsOpen }: ListType) => {
    );
 };
 
-export default List;
+export default ManageList;

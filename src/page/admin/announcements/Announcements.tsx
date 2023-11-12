@@ -1,13 +1,17 @@
-import AnnouncementList from "./content/List";
+import AnnouncementList from "./announcement-list/List";
 import { BsGear } from "react-icons/bs";
-import { useState } from "react";
-import PostAnnouncement from "./create-announcement/Post";
+import { useContext, useState } from "react";
+import PostAnnouncement from "./create-announcement/CreateAnnouncement";
 import Container from "../../../components/container/Container";
 import Carousel from "./view-announcement/Carousel";
 import { JSXCSwal } from "../../../components/swal/Swal";
+import { UserProvider } from "../../../context/UserProvider";
+import ManageList from "./manage-post/ManageList";
 
 const Announcements = () => {
+   const { cookies } = useContext(UserProvider);
    const [isOpen, setIsOpen] = useState(false);
+   const [isManagePost, setIsManagePost] = useState(false);
    const [toView, setToView] = useState<ToViewType>({
       images: [],
       profile: "",
@@ -15,10 +19,10 @@ const Announcements = () => {
       datetime: "",
       descriptions: "",
    });
-
    const CreateAnnouncement = () => {
+      if (!cookies) return;
       JSXCSwal({
-         children: <PostAnnouncement />,
+         children: <PostAnnouncement cookies={cookies} />,
          showConfirmButton: false,
       });
    };
@@ -45,12 +49,26 @@ const Announcements = () => {
                   />
                   Image
                </button>
-               <button className="flex flex-row gap-2 bg-white items-center px-2 rounded-md">
-                  <BsGear />
-                  Manage Post
+
+               <button
+                  className="flex flex-row gap-2 bg-white items-center px-2 rounded-md"
+                  onClick={() => setIsManagePost((prev) => !prev)}
+               >
+                  {isManagePost ? (
+                     "Back"
+                  ) : (
+                     <>
+                        <BsGear />
+                        Manage Post
+                     </>
+                  )}
                </button>
             </div>
-            <AnnouncementList setToView={setToView} setIsOpen={setIsOpen} />
+            {isManagePost ? (
+               <ManageList setToView={setToView} setIsOpen={setIsOpen} />
+            ) : (
+               <AnnouncementList setToView={setToView} setIsOpen={setIsOpen} />
+            )}
          </Container>
          <Carousel isOpen={isOpen} setIsOpen={setIsOpen} toView={toView} />
       </>

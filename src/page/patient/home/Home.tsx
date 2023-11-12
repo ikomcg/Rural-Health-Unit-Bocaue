@@ -7,7 +7,7 @@ import Carousel from "./view-announcement/Carousel";
 import { useState } from "react";
 import moment from "moment";
 const Home = () => {
-   const { news } = NewsFetch();
+   const { news } = NewsFetch({});
    const [isOpen, setIsOpen] = useState(false);
    const [toView, setToView] = useState<ToViewType>({
       images: [],
@@ -19,7 +19,7 @@ const Home = () => {
    const OnViewPost = (item: AnnouncementType) => {
       setToView({
          images: item.images,
-         name: item.user.name,
+         name: item.user.full_name,
          descriptions: item.descriptions,
          datetime: moment(item.created_at.toISOString())
             .utcOffset(8)

@@ -1,9 +1,7 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
 import style from "../Style.module.scss";
-import { UserProvider } from "../../../../context/UserProvider";
 import { BlueButton } from "../../../../components/button/BlueButton";
-import { CreateAnnouncementsFrb } from "../../../../firebase/Announcement/Create";
 import uuid from "react-uuid";
 import {
    getStorage,
@@ -13,36 +11,45 @@ import {
 } from "firebase/storage";
 import CSwal from "../../../../components/swal/Swal";
 import Swal from "sweetalert2";
+import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { db } from "../../../../firebase/Base";
 
-const Post = () => {
-   const { cookies } = useContext(UserProvider);
-   const name = `${cookies?.first_name} ${cookies?.middle_name} ${cookies?.last_name}`;
+type ManagePostType = {
+   cookies: UserType;
+   announcementId: string;
+   payload: AnnouncementType;
+};
+
+const ManagePost = ({ cookies, payload, announcementId }: ManagePostType) => {
+   const name = `${cookies.first_name} ${cookies.middle_name} ${cookies.last_name}`;
    const profile =
       cookies?.profile !== "" ? cookies?.profile : "/image/profile.png";
 
    const [post, setPost] = useState<CreateAnnouncementType>({
-      user: {
-         name,
-         profile: cookies?.profile ?? "",
-         user_id: cookies?.id ?? "",
-      },
-      descriptions: "",
+      user: payload.user.id,
+      descriptions: payload.descriptions,
    });
    const [images, setImages] = useState<
       { id: string; url: string; link: string; status: string }[]
-   >([]);
-
+   >(
+      payload.images
+         ? [
+              ...payload.images.map((item) => ({
+                 id: uuid(),
+                 url: item,
+                 link: item,
+                 status: "done",
+              })),
+           ]
+         : []
+   );
+   console.log(post);
    const inputRef = useRef<HTMLInputElement>(null);
-
    const OnClose = () => {
-      setPost({
-         user: {
-            name,
-            profile: cookies?.profile ?? "",
-            user_id: cookies?.id ?? "",
-         },
+      setPost((prev) => ({
+         ...prev,
          descriptions: "",
-      });
+      }));
       setImages([]);
       Swal.close();
    };
@@ -126,27 +133,27 @@ const Post = () => {
       );
    };
 
-   const CreateAnnouncement = async () => {
+   const UpdateAnnouncement = async () => {
       const _images = images.map((item) => {
          return item.link;
       });
 
-      const create = await CreateAnnouncementsFrb({
+      await updateDoc(doc(db, "announcements", announcementId), {
          data: {
-            ...post,
+            desription: post.descriptions,
             images: [..._images],
+            update_at: serverTimestamp(),
          },
-      });
-
-      if (!create) {
-         CSwal({
-            icon: "error",
-            title: "Filed Post Announcement",
+      })
+         .then(() => {
+            OnClose();
+         })
+         .catch((err) => {
+            CSwal({
+               icon: "error",
+               title: err.code ?? "Network Error",
+            });
          });
-
-         return;
-      }
-      OnClose();
    };
 
    const isUploading = images.some((item) => item.status === "uploading");
@@ -154,7 +161,7 @@ const Post = () => {
       <div>
          <div className={style.create_post}>
             <div className={style.header_post}>
-               <h1>Create Post</h1>
+               <h1>Update Announcement</h1>
                <button onClick={OnClose}>
                   <AiFillCloseCircle />
                </button>
@@ -163,11 +170,7 @@ const Post = () => {
             <div className={style.content}>
                <div>
                   <img src={profile} alt="" />
-                  <h2>
-                     {name}
-                     <br />
-                     <span>{cookies?.role[0]}</span>
-                  </h2>
+                  <h2>{name}</h2>
                </div>
                <textarea
                   name="descriptions"
@@ -218,13 +221,13 @@ const Post = () => {
             <BlueButton
                disabled={isUploading}
                className="w-full text-center py-1"
-               onClick={CreateAnnouncement}
+               onClick={UpdateAnnouncement}
             >
-               Post
+               Save
             </BlueButton>
          </div>
       </div>
    );
 };
 
-export default Post;
+export default ManagePost;
