@@ -27,7 +27,9 @@ const Home = () => {
    const users = useFetchUsers({
       role: ["patient", "admin", "health-worker", "doctor"],
    });
-
+   const [hWCount, setHWCount] = useState<
+      { count: number; created_at: string }[] | null
+   >();
    const [patientCount, setPatientCount] = useState<
       { count: number; created_at: string }[] | null
    >();
@@ -35,9 +37,12 @@ const Home = () => {
       { count: number; created_at: string }[] | null
    >();
    const filterPatient = users?.filter((item) => item.role.includes("patient"));
-
+   const healthWorkers = users?.filter(
+      (item) =>
+         item.role.includes("health-worker") || item.role.includes("doctor")
+   );
    useEffect(() => {
-      if (!filterPatient || !users) return;
+      if (!filterPatient || !users || !healthWorkers) return;
       const sortPatient = filterPatient.sort((a, b) => {
          const dateA = new Date(a.created_at);
          const dateB = new Date(b.created_at);
@@ -45,6 +50,12 @@ const Home = () => {
          return dateA.getMonth() - dateB.getMonth();
       });
       const sortUsers = users.sort((a, b) => {
+         const dateA = new Date(a.created_at);
+         const dateB = new Date(b.created_at);
+
+         return dateA.getMonth() - dateB.getMonth();
+      });
+      const sortHW = healthWorkers.sort((a, b) => {
          const dateA = new Date(a.created_at);
          const dateB = new Date(b.created_at);
 
@@ -89,8 +100,28 @@ const Home = () => {
          []
       );
 
+      const countedHW: CountedData[] = sortHW.reduce(
+         (accumulator: CountedData[], current: UserType) => {
+            const existingEntry = accumulator.find((entry) => {
+               const entryDate = new Date(entry.created_at);
+               const currentDate = new Date(current.created_at);
+               return entryDate.getMonth() === currentDate.getMonth();
+            });
+
+            if (existingEntry) {
+               existingEntry.count += 1;
+            } else {
+               accumulator.push({ count: 1, created_at: current.created_at });
+            }
+
+            return accumulator;
+         },
+         []
+      );
+
       setPatientCount(countedDataPatient);
       setUserCount(countedDataUser);
+      setHWCount(countedHW);
    }, [users]);
 
    console.log(userCount);
@@ -99,7 +130,7 @@ const Home = () => {
          <div className="flex flex-row my-10">
             <Card count={filterPatient?.length ?? 0} name="Total Patient" />
             <Card count={users?.length ?? 0} name="Users" />
-            <Card count={50} name="Covid Cases" />
+            <Card count={hWCount?.length ?? 0} name="Health Workers" />
          </div>
          <Chart
             width="97%"
@@ -119,8 +150,8 @@ const Home = () => {
                      : [],
                },
                {
-                  name: "Covid Cases",
-                  data: [51, 31, 40, 100, 28, 42, 50],
+                  name: "Health Workers",
+                  data: hWCount ? [...hWCount.map((item) => item.count)] : [],
                },
             ]}
             options={{
