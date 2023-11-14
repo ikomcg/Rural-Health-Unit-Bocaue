@@ -25,10 +25,13 @@ const useFetchUsers = ({ role }: FetchUserType) => {
                   doc.data().middle_name
                } ${doc.data().last_name}`;
                const birthday = doc.data().birthday.toDate();
+               const created_at = doc.data().created_at.toDate();
+               
                return {
                   ...doc.data(),
                   full_name,
                   id: doc.id,
+                  created_at,
                   birthday,
                };
             }) as unknown as UserType[];

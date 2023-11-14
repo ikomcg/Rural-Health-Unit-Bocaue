@@ -12,28 +12,30 @@ type ReplyMessagesType = {
    message: string;
    id: string;
    from: string;
+   files?: { url: string; type: string }[];
 };
 
 export const CreateMessages = async ({
    message,
    id,
    from,
+   files,
 }: ReplyMessagesType) => {
-   if (message.trim() === "") return;
-
    const docData = {
       message: message,
       from,
+      files,
       created_at: serverTimestamp(),
       status: "not-del",
    };
+
+   console.log(docData);
 
    return await addDoc(collection(db, "inbox", id, "messages"), docData)
       .then((res) => {
          return res;
       })
       .catch(() => {
-
          return null;
       });
 };
@@ -58,7 +60,7 @@ export const UpdateMessage = async ({ id, data }: UpdateMessageType) => {
       })
       .catch((err) => {
          enqueueSnackbar(err, { variant: "error", autoHideDuration: 1000 });
-        
+
          return null;
       });
 };

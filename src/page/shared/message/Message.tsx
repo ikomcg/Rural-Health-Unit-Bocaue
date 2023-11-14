@@ -23,23 +23,47 @@ const Message = () => {
          queryDb,
          (snapshot) => {
             const data = snapshot.docs.map((doc) => {
-               const timestamp =
-                  doc.data().created_at.seconds * 1000 +
-                  Math.floor(doc.data().created_at.nanoseconds / 1e6);
-               const created_at = new Date(timestamp);
                return {
                   ...doc.data(),
                   id: doc.id,
-                  created_at,
+                  created_at: doc.data().created_at.toDate(),
                };
             }) as MessageType[];
 
-            setMessages(data);
+            HandleGapMinutes(data);
          },
          () => {
             setMessages(null);
          }
       );
+   };
+
+   const HandleGapMinutes = (messages: MessageType[]) => {
+      let data: MessageType[] = [];
+
+      for (let i = 0; i < messages.length; i++) {
+         if (i === 0) {
+            data = data.concat({ ...messages[0] });
+         } else {
+            const prevDatetime = messages[i - 1].created_at;
+            const currentDatetime = messages[i].created_at;
+            const gapInMilliseconds = currentDatetime - prevDatetime;
+            const gapInMinutes = gapInMilliseconds / (1000 * 60);
+
+            if (gapInMinutes > 30) {
+               data = data.concat({
+                  ...messages[i],
+                  gap: true,
+               });
+            } else {
+               data = data.concat({
+                  ...messages[i],
+                  gap: false,
+               });
+            }
+         }
+         setMessages(data);
+      }
    };
 
    return (

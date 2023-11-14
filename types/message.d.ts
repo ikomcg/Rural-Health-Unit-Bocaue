@@ -11,7 +11,7 @@ type Inbox = {
    from_name: string;
    from_profile: string;
    from_phone: string;
-   latest_message: string;
+   message: string;
    created_at?: any;
    delete_to: string[];
 };
@@ -22,5 +22,10 @@ type MessageType = {
    message: string;
    from: string;
    created_at: any;
+   files: {
+      url: string;
+      type: string;
+      name: string;
+   }[];
    gap?: boolean;
 };

@@ -1,10 +1,8 @@
-import React, { SetStateAction, useContext, useRef, useState } from "react";
-import DialogSlide from "../../../components/mui/dialog/SlideModal";
+import React, { useRef, useState } from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
-import style from "./Style.module.scss";
-import { UserProvider } from "../../../context/UserProvider";
-import { BlueButton } from "../../../components/button/BlueButton";
-import { CreateAnnouncementsFrb } from "../../../firebase/Announcement/Create";
+import style from "../Style.module.scss";
+import { BlueButton } from "../../../../components/button/BlueButton";
+import { CreateAnnouncementsFrb } from "../../../../firebase/Announcement/Create";
 import uuid from "react-uuid";
 import {
    getStorage,
@@ -12,24 +10,20 @@ import {
    uploadBytesResumable,
    getDownloadURL,
 } from "firebase/storage";
-import CSwal from "../../../components/swal/Swal";
+import CSwal from "../../../../components/swal/Swal";
+import Swal from "sweetalert2";
 
 type PostType = {
-   isPost: boolean;
-   setIsPost: React.Dispatch<SetStateAction<boolean>>;
+   cookies: UserType;
 };
-const Post = ({ isPost, setIsPost }: PostType) => {
-   const { cookies } = useContext(UserProvider);
-   const name = `${cookies?.first_name} ${cookies?.middle_name} ${cookies?.last_name}`;
-   const profile =
-      cookies?.profile !== "" ? cookies?.profile : "/image/profile.png";
 
+const Post = ({ cookies }: PostType) => {
+   const name = `${cookies.first_name} ${cookies.middle_name} ${cookies.last_name}`;
+   const profile =
+      cookies.profile !== "" ? cookies.profile : "/image/profile.png";
+   const [isSaving, setIsSaving] = useState(false);
    const [post, setPost] = useState<CreateAnnouncementType>({
-      user: {
-         name,
-         profile: cookies?.profile ?? "",
-         user_id: cookies?.id ?? "",
-      },
+      user: cookies.id,
       descriptions: "",
    });
    const [images, setImages] = useState<
@@ -37,18 +31,13 @@ const Post = ({ isPost, setIsPost }: PostType) => {
    >([]);
 
    const inputRef = useRef<HTMLInputElement>(null);
-
    const OnClose = () => {
       setPost({
-         user: {
-            name,
-            profile: cookies?.profile ?? "",
-            user_id: cookies?.id ?? "",
-         },
+         user: cookies.id,
          descriptions: "",
       });
       setImages([]);
-      setIsPost(false);
+      Swal.close();
    };
 
    const OnChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -134,6 +123,7 @@ const Post = ({ isPost, setIsPost }: PostType) => {
       const _images = images.map((item) => {
          return item.link;
       });
+      setIsSaving(true);
 
       const create = await CreateAnnouncementsFrb({
          data: {
@@ -141,6 +131,7 @@ const Post = ({ isPost, setIsPost }: PostType) => {
             images: [..._images],
          },
       });
+      setIsSaving(false);
 
       if (!create) {
          CSwal({
@@ -155,10 +146,10 @@ const Post = ({ isPost, setIsPost }: PostType) => {
 
    const isUploading = images.some((item) => item.status === "uploading");
    return (
-      <DialogSlide open={isPost} setOpen={OnClose}>
+      <div>
          <div className={style.create_post}>
             <div className={style.header_post}>
-               <h1>Create Post</h1>
+               <h1>Create Announcement</h1>
                <button onClick={OnClose}>
                   <AiFillCloseCircle />
                </button>
@@ -170,7 +161,6 @@ const Post = ({ isPost, setIsPost }: PostType) => {
                   <h2>
                      {name}
                      <br />
-                     <span>{cookies?.role[0]}</span>
                   </h2>
                </div>
                <textarea
@@ -220,14 +210,14 @@ const Post = ({ isPost, setIsPost }: PostType) => {
                />
             </label>
             <BlueButton
-               disabled={isUploading}
+               disabled={isUploading || isSaving}
                className="w-full text-center py-1"
                onClick={CreateAnnouncement}
             >
                Post
             </BlueButton>
          </div>
-      </DialogSlide>
+      </div>
    );
 };
 

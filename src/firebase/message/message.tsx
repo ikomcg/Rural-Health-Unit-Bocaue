@@ -39,6 +39,8 @@ export const CreateConversation = async ({
       },
    });
 
+   console.log(send_message);
+
    if (!send_message) {
       enqueueSnackbar("Message not sent!", { variant: "error" });
       return;
@@ -49,6 +51,7 @@ export const CreateConversation = async ({
    const create_messages = await CreateMessages({
       message: toMessage.message,
       id: _id,
+      files: [],
       from: from_id,
    });
 
@@ -65,41 +68,31 @@ export const CreateConversation = async ({
       autoHideDuration: 1000,
    });
 };
-// ---
 
-// --- update conversation
 type UpdateConversationType = {
    message: string;
    convoID: string;
    from_id: string;
+   files?: { url: string; type: string }[];
 };
 export const UpdateConversation = async ({
    message,
    convoID,
    from_id,
+   files,
 }: UpdateConversationType) => {
    await UpdateMessage({
       id: convoID,
       data: {
          update_at: serverTimestamp(),
-         latest_message: message,
+         latest_message: message.trim() === "" ? "sent a files" : message,
       },
    });
 
-   const create_messages = await CreateMessages({
+   await CreateMessages({
       message,
       id: convoID,
+      files,
       from: from_id,
    });
-
-   if (!create_messages) {
-      enqueueSnackbar("Message not sent!", {
-         variant: "error",
-         autoHideDuration: 1000,
-      });
-      return;
-   }
-
-   // enqueueSnackbar('Message sent!',{'variant' : 'success', 'autoHideDuration' : 1000} )
 };
-// ---

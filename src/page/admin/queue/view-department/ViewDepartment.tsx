@@ -17,36 +17,35 @@ const ViewDepartment = () => {
    const waitingQueue = queueLists?.filter((item) => item.status === "waiting");
 
    const NextQueueHandle = async () => {
-      if (!id || !waitingQueue) return;
+      if (!waitingQueue) return;
 
       setIsLoading(true);
       const nextQueue = waitingQueue[0];
-
+      console.log("Sdas2");
       if (currentQueue) {
-         await deleteDoc(doc(db, `queue`, id, "queue-list", currentQueue.id))
+         await deleteDoc(doc(db, "queue-list", currentQueue.id))
             .then(() => {})
-            .catch(() => {});
+            .catch((err) => console.log(err));
       }
-
-      await updateDoc(doc(db, `queue`, id, "queue-list", nextQueue.id), {
+      await updateDoc(doc(db, "queue-list", nextQueue.id), {
          status: "current",
       })
          .then(() => {})
          .catch((err) => {
+            console.log(err);
             CSwal({
                icon: "error",
                title: err.code ?? "Network Error",
             });
-         })
-         .finally(() => {
-            setIsLoading(false);
          });
+
+      setIsLoading(false);
    };
 
    const FinishQueueHandle = async () => {
-      if (!id || !currentQueue) return;
+      if (!currentQueue) return;
       setIsLoading(true);
-      await deleteDoc(doc(db, `queue`, id, "queue-list", currentQueue.id))
+      await deleteDoc(doc(db, "queue-list", currentQueue.id))
          .then(() => {})
          .catch((err) => {
             CSwal({
@@ -68,9 +67,11 @@ const ViewDepartment = () => {
          <h1 className="text-4xl text-blue text-center">RURAL HEALTH UNIT</h1>
          <h2 className="text-center text-2xl">BOCAUE, BULACAN</h2>
          {queueLists === undefined ? (
-            <h1 className="text-center text-gray-400 w-full">Loading...</h1>
+            <h1 className="text-center text-gray-400 w-full mt-20">
+               Loading...
+            </h1>
          ) : queueLists === null ? (
-            <h1 className="text-center text-gray-400">
+            <h1 className="text-center text-gray-400 mt-20">
                OOPS! Something went wrong
             </h1>
          ) : (

@@ -1,18 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type AnnouncementType = {
    id: string;
-   user: {
-      name: string;
-      profile: string;
-      user_id: string;
-   };
+   user: UserType;
    images: string[];
    descriptions: string;
    created_at: any;
 };
 type CreateAnnouncementType = {
    images?: string[];
-} & Pick<AnnouncementType, "descriptions" | "user">;
+   user: string;
+} & Pick<AnnouncementType, "descriptions">;
 
 type ToViewType = {
    images: string[];

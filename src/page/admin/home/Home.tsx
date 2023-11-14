@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import style from "./style.module.scss";
 import Chart from "react-apexcharts";
+import useFetchUsers from "../../../hooks/Users";
 
 type CardType = {
    count: number;
@@ -17,13 +18,119 @@ const Card: React.FC<CardType> = ({ count, name }) => {
    );
 };
 
+interface CountedData {
+   count: number;
+   created_at: string;
+}
+
 const Home = () => {
+   const users = useFetchUsers({
+      role: ["patient", "admin", "health-worker", "doctor"],
+   });
+   const [hWCount, setHWCount] = useState<
+      { count: number; created_at: string }[] | null
+   >();
+   const [patientCount, setPatientCount] = useState<
+      { count: number; created_at: string }[] | null
+   >();
+   const [userCount, setUserCount] = useState<
+      { count: number; created_at: string }[] | null
+   >();
+   const filterPatient = users?.filter((item) => item.role.includes("patient"));
+   const healthWorkers = users?.filter(
+      (item) =>
+         item.role.includes("health-worker") || item.role.includes("doctor")
+   );
+   useEffect(() => {
+      if (!filterPatient || !users || !healthWorkers) return;
+      const sortPatient = filterPatient.sort((a, b) => {
+         const dateA = new Date(a.created_at);
+         const dateB = new Date(b.created_at);
+
+         return dateA.getMonth() - dateB.getMonth();
+      });
+      const sortUsers = users.sort((a, b) => {
+         const dateA = new Date(a.created_at);
+         const dateB = new Date(b.created_at);
+
+         return dateA.getMonth() - dateB.getMonth();
+      });
+      const sortHW = healthWorkers.sort((a, b) => {
+         const dateA = new Date(a.created_at);
+         const dateB = new Date(b.created_at);
+
+         return dateA.getMonth() - dateB.getMonth();
+      });
+
+      const countedDataPatient: CountedData[] = sortPatient.reduce(
+         (accumulator: CountedData[], current: UserType) => {
+            const existingEntry = accumulator.find((entry) => {
+               const entryDate = new Date(entry.created_at);
+               const currentDate = new Date(current.created_at);
+               return entryDate.getMonth() === currentDate.getMonth();
+            });
+
+            if (existingEntry) {
+               existingEntry.count += 1;
+            } else {
+               accumulator.push({ count: 1, created_at: current.created_at });
+            }
+
+            return accumulator;
+         },
+         []
+      );
+
+      const countedDataUser: CountedData[] = sortUsers.reduce(
+         (accumulator: CountedData[], current: UserType) => {
+            const existingEntry = accumulator.find((entry) => {
+               const entryDate = new Date(entry.created_at);
+               const currentDate = new Date(current.created_at);
+               return entryDate.getMonth() === currentDate.getMonth();
+            });
+
+            if (existingEntry) {
+               existingEntry.count += 1;
+            } else {
+               accumulator.push({ count: 1, created_at: current.created_at });
+            }
+
+            return accumulator;
+         },
+         []
+      );
+
+      const countedHW: CountedData[] = sortHW.reduce(
+         (accumulator: CountedData[], current: UserType) => {
+            const existingEntry = accumulator.find((entry) => {
+               const entryDate = new Date(entry.created_at);
+               const currentDate = new Date(current.created_at);
+               return entryDate.getMonth() === currentDate.getMonth();
+            });
+
+            if (existingEntry) {
+               existingEntry.count += 1;
+            } else {
+               accumulator.push({ count: 1, created_at: current.created_at });
+            }
+
+            return accumulator;
+         },
+         []
+      );
+
+      setPatientCount(countedDataPatient);
+      setUserCount(countedDataUser);
+      setHWCount(countedHW);
+   }, [users]);
+
+   console.log(userCount);
    return (
       <>
          <div className="flex flex-row my-10">
-            <Card count={150} name="Total Patient" />
-            <Card count={25} name="Users" />
-            <Card count={50} name="Covid Cases" />
+            <Card count={filterPatient?.length ?? 0} name="Total Patient" />
+            <Card count={users?.length ?? 0} name="Users" />
+            <Card count={hWCount?.length ?? 0} name="Health Workers" />
          </div>
          <Chart
             width="97%"
@@ -32,15 +139,19 @@ const Home = () => {
             series={[
                {
                   name: "Patient",
-                  data: [31, 40, 28, 51, 42, 109, 150],
+                  data: patientCount
+                     ? [...patientCount.map((item) => item.count)]
+                     : [],
                },
                {
                   name: "Users",
-                  data: [11, 32, 45, 32, 34, 52, 25],
+                  data: userCount
+                     ? [...userCount.map((item) => item.count)]
+                     : [],
                },
                {
-                  name: "Covid Cases",
-                  data: [51, 31, 40, 100, 28, 42, 50],
+                  name: "Health Workers",
+                  data: hWCount ? [...hWCount.map((item) => item.count)] : [],
                },
             ]}
             options={{
@@ -48,8 +159,17 @@ const Home = () => {
                   enabled: false,
                },
                xaxis: {
-                  type: "category", // Set the x-axis type to 'category' for months
-                  categories: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"],
+                  type: "category",
+                  categories: userCount
+                     ? [
+                          ...userCount.map((item) =>
+                             new Date(item.created_at).toLocaleString(
+                                "default",
+                                { month: "short" }
+                             )
+                          ),
+                       ]
+                     : [],
                },
                colors: ["#008FFB", "#00E396", "#CED4DC"],
                tooltip: {

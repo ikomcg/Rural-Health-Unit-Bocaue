@@ -7,3 +7,6 @@ type QueueList = {
    status: "current" | "waiting";
    patient: string;
 };
+type QueueList2 = {
+   department: ServiceType;
+} & Omit<QueueList, "department">;

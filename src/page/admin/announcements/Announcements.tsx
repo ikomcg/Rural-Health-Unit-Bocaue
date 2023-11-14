@@ -1,13 +1,17 @@
-import AnnouncementList from "./List";
+import AnnouncementList from "./announcement-list/List";
 import { BsGear } from "react-icons/bs";
-import { useState } from "react";
-import Post from "./Post";
+import { useContext, useState } from "react";
+import PostAnnouncement from "./create-announcement/CreateAnnouncement";
 import Container from "../../../components/container/Container";
 import Carousel from "./view-announcement/Carousel";
+import { JSXCSwal } from "../../../components/swal/Swal";
+import { UserProvider } from "../../../context/UserProvider";
+import ManageList from "./manage-post/ManageList";
 
 const Announcements = () => {
-   const [isPost, setIsPost] = useState(false);
+   const { cookies } = useContext(UserProvider);
    const [isOpen, setIsOpen] = useState(false);
+   const [isManagePost, setIsManagePost] = useState(false);
    const [toView, setToView] = useState<ToViewType>({
       images: [],
       profile: "",
@@ -15,8 +19,12 @@ const Announcements = () => {
       datetime: "",
       descriptions: "",
    });
-   const HandleOnClick = () => {
-      setIsPost((prev) => !prev);
+   const CreateAnnouncement = () => {
+      if (!cookies) return;
+      JSXCSwal({
+         children: <PostAnnouncement cookies={cookies} />,
+         showConfirmButton: false,
+      });
    };
 
    return (
@@ -25,13 +33,13 @@ const Announcements = () => {
             <div className="flex flex-row gap-2 w-[90%] bg-blue rounded-md mx-auto py-2 px-4 mb-8">
                <button
                   className="rounded-md bg-white p-2 w-1/2 text-left mr-auto"
-                  onClick={HandleOnClick}
+                  onClick={CreateAnnouncement}
                >
                   New Announcement...
                </button>
                <button
                   className="flex flex-row gap-2 bg-white items-center px-2 rounded-md"
-                  onClick={HandleOnClick}
+                  onClick={CreateAnnouncement}
                >
                   <img
                      width="30"
@@ -41,15 +49,27 @@ const Announcements = () => {
                   />
                   Image
                </button>
-               <button className="flex flex-row gap-2 bg-white items-center px-2 rounded-md">
-                  <BsGear />
-                  Manage Post
+
+               <button
+                  className="flex flex-row gap-2 bg-white items-center px-2 rounded-md"
+                  onClick={() => setIsManagePost((prev) => !prev)}
+               >
+                  {isManagePost ? (
+                     "Back"
+                  ) : (
+                     <>
+                        <BsGear />
+                        Manage Post
+                     </>
+                  )}
                </button>
             </div>
-            <AnnouncementList setToView={setToView} setIsOpen={setIsOpen} />
+            {isManagePost ? (
+               <ManageList setToView={setToView} setIsOpen={setIsOpen} />
+            ) : (
+               <AnnouncementList setToView={setToView} setIsOpen={setIsOpen} />
+            )}
          </Container>
-
-         <Post isPost={isPost} setIsPost={setIsPost} />
          <Carousel isOpen={isOpen} setIsOpen={setIsOpen} toView={toView} />
       </>
    );

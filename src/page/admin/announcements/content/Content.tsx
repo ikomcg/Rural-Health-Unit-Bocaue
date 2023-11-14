@@ -1,11 +1,13 @@
 import MDEditor from "@uiw/react-md-editor";
-import style from "./Style.module.scss";
+import style from "../Style.module.scss";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import "./GridStyle.scss";
 import moment from "moment";
-import BasicMenu from "./Menu";
+import BasicMenu from "../announcement-list/Menu";
 import React, { useContext } from "react";
-import { UserProvider } from "../../../context/UserProvider";
+import { UserProvider } from "../../../../context/UserProvider";
+import ManagePost from "../manage-post/ManageAnnouncement";
+import CSwal, { JSXCSwal } from "../../../../components/swal/Swal";
 
 type ContentType = {
    item: AnnouncementType;
@@ -24,9 +26,31 @@ const Content = ({
    const image_len = item.images.length > 3 ? "4" : item.images.length;
 
    const OnDelete = async () => {
+      const swal = await CSwal({
+         icon: "info",
+         title: "Delete Announcement",
+         text: "Are you sure you want to delete Post?",
+         showCancelButton: true,
+      });
+
+      if (!swal) return;
+
       await OnDeletePost(item.id);
       setAnchorEl(null);
    };
+
+   const UpdateAnnouncement = (id: string, item: AnnouncementType) => {
+      if (!cookies) return;
+
+      JSXCSwal({
+         children: (
+            <ManagePost cookies={cookies} announcementId={id} payload={item} />
+         ),
+         showConfirmButton: false,
+      });
+      setAnchorEl(null);
+   };
+
    return (
       <div
          className={`flex flex-col w-[75%] border border-1 border-gray-400 rounded-lg pt-5 overflow-hidden mb-3 py-10`}
@@ -35,19 +59,20 @@ const Content = ({
          <div className="flex items-center gap-2 px-3 h-[10%] ">
             <img className={`${style.profile_img}`} src={item.user.profile} />
             <div className="flex flex-col">
-               <h1>{item.user.name}</h1>
+               <h1>{item.user.full_name}</h1>
                <span className="text-gray-600 text-sm">
                   {moment(item.created_at.toISOString())
                      .utcOffset(8)
                      .format("LLL")}
                </span>
             </div>
-            {cookies?.id === item.user.user_id && (
+            {cookies?.id === item.user.id && (
                <BasicMenu
                   OnDeletePost={OnDelete}
                   open={open}
                   anchorEl={anchorEl}
                   setAnchorEl={setAnchorEl}
+                  OnEditPost={() => UpdateAnnouncement(item.id, item)}
                />
             )}
          </div>

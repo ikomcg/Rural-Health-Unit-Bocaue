@@ -1,4 +1,12 @@
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import {
+   collection,
+   doc,
+   getDoc,
+   onSnapshot,
+   orderBy,
+   query,
+   where,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebase/Base";
 type List = {
@@ -45,25 +53,42 @@ const useFetchDepartment = () => {
 export default useFetchDepartment;
 
 export const useFetchQueueList = ({ id }: List) => {
-   const [queueLists, setQueueList] = useState<QueueList[] | null>();
+   const [queueLists, setQueueList] = useState<QueueList2[] | null>();
 
    const GetQueueLists = async () => {
-      if (!id) return;
-      const queryDB = query(
-         collection(db, `queue`, id, "queue-list"),
+      let queryDB = query(
+         collection(db, "queue-list"),
          orderBy("created_at", "asc")
       );
+
+      if (id) {
+         queryDB = query(
+            collection(db, "queue-list"),
+            where("department", "==", id),
+            orderBy("created_at", "asc")
+         );
+      }
+
       onSnapshot(
          queryDB,
          (snapshot) => {
-            const data = snapshot.docs.map((doc) => {
-               return {
-                  id: doc.id,
-                  created_at: doc.data().created_at.toDate(),
-                  ...doc.data(),
-               };
-            }) as unknown as QueueList[];
-            setQueueList(data);
+            Promise.all(
+               snapshot.docs.map(async (docu) => {
+                  const data = docu.data() as QueueList;
+                  const departmentRef = doc(db, "queue", data.department);
+                  const department = await getDoc(departmentRef);
+                  const dataDepartment = department.data() as ServiceType;
+
+                  return {
+                     ...data,
+                     id: docu.id,
+                     department: dataDepartment,
+                     created_at: docu.data().created_at.toDate(),
+                  };
+               }) as unknown as QueueList2[]
+            ).then((res) => {
+               setQueueList(res);
+            });
          },
          () => {
             setQueueList(null);

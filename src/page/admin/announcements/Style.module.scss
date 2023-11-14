@@ -23,6 +23,9 @@
    .header_post {
       display: flex;
       flex-flow: row nowrap;
+      border-bottom: 2px solid color.$blue;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
 
       h1 {
          font-weight: 600;
@@ -33,9 +36,6 @@
          color: rgba(128, 128, 128, 0.6);
          font-size: 24px;
       }
-      border-bottom: 2px solid color.$blue;
-      padding-bottom: 10px;
-      margin-bottom: 10px;
    }
 
    .content {
@@ -48,6 +48,7 @@
 
             img {
                max-width: 60px;
+               height: 50px;
                width: 100%;
                clip-path: circle();
             }

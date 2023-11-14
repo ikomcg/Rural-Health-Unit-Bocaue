@@ -133,6 +133,63 @@ const Messages = ({ activeInbox, messages }: MessagesType) => {
 
 export default Messages;
 
+const FileMessages = ({ message }: Pick<MessageType1, "message">) => {
+   const imageVideoFilter = message.files.filter(
+      (item) => item.type.includes("image") || item.type.includes("video")
+   );
+   const filesFilter = message.files.filter(
+      (item) => !item.type.includes("image") && !item.type.includes("video")
+   );
+
+   return (
+      <>
+         {message.files.length !== 0 ? (
+            <>
+               {imageVideoFilter.length !== 0 && (
+                  <div className={style.message_files}>
+                     {imageVideoFilter.map((item) => {
+                        if (item.type.includes("image")) {
+                           return (
+                              <img
+                                 key={item.type + item.url}
+                                 src={item.url}
+                                 alt={item.url}
+                              />
+                           );
+                        } else if (item.type.includes("video")) {
+                           return (
+                              <video controls>
+                                 <source src={item.url} type="video/mp4" />
+                              </video>
+                           );
+                        }
+                     })}
+                  </div>
+               )}
+               {filesFilter.length !== 0 && (
+                  <div
+                     className={style.docs_file}
+                     style={{
+                        display: "flex",
+                        flexFlow: "column",
+                        gap: "3px",
+                     }}
+                  >
+                     {filesFilter.map((item) => (
+                        <a href={item.url} target="_blank">
+                           {item.name}
+                        </a>
+                     ))}
+                  </div>
+               )}
+            </>
+         ) : (
+            <></>
+         )}
+      </>
+   );
+};
+
 type MessageType1 = {
    message: MessageType;
    onClick: () => void;
@@ -156,6 +213,7 @@ const Message = ({ message, onClick, id }: MessageType1) => {
                <hr />
             </span>
          )}
+
          {isMyMessage && (
             <MdDelete
                className={style.delete_message}
@@ -163,8 +221,17 @@ const Message = ({ message, onClick, id }: MessageType1) => {
                onClick={onClick}
             />
          )}
+         <div
+            className={`flex flex-col max-w-[70%] ${
+               isMyMessage ? "items-end" : "items-start"
+            }`}
+         >
+            <FileMessages message={message} />
+            {message.message.trim() !== "" && (
+               <p className="mt-1">{message.message}</p>
+            )}
+         </div>
 
-         <p>{message.message}</p>
          {message.status === "sending" && (
             <span className={style.status_message}>sending</span>
          )}

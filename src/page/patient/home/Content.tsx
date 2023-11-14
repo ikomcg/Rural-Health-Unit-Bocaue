@@ -16,7 +16,7 @@ const Content = ({ item, onClick }: ContentType) => {
          <div className="flex items-center gap-2 px-3 h-[10%] ">
             <img className={`${style.profile_img}`} src={item.user.profile} />
             <div className="flex flex-col">
-               <h1>{item.user.name}</h1>
+               <h1>{item.user.full_name}</h1>
                <span className="text-gray-600 text-sm">
                   {moment(item.created_at.toISOString())
                      .utcOffset(8)

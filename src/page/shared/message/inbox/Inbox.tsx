@@ -115,7 +115,7 @@ const Inbox = ({ activeInbox, setActiveInbox }: InboxType) => {
                                     {isReciever ? item.from_name : item.to_name}
                                  </h2>
                                  <p className="word-wrap line-clamp-1 text-sm">
-                                    {item.latest_message}
+                                    {item.message}
                                  </p>
                               </div>
                            </div>
