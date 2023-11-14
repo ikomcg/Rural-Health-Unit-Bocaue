@@ -54,6 +54,8 @@ const SendMessage = ({ anchorEl, open, setOpen, inbox }: SendMessageType) => {
             (item.from_id === toMessage.id && item.to_id === cookies?.id)
       );
 
+      OnClose();
+
       if (has_convo) {
          await UpdateConversation({
             message: toMessage.message,
@@ -83,8 +85,6 @@ const SendMessage = ({ anchorEl, open, setOpen, inbox }: SendMessageType) => {
             ],
          },
       });
-
-      OnClose();
    };
 
    useEffect(() => {

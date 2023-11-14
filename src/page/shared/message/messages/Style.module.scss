@@ -5,6 +5,7 @@
 .unsent_message_ {
    display: flex;
    align-items: center;
+
    width: 100%;
    position: relative;
    font-size: 14px;
@@ -13,11 +14,10 @@
       color: #ffffffff;
       padding: 4px 12px;
       border-radius: 14px;
-      max-width: 70%;
+      max-width: max-content;
    }
    .delete_message {
-      color: rgb(79, 79, 79);
-      margin-right: 2px;
+      color: rgb(255, 0, 0);
       cursor: pointer;
       display: none;
    }
@@ -28,7 +28,7 @@
       }
    }
 }
-
+// sender message
 .message {
    display: flex;
    align-items: start;
@@ -39,7 +39,7 @@
       color: #ffffffff;
       padding: 4px 12px;
       border-radius: 14px;
-      max-width: 70%;
+      max-width: max-content;
    }
 }
 .unsent_message_ {
@@ -90,5 +90,67 @@
       width: max-content;
       border-radius: 14px;
       font-size: 14px;
+   }
+}
+
+.image_upload {
+   display: flex;
+   gap: 10px;
+   overflow-x: auto;
+   overflow-y: hidden;
+   max-height: 100px;
+
+   div {
+      position: relative;
+      max-width: 100px;
+      img {
+         max-width: 100px;
+         height: 100%;
+      }
+      button {
+         position: absolute;
+         top: 2px;
+         right: 2px;
+         color: color.$blue;
+         z-index: 9999;
+      }
+   }
+}
+.docs_file {
+   display: grid;
+   justify-content: center;
+   align-items: center;
+   a {
+      font-size: 12px;
+      padding: 3px 5px;
+      border-radius: 5px;
+      background-color: rgba(128, 128, 128, 0.394) !important;
+      word-wrap: break-word;
+      white-space: normal;
+      overflow: hidden;
+      display: -webkit-box;
+      text-overflow: ellipsis;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      transition: transform ease-in-out 0.5s;
+      &:hover {
+         color: color.$blue;
+         transform: scale(1.1);
+      }
+   }
+}
+.message_files {
+   display: grid;
+   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+   column-gap: 5px;
+   row-gap: 5px;
+   width: 100%;
+
+   img,
+   video {
+      &:hover {
+         cursor: pointer;
+      }
+      border-radius: 10px;
    }
 }
