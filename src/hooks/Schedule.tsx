@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import { db } from "../firebase/Base";
 
 type ScheduleType = {
-   id: string | undefined;
+   id?: string;
 };
 
 const useFetchSchedulesService = ({ id }: ScheduleType) => {
@@ -54,10 +54,10 @@ const useFetchSchedulesService = ({ id }: ScheduleType) => {
 
 export default useFetchSchedulesService;
 
-interface MySchedule extends ScheduleType {
+interface Schedule extends ScheduleType {
    _limit: number;
 }
-export const useFetchMySchedules = ({ id, _limit }: MySchedule) => {
+export const useFetchMySchedules = ({ id, _limit }: Schedule) => {
    const [schedules, setSchedules] = useState<RequestService[] | null>();
 
    useEffect(() => {
@@ -108,7 +108,7 @@ export const useFetchMySchedules = ({ id, _limit }: MySchedule) => {
    return schedules;
 };
 
-export const useFetchAllSchedules = () => {
+export const useFetchAllSchedules = ({ _limit }: Schedule) => {
    const [schedules, setSchedules] = useState<RequestService[] | null>();
 
    useEffect(() => {
@@ -118,7 +118,8 @@ export const useFetchAllSchedules = () => {
    const GetSchedules = async () => {
       const queryDB = query(
          collection(db, "schedules"),
-         where("status", "==", "approve")
+         where("status", "==", "approve"),
+         limit(_limit)
       );
       onSnapshot(
          queryDB,

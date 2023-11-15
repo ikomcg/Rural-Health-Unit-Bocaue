@@ -10,7 +10,7 @@ import moment from "moment";
 import timeGridPlugin from "@fullcalendar/timegrid";
 
 const Schedule = () => {
-   const schedules = useFetchAllSchedules();
+   const schedules = useFetchAllSchedules({ _limit: 1000 });
 
    const MySchedules = useMemo(() => {
       if (!schedules) return [];
