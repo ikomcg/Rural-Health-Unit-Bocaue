@@ -17,6 +17,7 @@ import {
    ValidImageTypeListToEdit,
 } from "../../../../utils/FileValidator";
 import CSwal from "../../../../components/swal/Swal";
+import { CreateRapidApi } from "../../../../api/SMS/SendSMS";
 
 type ReplyType = {
    activeInbox: Inbox;
@@ -60,27 +61,27 @@ const Reply = ({ activeInbox }: ReplyType) => {
          from_id: cookies.id,
       });
 
-      // let phone;
+      let phone;
 
-      // if (activeInbox.from_phone === cookies.contact_no) {
-      //    phone = activeInbox.to_phone;
-      // } else {
-      //    phone = activeInbox.from_phone;
-      // }
+      if (activeInbox.from_user.contact_no === cookies.contact_no) {
+         phone = activeInbox.to_user.contact_no;
+      } else {
+         phone = activeInbox.from_user.contact_no;
+      }
 
-      // await CreateRapidApi({
-      //    endPoint: "sms/send",
-      //    token: "bWlrb2d1cnJvYmF0OjFFOUE4MkFFLTIyQTItQ0REMS1DRUFDLTNFQjEzRjgyNjhBMg==",
-      //    data: {
-      //       messages: [
-      //          {
-      //             from: "RHU",
-      //             body: `${cookies.full_name} sent a message`,
-      //             to: phone,
-      //          },
-      //       ],
-      //    },
-      // });
+      await CreateRapidApi({
+         endPoint: "sms/send",
+         token: "bWlrb2d1cnJvYmF0OjFFOUE4MkFFLTIyQTItQ0REMS1DRUFDLTNFQjEzRjgyNjhBMg==",
+         data: {
+            messages: [
+               {
+                  from: "RHU",
+                  body: `${cookies.full_name} sent a message`,
+                  to: phone,
+               },
+            ],
+         },
+      });
       setFiles([]);
    };
 
