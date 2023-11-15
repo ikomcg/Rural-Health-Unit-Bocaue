@@ -66,13 +66,13 @@ const Schedule = () => {
                   <li
                      key={item.id}
                      className="word-wrap line-clamp-1"
-                     title={`${item.patient_name} - ${moment(
+                     title={`${item.patient.full_name} - ${moment(
                         item.request_date.toISOString()
                      )
                         .utcOffset(8)
                         .format("LLLL")}} - ${item.service_name}`}
                   >
-                     {item.patient_name} -{" "}
+                     ${item.patient.full_name} -{" "}
                      {moment(item.request_date.toISOString())
                         .utcOffset(8)
                         .format("LLLL")}{" "}
