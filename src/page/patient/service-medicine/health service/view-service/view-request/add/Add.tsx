@@ -27,14 +27,10 @@ const AddRequest = ({ isPost, setIsPost }: PostType) => {
       e.preventDefault();
       if (!id || !cookies || !name) return;
 
-      const { first_name, last_name, middle_name } = cookies;
       seIsLoading(true);
       const _data = await CreateRequestScheduleFrb({
          data: {
             patient_id: cookies.id,
-            patient_name: `${first_name} ${middle_name} ${last_name}`,
-            patient_email: cookies.email,
-            patient_no: cookies.contact_no,
             service_id: id,
             service_name: name,
             request_date: TimeStampValue(requestDate),
