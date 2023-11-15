@@ -12,6 +12,7 @@ import {
 } from "firebase/storage";
 import CSwal from "../../../../components/swal/Swal";
 import Swal from "sweetalert2";
+import { ValidImageTypeListToEdit } from "../../../../utils/FileValidator";
 
 type PostType = {
    cookies: UserType;
@@ -46,6 +47,14 @@ const Post = ({ cookies }: PostType) => {
       if (!files || files.length === 0) return;
 
       for (let i = 0; i < files.length; i++) {
+         if (!ValidImageTypeListToEdit.includes(files[i].type)) {
+            CSwal({
+               icon: "info",
+               title: "Invalid File",
+            });
+            return;
+         }
+
          const _url = URL.createObjectURL(files[i]);
          const id = uuid();
          setImages((prev) => [

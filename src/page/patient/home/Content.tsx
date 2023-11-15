@@ -2,6 +2,8 @@ import MDEditor from "@uiw/react-md-editor";
 import style from "./Style.module.scss";
 import "./GridStyle.scss";
 import moment from "moment";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 type ContentType = {
    item: AnnouncementType;
@@ -36,7 +38,13 @@ const Content = ({ item, onClick }: ContentType) => {
                {item.images.map((item, i) => {
                   if (i > 3) return;
                   return (
-                     <img key={i} src={item} loading="lazy" onClick={onClick} />
+                     <LazyLoadImage
+                        key={i}
+                        src={item}
+                        alt={item}
+                        effect="blur"
+                        onClick={onClick}
+                     />
                   );
                })}
 
