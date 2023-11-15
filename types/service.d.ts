@@ -15,15 +15,12 @@ type ScheduleService = {
 
 type RequestService = {
    id: string;
-   patient_name: string;
    patient_id: string;
-   patient_email: string;
-   patient_no: string;
+   patient: UserType;
    service_id: string;
    service_name: string;
    request_date: any;
    created_at: any;
-   user: UserType;
    status: "pending" | "approve" | "decline";
 };
 type MedecineList = {
@@ -35,16 +32,12 @@ type MedecineList = {
 };
 type RequestMedecines = {
    id: string;
-   patient_name: string;
    patient_id: string;
-   patient_email: string;
-   patient_no: string;
-   service_id: string;
+   patient: UserType;
    service_name: string;
    medecine_name: string;
    medecine_id: string;
    quantity: any;
    created_at: any;
-   user: UserType;
    status: "pending" | "approve" | "decline";
 };

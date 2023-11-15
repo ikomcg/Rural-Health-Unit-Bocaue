@@ -63,7 +63,7 @@ const AddRequest = ({ isPost, setIsPost }: PostType) => {
          open={isPost}
          setOpen={OnClose}
       >
-         <div className="p-5">
+         <div className="p-3">
             <div className={style.header_post}>
                <h1>Request Schedule</h1>
                <button type="button" onClick={OnClose}>

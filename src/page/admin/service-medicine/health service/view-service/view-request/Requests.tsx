@@ -27,7 +27,7 @@ const Request = () => {
          if (requests === undefined) return;
 
          const filterData = requests.filter((item) =>
-            item.patient_name
+            item.patient.full_name
                .trim()
                .toLocaleLowerCase()
                .includes(search.toLocaleLowerCase().trim())
@@ -67,7 +67,7 @@ const Request = () => {
                         )
                            .utcOffset(8)
                            .format("LLL")} in RHU Bocaue has been ${status}`,
-                        to: request.patient_no,
+                        to: request.patient.contact_no,
                      },
                   ],
                },
@@ -133,7 +133,7 @@ const Request = () => {
             ) : (
                sliceRequest.map((item) => (
                   <tr key={item.id}>
-                     <td>{item.patient_name}</td>
+                     <td>{item.patient.full_name}</td>
                      <td>
                         {moment(item.request_date.toISOString())
                            .utcOffset(8)
