@@ -32,13 +32,13 @@ const Inbox = ({ activeInbox, setActiveInbox }: InboxType) => {
          const isReciever = cookies && item.to_id === cookies.id;
 
          if (isReciever) {
-            return item.from_name
+            return item.from_user.full_name
                .toLocaleLowerCase()
                .trim()
                .includes(search.toLocaleLowerCase().trim());
          }
 
-         return item.to_name
+         return item.to_user.full_name
             .toLocaleLowerCase()
             .trim()
             .includes(search.toLocaleLowerCase().trim());
@@ -88,8 +88,8 @@ const Inbox = ({ activeInbox, setActiveInbox }: InboxType) => {
                      InboxFilter.map((item) => {
                         const isReciever = cookies && item.to_id === cookies.id;
                         const profile = isReciever
-                           ? item.from_profile
-                           : item.to_profile;
+                           ? item.from_user.profile
+                           : item.to_user.profile;
 
                         return (
                            <div
@@ -112,7 +112,7 @@ const Inbox = ({ activeInbox, setActiveInbox }: InboxType) => {
                               />
                               <div className="flex flex-col pl-2">
                                  <h2 className="text-sm font-semibold">
-                                    {isReciever ? item.from_name : item.to_name}
+                                    {isReciever ? item.from_user.full_name : item.to_user.full_name}
                                  </h2>
                                  <p className="word-wrap line-clamp-1 text-sm">
                                     {item.message}
