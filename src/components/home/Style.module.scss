@@ -1,9 +1,23 @@
 @use "../../color";
 
 .covid_19_news {
-  &:hover {
-    h5 {
-      color: color.$blueLight;
-    }
-  }
+   &:hover {
+      color: color.$blueLight !important;
+   }
+}
+.container_card {
+   display: grid;
+   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+   row-gap: 20px;
+}
+
+@media (max-width: 1024px) {
+   .header_topic {
+      h3 {
+         font-size: 22px;
+      }
+      a {
+         font-size: 14px;
+      }
+   }
 }

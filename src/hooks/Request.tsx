@@ -39,22 +39,27 @@ const useFetchRequest = ({ id }: ParamsType) => {
                   const ref = doc(db, "users", data.patient_id);
 
                   const docSnap = await getDoc(ref);
-                  const _user = docSnap.data();
+                  const _user = docSnap.data() as UserType;
+                  let full_name: string = "";
+                  if (_user) {
+                     full_name = `${_user.first_name} ${_user.middle_name} ${_user.last_name}`;
+                  }
                   return {
                      ...data,
                      id: docu.id,
-                     user: _user,
+                     patient: { ..._user, full_name },
                      request_date: data.request_date.toDate(),
                   };
                }) as unknown as RequestService[]
             ).then((res) => {
                const data = res.filter(
-                  (item) => item.user.account_status === "active"
+                  (item) => item.patient.account_status === "active"
                );
                setRequests(data);
             });
          },
-         () => {
+         (err) => {
+            console.log(err);
             setRequests(null);
          }
       );
@@ -82,7 +87,7 @@ export const useFetchMyRequestMedecine = ({ id, user_id }: RerquestType) => {
       if (!id || !user_id) return;
 
       const queryDB = query(
-         collection(db, `medecine_request`),
+         collection(db, `medicine_request`),
          and(where("service_id", "==", id), where("patient_id", "==", user_id))
       );
       onSnapshot(
@@ -96,7 +101,8 @@ export const useFetchMyRequestMedecine = ({ id, user_id }: RerquestType) => {
             }) as unknown as RequestMedecines[];
             setRequests(data);
          },
-         () => {
+         (err) => {
+            console.log(err);
             setRequests(null);
          }
       );
@@ -116,7 +122,7 @@ export const useFetchRequestMedecine = ({ id }: ParamsType) => {
       if (!id) return;
 
       const queryDB = query(
-         collection(db, `medecine_request`),
+         collection(db, `medicine_request`),
          where("service_id", "==", id),
          orderBy("created_at", "asc")
       );
@@ -128,22 +134,28 @@ export const useFetchRequestMedecine = ({ id }: ParamsType) => {
                   const data = docu.data();
                   const ref = doc(db, "users", data.patient_id);
                   const docSnap = await getDoc(ref);
-                  const _user = docSnap.data();
+                  const _user = docSnap.data() as UserType;
+                  let full_name: string = "";
+                  if (_user) {
+                     full_name = `${_user.first_name} ${_user.middle_name} ${_user.last_name}`;
+                  }
+
                   return {
                      ...data,
                      id: docu.id,
-                     user: _user,
+                     patient: { ..._user, full_name },
                   };
                }) as unknown as RequestMedecines[]
             ).then((res) => {
                const data = res.filter(
-                  (item) => item.user.account_status === "active"
+                  (item) => item.patient.account_status === "active"
                );
 
                setRequests(data);
             });
          },
-         () => {
+         (err) => {
+            console.log(err);
             setRequests(null);
          }
       );

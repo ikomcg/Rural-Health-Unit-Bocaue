@@ -28,7 +28,7 @@ const Request = () => {
          if (medecine === undefined) return;
 
          const filterData = medecine.filter((item) =>
-            item.patient_name
+            item.patient.full_name
                .trim()
                .toLocaleLowerCase()
                .includes(search.toLocaleLowerCase().trim())
@@ -54,7 +54,7 @@ const Request = () => {
    const OnChangeStatus = async (request: RequestMedecines, status: string) => {
       if (!id) return;
 
-      await updateDoc(doc(db, "medecine_request", request.id), { status })
+      await updateDoc(doc(db, "medicine_request", request.id), { status })
          .then(async () => {
             await CreateRapidApi({
                endPoint: "sms/send",
@@ -64,7 +64,7 @@ const Request = () => {
                      {
                         from: "RHU",
                         body: `Your Request ${request.medecine_name} in RHU Bocaue has been ${status}`,
-                        to: request.patient_no,
+                        to: request.patient.contact_no,
                      },
                   ],
                },
@@ -129,7 +129,7 @@ const Request = () => {
             ) : (
                sliceMedecines.map((item) => (
                   <tr key={item.id}>
-                     <td>{item.patient_name}</td>
+                     <td>{item.patient.full_name}</td>
                      <td>{item.medecine_name}</td>
                      <td>{item.quantity}</td>
                      <td className="flex flex-col gap-2 justify-center items-center">

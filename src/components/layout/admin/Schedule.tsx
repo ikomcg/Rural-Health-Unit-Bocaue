@@ -1,78 +1,38 @@
 import style from "./style.module.scss";
-import { useContext, useEffect, useState } from "react";
-import { UserProvider } from "../../../context/UserProvider";
 import moment from "moment";
-import {
-   collection,
-   limit,
-   onSnapshot,
-   orderBy,
-   query,
-   where,
-} from "firebase/firestore";
-import { db } from "../../../firebase/Base";
+
+import { useFetchAllSchedules } from "../../../hooks/Schedule";
 
 const Schedule = () => {
-   const { cookies } = useContext(UserProvider);
-
-   const [requests, setRequests] = useState<RequestService[] | null>();
-
-   const GetRequests = async () => {
-      if (!cookies) return;
-
-      const queryDB = query(
-         collection(db, "schedules"),
-         where("status", "==", "approve"),
-         orderBy("request_date", "asc"),
-         limit(4)
-      );
-      onSnapshot(
-         queryDB,
-         (snapshot) => {
-            const data = snapshot.docs.map((doc) => {
-               return {
-                  ...doc.data(),
-                  id: doc.id,
-                  request_date: doc.data().request_date.toDate(),
-               };
-            }) as unknown as RequestService[];
-            setRequests(data);
-         },
-         () => {
-            setRequests(null);
-         }
-      );
-   };
-
-   useEffect(() => {
-      GetRequests();
-   }, []);
+   const schedules = useFetchAllSchedules({
+      _limit: 4,
+   });
 
    return (
       <div className={style.schedules}>
          <h2>Upcoming Schedules</h2>
 
          <ul>
-            {requests === undefined ? (
+            {schedules === undefined ? (
                <li className="text-center text-slate-400">Loading....</li>
-            ) : requests === null ? (
+            ) : schedules === null ? (
                <li className="text-center text-slate-400">
                   Error Get list Schedules
                </li>
-            ) : requests.length === 0 ? (
+            ) : schedules.length === 0 ? (
                <li className="text-center text-slate-400">No Schedules</li>
             ) : (
-               requests.map((item) => (
+               schedules.map((item) => (
                   <li
                      key={item.id}
                      className="word-wrap line-clamp-1"
-                     title={`${item.patient_name} - ${moment(
+                     title={`${item.patient.full_name} - ${moment(
                         item.request_date.toISOString()
                      )
                         .utcOffset(8)
                         .format("LLLL")}} - ${item.service_name}`}
                   >
-                     {item.patient_name} -{" "}
+                     {item.patient.full_name} -{" "}
                      {moment(item.request_date.toISOString())
                         .utcOffset(8)
                         .format("LLLL")}{" "}

@@ -33,14 +33,10 @@ const AddRequest = ({ isPost, setIsPost }: PostType) => {
       const medecine = medecines.find(
          (item) => item.id === payload.medecine_id
       );
-      const { first_name, last_name, middle_name } = cookies;
       setIsLoading(true);
       const _data = await CreateRequestMedecineFrb({
          data: {
             patient_id: cookies.id,
-            patient_name: `${first_name} ${middle_name} ${last_name}`,
-            patient_email: cookies.email,
-            patient_no: cookies.contact_no,
             service_id: id,
             service_name: name,
             medecine_name: medecine?.name ?? "",

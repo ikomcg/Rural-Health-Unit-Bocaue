@@ -46,7 +46,7 @@ const SendMessage = ({ anchorEl, open, setOpen, inbox }: SendMessageType) => {
 
       if (!cookies) return;
 
-      const { id, first_name, last_name, middle_name, profile } = cookies;
+      const { id } = cookies;
 
       const has_convo = inbox.find(
          (item) =>
@@ -66,9 +66,6 @@ const SendMessage = ({ anchorEl, open, setOpen, inbox }: SendMessageType) => {
          await CreateConversation({
             toMessage: toMessage,
             from_id: cookies.id,
-            from_name: `${first_name} ${middle_name} ${last_name}`,
-            from_profile: profile,
-            from_phone: cookies.contact_no,
          });
       }
 

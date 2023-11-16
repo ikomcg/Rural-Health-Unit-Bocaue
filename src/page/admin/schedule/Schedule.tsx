@@ -8,16 +8,16 @@ import * as bootstrap from "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import moment from "moment";
 import timeGridPlugin from "@fullcalendar/timegrid";
-   
+
 const Schedule = () => {
-   const schedules = useFetchAllSchedules();
+   const schedules = useFetchAllSchedules({ _limit: 1000 });
 
    const MySchedules = useMemo(() => {
       if (!schedules) return [];
 
       const mySchedules = schedules.map((item) => ({
          title: item.service_name,
-         patient: item.patient_name,
+         patient: item.patient.full_name,
          start: item.request_date,
       }));
 

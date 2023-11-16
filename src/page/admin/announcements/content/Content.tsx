@@ -8,6 +8,8 @@ import React, { useContext } from "react";
 import { UserProvider } from "../../../../context/UserProvider";
 import ManagePost from "../manage-post/ManageAnnouncement";
 import CSwal, { JSXCSwal } from "../../../../components/swal/Swal";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 type ContentType = {
    item: AnnouncementType;
@@ -88,7 +90,13 @@ const Content = ({
                {item.images.map((item, i) => {
                   if (i > 3) return;
                   return (
-                     <img key={i} src={item} loading="lazy" onClick={onClick} />
+                     <LazyLoadImage
+                        key={i}
+                        src={item}
+                        alt={item}
+                        effect="blur"
+                        onClick={onClick}
+                     />
                   );
                })}
 

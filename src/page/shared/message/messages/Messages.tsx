@@ -7,6 +7,8 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../firebase/Base";
 import { SimpleSnackbar } from "../../../../components/mui/alert/alert";
 import moment from "moment";
+import {LazyLoadImage} from 'react-lazy-load-image-component';
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 type MessagesType = {
    activeInbox: Inbox;
@@ -150,10 +152,11 @@ const FileMessages = ({ message }: Pick<MessageType1, "message">) => {
                      {imageVideoFilter.map((item) => {
                         if (item.type.includes("image")) {
                            return (
-                              <img
+                              <LazyLoadImage
                                  key={item.type + item.url}
                                  src={item.url}
                                  alt={item.url}
+                                 effect="blur"
                               />
                            );
                         } else if (item.type.includes("video")) {

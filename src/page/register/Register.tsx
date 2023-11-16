@@ -49,6 +49,7 @@ const initialPayload: Register = {
    physical_examination: "",
    profile: "",
    address: "",
+   barangay: "",
 };
 const Register = ({ open, setOpen }: RegisterType) => {
    const auth = getAuth();
@@ -63,7 +64,7 @@ const Register = ({ open, setOpen }: RegisterType) => {
    ) => {
       const { name, value } = e.target;
 
-      setPayload((prev) => ({ ...prev, [name]: value }));
+      setPayload((prev) => ({ ...prev, [name]: value.toLocaleUpperCase() }));
    };
 
    const OnChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -160,13 +161,13 @@ const Register = ({ open, setOpen }: RegisterType) => {
             setOpen={setOpen}
          >
             <div className={style.header}>
-               <h1>Rural Health Unit Bocaue, Bulacan</h1>
-               <h2>Patient Card</h2>
+               <h1>Rural Health Unit</h1>
+               <h2>ocaue, Bulacan</h2>
                <span className="text-blue mx-auto">Step {page}/2</span>
             </div>
             {page === 1 ? (
                <form
-                  className="flex flex-col gap-1 mx-3 mb-5"
+                  className="flex flex-col gap-1 mx-3 mb-3"
                   onSubmit={(e) => {
                      e.preventDefault();
                      if (payload.email.trim() && password.trim()) {
@@ -227,20 +228,18 @@ const Register = ({ open, setOpen }: RegisterType) => {
                   <PersonalInformation
                      payload={payload}
                      HandleOnChange={HandleOnChange}
-                     password={password}
-                     setPassword={setPassword}
                      OnChangeFile={OnChangeFile}
                   />
 
                   <div className="flex flex-row gap-3 justify-end items-center m-3 mt-5">
                      <BlueButton
-                        className="w-[8%] py-2"
+                        className="py-2"
                         type="button"
                         onClick={() => setPage(1)}
                      >
                         Prev
                      </BlueButton>
-                     <BlueButton className="w-[8%] py-2" type="submit">
+                     <BlueButton className="py-2" type="submit">
                         Register
                      </BlueButton>
                   </div>

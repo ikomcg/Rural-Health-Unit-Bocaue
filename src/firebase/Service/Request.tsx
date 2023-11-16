@@ -12,7 +12,6 @@ export const CreateRequestScheduleFrb = async ({ data }: Params) => {
          return res;
       })
       .catch(() => {
-
          return null;
       });
 };
@@ -23,12 +22,11 @@ export const CreateRequestMedecineFrb = async ({ data }: Params) => {
       created_at: serverTimestamp(),
    };
 
-   return await addDoc(collection(db, "medecine_request"), docData)
+   return await addDoc(collection(db, "medicine_request"), docData)
       .then((res) => {
          return res;
       })
       .catch(() => {
-
          return null;
       });
 };

@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import { db } from "../firebase/Base";
 
 type ScheduleType = {
-   id: string | undefined;
+   id?: string;
 };
 
 const useFetchSchedulesService = ({ id }: ScheduleType) => {
@@ -54,10 +54,10 @@ const useFetchSchedulesService = ({ id }: ScheduleType) => {
 
 export default useFetchSchedulesService;
 
-interface MySchedule extends ScheduleType {
+interface Schedule extends ScheduleType {
    _limit: number;
 }
-export const useFetchMySchedules = ({ id, _limit }: MySchedule) => {
+export const useFetchMySchedules = ({ id, _limit }: Schedule) => {
    const [schedules, setSchedules] = useState<RequestService[] | null>();
 
    useEffect(() => {
@@ -88,18 +88,19 @@ export const useFetchMySchedules = ({ id, _limit }: MySchedule) => {
                   return {
                      ...data,
                      id: docu.id,
-                     user: _user,
+                     patient: _user,
                      request_date: data.request_date.toDate(),
                   };
                }) as unknown as RequestService[]
             ).then((res) => {
                const data = res.filter(
-                  (item) => item.user.account_status === "active"
+                  (item) => item.patient.account_status === "active"
                );
                setSchedules(data);
             });
          },
-         () => {
+         (err) => {
+            console.log(err);
             setSchedules(null);
          }
       );
@@ -108,7 +109,7 @@ export const useFetchMySchedules = ({ id, _limit }: MySchedule) => {
    return schedules;
 };
 
-export const useFetchAllSchedules = () => {
+export const useFetchAllSchedules = ({ _limit }: Schedule) => {
    const [schedules, setSchedules] = useState<RequestService[] | null>();
 
    useEffect(() => {
@@ -118,7 +119,8 @@ export const useFetchAllSchedules = () => {
    const GetSchedules = async () => {
       const queryDB = query(
          collection(db, "schedules"),
-         where("status", "==", "approve")
+         where("status", "==", "approve"),
+         limit(_limit)
       );
       onSnapshot(
          queryDB,
@@ -129,23 +131,28 @@ export const useFetchAllSchedules = () => {
                   const ref = doc(db, "users", data.patient_id);
 
                   const docSnap = await getDoc(ref);
-                  const _user = docSnap.data();
+                  const _user = docSnap.data() as UserType;
+                  const full_name = `${_user.first_name} ${_user.middle_name} ${_user.last_name}`;
 
                   return {
                      ...data,
                      id: docu.id,
-                     user: _user,
+                     patient: {
+                        ..._user,
+                        full_name,
+                     },
                      request_date: data.request_date.toDate(),
                   };
                }) as unknown as RequestService[]
             ).then((res) => {
                const data = res.filter(
-                  (item) => item.user.account_status === "active"
+                  (item) => item.patient.account_status === "active"
                );
                setSchedules(data);
             });
          },
-         () => {
+         (err) => {
+            console.log(err);
             setSchedules(null);
          }
       );

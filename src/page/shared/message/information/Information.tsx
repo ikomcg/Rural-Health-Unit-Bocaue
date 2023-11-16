@@ -11,8 +11,8 @@ const Information = ({ activeInbox }: InformationType) => {
    const { cookies } = useContext(UserProvider);
    const isReciever = cookies?.id === activeInbox.to_id;
    const profile = isReciever
-      ? activeInbox.from_profile
-      : activeInbox.to_profile;
+      ? activeInbox.from_user.profile
+      : activeInbox.to_user.profile;
    return (
       <div className="w-[20%] ml-1">
          <div className="w-full flex flex-col items-center mt-10">
@@ -27,7 +27,9 @@ const Information = ({ activeInbox }: InformationType) => {
                }}
             />
             <h2 className="text-md font-semibold">
-               {isReciever ? activeInbox.from_name : activeInbox.to_name}
+               {isReciever
+                  ? activeInbox.from_user.full_name
+                  : activeInbox.to_user.full_name}
             </h2>
             <span className="text-xs">STI Student</span>
          </div>

@@ -138,7 +138,7 @@ const NewService = ({ path, storagepPath }: PostType) => {
                   id="name"
                   placeholder="Type here..."
                   onChange={(e) => {
-                     setTitle(e.target.value);
+                     setTitle(e.target.value.toLocaleUpperCase());
                   }}
                />
             </div>

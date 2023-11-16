@@ -1,8 +1,3 @@
-import HealthCondition from "./landing-page/HealthCondition";
-import LivingHealthy from "./landing-page/Living_Healthy";
-import Main from "./landing-page/Main";
-import News from "./landing-page/News";
-import Newsletter from "./landing-page/Newsletter";
 import {
    getAuth,
    isSignInWithEmailLink,
@@ -14,6 +9,7 @@ import { db } from "../firebase/Base";
 import { TimeStampValue } from "../shared/TimeStamp";
 import { useContext, useEffect } from "react";
 import { UserProvider } from "../context/UserProvider";
+import Login from "./login/Login";
 
 const LandingPage = () => {
    const auth = getAuth();
@@ -82,13 +78,19 @@ const LandingPage = () => {
    };
 
    return (
-      <>
-         <Main />
-         <LivingHealthy />
-         <News />
-         <Newsletter />
-         <HealthCondition />
-      </>
+      <div className="flex flex-row justify-around items-center h-screen">
+         <div className="flex flex-col items-center justify-center w-1/2 px-5">
+            <h1 className="text-blue text-4xl font-bold text-center">RURAL HEALTH UNIT</h1>
+            <span>Bocaue Bulacan</span>
+            <p className="text-xl my-3">
+               RURAL HEALTH UNIT provide medical advice, diagnosis, or
+               treatment.
+            </p>
+         </div>
+         <div className="flex justify-center w-1/2">
+            <Login />
+         </div>
+      </div>
    );
 };
 

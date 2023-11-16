@@ -1,8 +1,8 @@
 import FastingDiet from "../../images/section-topic/img-1.jpg";
 import FastFood from "../../images/section-topic/img-2.jpg";
 import DietRigh from "../../images/section-topic/img-3.jpg";
-import Topic from "../../components/home/Topic";
-
+import Topic from "./Topic";
+import style from "./style.module.scss";
 import "./style.scss";
 
 const topic = [
@@ -18,9 +18,9 @@ const topic = [
 
 const Main = () => {
    return (
-      <main className="my-10">
-         <div className="wrap flex justify-between ">
-            <div className="left-topic relative flex w-7/12 rounded-xl overflow-hidden cursor-pointer hover:scale-101">
+      <main className={style.container}>
+         <div className="wrap">
+            <div className="relative rounded-xl overflow-hidden cursor-pointer hover:scale-101">
                <img loading="lazy" src={FastingDiet} />
                <div className="topic-info absolute bottom-5 p-3">
                   <h3 className="text-2xl text-blue font-bold">
@@ -33,7 +33,7 @@ const Main = () => {
                </div>
             </div>
 
-            <div className="right-topic flex justify-between flex-col right-topic w-2/5">
+            <div className={style.right_topic}>
                <Topic topic={topic} />
             </div>
          </div>
