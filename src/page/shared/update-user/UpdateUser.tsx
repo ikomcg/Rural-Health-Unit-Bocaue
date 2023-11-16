@@ -32,7 +32,9 @@ const UpdateUser = ({ setPayload, payload }: UpdateInventoryType) => {
    ) => {
       const { name, value } = e.target;
 
-      setPayload((prev) => (prev ? { ...prev, [name]: value } : null));
+      setPayload((prev) =>
+         prev ? { ...prev, [name]: value.toLocaleUpperCase() } : null
+      );
    };
 
    const OnChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -171,8 +173,8 @@ const UpdateUser = ({ setPayload, payload }: UpdateInventoryType) => {
             onSubmit={UpdatePatient}
          >
             <div className={style.header}>
-               <h1>Rural Health Unit Bocaue, Bulacan</h1>
-               <h2>Patient Card</h2>
+               <h1>Rural Health Unit</h1>
+               <h2>Bocaue, Bulacan</h2>
             </div>
             <PersonalInformation
                payload={payload}

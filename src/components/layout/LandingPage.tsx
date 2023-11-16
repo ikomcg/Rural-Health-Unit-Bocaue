@@ -1,6 +1,4 @@
-import Header from "../header/Header";
 import { Outlet, useNavigate } from "react-router-dom";
-import Footer from "../footer/Footer";
 import { useContext, useEffect } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, onSnapshot } from "firebase/firestore";
@@ -61,13 +59,7 @@ const LandingPage = () => {
    }, []);
 
    return (
-      <div className="flex flex-col justify-between h-screen">
-         <div>
-            <Header />
-            <Outlet />
-         </div>
-         <Footer />
-      </div>
+     <Outlet/>
    );
 };
 

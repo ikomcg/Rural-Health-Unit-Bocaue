@@ -16,4 +16,5 @@ type Register = {
    physical_examination: string;
    profile: string;
    address: string;
+   barangay: string;
 };

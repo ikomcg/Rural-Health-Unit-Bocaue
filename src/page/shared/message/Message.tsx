@@ -32,7 +32,8 @@ const Message = () => {
 
             HandleGapMinutes(data);
          },
-         () => {
+         (err) => {
+            console.log(err)
             setMessages(null);
          }
       );

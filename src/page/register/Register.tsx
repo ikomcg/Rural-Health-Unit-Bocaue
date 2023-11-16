@@ -49,6 +49,7 @@ const initialPayload: Register = {
    physical_examination: "",
    profile: "",
    address: "",
+   barangay: "",
 };
 const Register = ({ open, setOpen }: RegisterType) => {
    const auth = getAuth();
@@ -63,7 +64,7 @@ const Register = ({ open, setOpen }: RegisterType) => {
    ) => {
       const { name, value } = e.target;
 
-      setPayload((prev) => ({ ...prev, [name]: value }));
+      setPayload((prev) => ({ ...prev, [name]: value.toLocaleUpperCase() }));
    };
 
    const OnChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -160,8 +161,8 @@ const Register = ({ open, setOpen }: RegisterType) => {
             setOpen={setOpen}
          >
             <div className={style.header}>
-               <h1>Rural Health Unit Bocaue, Bulacan</h1>
-               <h2>Patient Card</h2>
+               <h1>Rural Health Unit</h1>
+               <h2>ocaue, Bulacan</h2>
                <span className="text-blue mx-auto">Step {page}/2</span>
             </div>
             {page === 1 ? (
@@ -227,8 +228,6 @@ const Register = ({ open, setOpen }: RegisterType) => {
                   <PersonalInformation
                      payload={payload}
                      HandleOnChange={HandleOnChange}
-                     password={password}
-                     setPassword={setPassword}
                      OnChangeFile={OnChangeFile}
                   />
 

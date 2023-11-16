@@ -1,4 +1,4 @@
-import React, { SetStateAction } from "react";
+import React from "react";
 import { Input, Select } from "../../components/forms/Form";
 import style from "./style.module.scss";
 
@@ -7,16 +7,35 @@ type PersonalInformationType = {
    HandleOnChange: (
       e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
    ) => void;
-   setPassword: React.Dispatch<SetStateAction<string>>;
    payload: Register;
-   password: string;
 };
-
+export const BARANGAYS = [
+   "Antipona",
+   "Bagumbayan",
+   "Bambang",
+   "Batia",
+   "Biñang 1st",
+   "Biñang 2nd",
+   "Bolacan",
+   "Bundukan",
+   "Bunlo",
+   "Caingin",
+   "Duhat",
+   "Igulot",
+   "Lolomboy",
+   "Poblacion",
+   "Sulucan",
+   "Taal",
+   "Tambobong",
+   "Turo",
+   "Tambobong",
+];
 const PersonalInformation: React.FC<PersonalInformationType> = ({
    payload,
    HandleOnChange,
    OnChangeFile,
 }) => {
+  
    return (
       <div className="px-3 md:px-5">
          <h3 className="text-xl mb-5 text-blue font-semibold">
@@ -136,6 +155,23 @@ const PersonalInformation: React.FC<PersonalInformationType> = ({
                   value={payload.marital_status}
                   onChange={HandleOnChange}
                />
+               <Select
+                  name="barangay"
+                  required
+                  placeholder="Barangay"
+                  label="Branggay"
+                  value={payload.barangay}
+                  onChange={HandleOnChange}
+               >
+                  <option value="" disabled>
+                     ----
+                  </option>
+                  {BARANGAYS.map((item) => (
+                     <option key={item} value={item}>
+                        {item}
+                     </option>
+                  ))}
+               </Select>
                <Input
                   type="text"
                   name="address"

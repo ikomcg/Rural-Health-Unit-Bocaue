@@ -99,7 +99,8 @@ export const useFetchMySchedules = ({ id, _limit }: Schedule) => {
                setSchedules(data);
             });
          },
-         () => {
+         (err) => {
+            console.log(err);
             setSchedules(null);
          }
       );
@@ -150,7 +151,8 @@ export const useFetchAllSchedules = ({ _limit }: Schedule) => {
                setSchedules(data);
             });
          },
-         () => {
+         (err) => {
+            console.log(err);
             setSchedules(null);
          }
       );

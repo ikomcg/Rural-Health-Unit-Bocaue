@@ -5,7 +5,6 @@ import { BiErrorCircle } from "react-icons/bi";
 import { SignInWithEmailAndPassword } from "../../firebase/SignIn";
 import { InputPassword, Input } from "../../components/forms/Form";
 import { LightBlueButton } from "../../components/button/BlueButton";
-import DialogSlide from "../../components/mui/dialog/SlideModal";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/Base";
 import { GetDocFireBase } from "../../firebase/Document";
@@ -14,11 +13,7 @@ import Register from "../register/Register";
 import Swal from "sweetalert2";
 import ForgotPassword from "../forgot-password/Forgot-Password";
 
-type LoginType = {
-   open: boolean;
-   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
-const Login = ({ open, setOpen }: LoginType) => {
+const Login = () => {
    const navigate = useNavigate();
    const { setLoading, saveCookies } = useContext(UserProvider);
    const [isRegister, setIsRegister] = useState(false);
@@ -152,7 +147,6 @@ const Login = ({ open, setOpen }: LoginType) => {
             saveCookies(cookie);
             return cookie;
          } else {
-            setOpen(false);
             Swal.fire({
                icon: "info",
                title: "Account not Verify",
@@ -171,12 +165,7 @@ const Login = ({ open, setOpen }: LoginType) => {
 
    return (
       <>
-         <DialogSlide
-            open={open}
-            setOpen={setOpen}
-            fullWidth={true}
-            maxWidth={"xs"}
-         >
+         <div className="shadow w-[60%]">
             <div className={style.container}>
                <div className={style.header_login}>
                   <h2 className="text-2xl font-semibold">Login</h2>
@@ -217,7 +206,6 @@ const Login = ({ open, setOpen }: LoginType) => {
                            type="button"
                            className="text-sm text-blue"
                            onClick={() => {
-                              setOpen(false);
                               setForgotPassword(true);
                            }}
                         >
@@ -236,7 +224,6 @@ const Login = ({ open, setOpen }: LoginType) => {
                         type="button"
                         className="text-sm"
                         onClick={() => {
-                           setOpen(false);
                            setIsRegister(true);
                         }}
                      >
@@ -248,7 +235,7 @@ const Login = ({ open, setOpen }: LoginType) => {
                   </div>
                </div>
             </div>
-         </DialogSlide>
+         </div>
          {isRegister && <Register open={isRegister} setOpen={setIsRegister} />}
          {forgotPassword && (
             <ForgotPassword open={forgotPassword} setOpen={setForgotPassword} />

@@ -48,7 +48,8 @@ const useFetchMyRequest = ({ id, user_id }: RerquestType) => {
             }) as unknown as RequestService[];
             setRequests(data);
          },
-         () => {
+         (err) => {
+            console.log(err);
             setRequests(null);
          }
       );

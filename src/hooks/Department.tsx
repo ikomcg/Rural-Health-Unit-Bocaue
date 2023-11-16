@@ -90,7 +90,8 @@ export const useFetchQueueList = ({ id }: List) => {
                setQueueList(res);
             });
          },
-         () => {
+         (err) => {
+            console.log(err);
             setQueueList(null);
          }
       );

@@ -54,7 +54,7 @@ const Request = () => {
    const OnChangeStatus = async (request: RequestMedecines, status: string) => {
       if (!id) return;
 
-      await updateDoc(doc(db, "medecine_request", request.id), { status })
+      await updateDoc(doc(db, "medicine_request", request.id), { status })
          .then(async () => {
             await CreateRapidApi({
                endPoint: "sms/send",

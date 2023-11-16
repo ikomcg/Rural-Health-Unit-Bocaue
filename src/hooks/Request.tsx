@@ -58,7 +58,8 @@ const useFetchRequest = ({ id }: ParamsType) => {
                setRequests(data);
             });
          },
-         () => {
+         (err) => {
+            console.log(err);
             setRequests(null);
          }
       );
@@ -86,7 +87,7 @@ export const useFetchMyRequestMedecine = ({ id, user_id }: RerquestType) => {
       if (!id || !user_id) return;
 
       const queryDB = query(
-         collection(db, `medecine_request`),
+         collection(db, `medicine_request`),
          and(where("service_id", "==", id), where("patient_id", "==", user_id))
       );
       onSnapshot(
@@ -100,7 +101,8 @@ export const useFetchMyRequestMedecine = ({ id, user_id }: RerquestType) => {
             }) as unknown as RequestMedecines[];
             setRequests(data);
          },
-         () => {
+         (err) => {
+            console.log(err);
             setRequests(null);
          }
       );
@@ -120,7 +122,7 @@ export const useFetchRequestMedecine = ({ id }: ParamsType) => {
       if (!id) return;
 
       const queryDB = query(
-         collection(db, `medecine_request`),
+         collection(db, `medicine_request`),
          where("service_id", "==", id),
          orderBy("created_at", "asc")
       );
@@ -152,7 +154,8 @@ export const useFetchRequestMedecine = ({ id }: ParamsType) => {
                setRequests(data);
             });
          },
-         () => {
+         (err) => {
+            console.log(err);
             setRequests(null);
          }
       );

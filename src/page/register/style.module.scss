@@ -38,10 +38,13 @@
 
    article {
       margin-bottom: 10px;
+      h1 {
+         font-size: 32px;
+         color: color.$blue;
+      }
       h2 {
          font-size: 18px;
          font-weight: 500;
-         color: color.$blue;
       }
       p {
          margin-bottom: 5px;

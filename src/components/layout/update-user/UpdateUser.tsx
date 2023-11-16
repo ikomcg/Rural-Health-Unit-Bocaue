@@ -190,8 +190,8 @@ const UpdateUser = ({ setPayload, payload }: UpdateInventoryType) => {
             onSubmit={UpdateAccount}
          >
             <div className={style.header}>
-               <h1>Rural Health Unit Bocaue, Bulacan</h1>
-               <h2>Patient Card</h2>
+               <h1>Rural Health Unit </h1>
+               <h2>Bocaue, Bulacan</h2>
             </div>
             <PersonalInformation
                payload={payload}

@@ -74,7 +74,8 @@ const InboxFetch = (
                      }
                   });
                },
-               () => {
+               (err) => {
+                  console.log(err);
                   setInbox(null);
                }
             );

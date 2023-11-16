@@ -3,6 +3,7 @@ import { Input, Select } from "../../../components/forms/Form";
 import style from "./style.module.scss";
 import { FormControlLabel } from "@mui/material";
 import { IOSSwitch } from "../../../components/mui/switch/Switch";
+import { BARANGAYS } from "../../register/PersonalInformation";
 
 type PersonalInformationType = {
    HandleOnChange: (
@@ -151,6 +152,23 @@ const PersonalInformation: React.FC<PersonalInformationType> = ({
                   value={payload.marital_status}
                   onChange={HandleOnChange}
                />
+               <Select
+                  name="barangay"
+                  required
+                  placeholder="Barangay"
+                  label="Branggay"
+                  value={payload.barangay}
+                  onChange={HandleOnChange}
+               >
+                  <option value="" disabled>
+                     ----
+                  </option>
+                  {BARANGAYS.map((item) => (
+                     <option key={item} value={item}>
+                        {item}
+                     </option>
+                  ))}
+               </Select>
                <Input
                   type="text"
                   name="address"
@@ -161,9 +179,9 @@ const PersonalInformation: React.FC<PersonalInformationType> = ({
                   onChange={HandleOnChange}
                />
                <FormControlLabel
-                  className=" mt-auto font-semibold"
+                  className="mt-auto font-semibold"
                   label="Verify"
-                  labelPlacement="start"
+                  labelPlacement="top"
                   control={
                      <IOSSwitch
                         sx={{ m: 1 }}
