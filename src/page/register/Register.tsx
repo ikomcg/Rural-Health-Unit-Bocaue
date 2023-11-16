@@ -162,7 +162,7 @@ const Register = ({ open, setOpen }: RegisterType) => {
          >
             <div className={style.header}>
                <h1>Rural Health Unit</h1>
-               <h2>ocaue, Bulacan</h2>
+               <h2>Bocaue, Bulacan</h2>
                <span className="text-blue mx-auto">Step {page}/2</span>
             </div>
             {page === 1 ? (
