@@ -4,10 +4,10 @@
   background-color: color.$darkVar;
   width: 100%;
   color: white;
-  padding: 14px 0;
+  padding: 15px 10px;
 }
 .button_sign_up {
-  width: 30%;
+  
   &:hover {
     color: color.$blueLight;
   }

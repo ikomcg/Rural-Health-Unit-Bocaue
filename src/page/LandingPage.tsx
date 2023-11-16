@@ -2,7 +2,6 @@ import HealthCondition from "./landing-page/HealthCondition";
 import LivingHealthy from "./landing-page/Living_Healthy";
 import Main from "./landing-page/Main";
 import News from "./landing-page/News";
-import Newsletter from "./landing-page/Newsletter";
 import {
    getAuth,
    isSignInWithEmailLink,
@@ -86,7 +85,6 @@ const LandingPage = () => {
          <Main />
          <LivingHealthy />
          <News />
-         <Newsletter />
          <HealthCondition />
       </>
    );

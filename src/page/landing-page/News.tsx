@@ -12,7 +12,7 @@ const News = () => {
       <div className="covid-news wrap">
          <TopicHeader title="Covid-19 News" />
          <div
-            className={`flex flex-row flex-wrap gap-y-5 ${
+            className={`flex flex-col md:flex-row flex-wrap gap-y-5 ${
                isLoading && "justify-center"
             }`}
          >

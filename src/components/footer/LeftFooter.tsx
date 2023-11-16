@@ -13,9 +13,9 @@ const socialIcons = [
 
 const LeftFooter = () => {
    return (
-      <div className="left-footer w-1/2 px-5">
+      <div className="left-footer w-full md:w-1/2 px-2 sms:px-5">
          <div className="flex flex-col justify-center items-center my-5">
-            <h1 className="text-5xl first-letter:text-blue font-bold">
+            <h1 className=" text-3xl md:text-5xl first-letter:text-blue font-bold">
                RURAL HEALTH UNIT
             </h1>
             <ul className="flex flex-row my-5 gap-5 ">
@@ -26,11 +26,11 @@ const LeftFooter = () => {
                ))}
             </ul>
          </div>
-         <div className="m-8">
+         <div className="m-3 md:m-8">
             <span className="text-2xl text-black font-bold">
                Get our wellness newsletter
             </span>
-            <p className="text-lg tex-black text-normal">
+            <p className="text-md sm:text-lg tex-black text-normal">
                Filter out the noise and nurture your inbox with health and
                wellness advice that's inclusive and rooted in medical expertise.
             </p>

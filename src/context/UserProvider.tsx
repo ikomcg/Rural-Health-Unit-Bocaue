@@ -54,17 +54,19 @@ const Provider = ({ children }: ProviderType) => {
          }}
       >
          {children}
-         <Backdrop
-            className="flex flex-col items-center"
-            sx={{
-               color: "#fff",
-               zIndex: (theme) => theme.zIndex.drawer + 9999,
-            }}
-            open={isLoading.isLoading}
-         >
-            <CircularProgress color="inherit" />
-            {isLoading.message ?? ""}
-         </Backdrop>
+         {isLoading && (
+            <Backdrop
+               className="flex flex-col items-center"
+               sx={{
+                  color: "#fff",
+                  zIndex: (theme) => theme.zIndex.drawer + 9999,
+               }}
+               open={isLoading.isLoading}
+            >
+               <CircularProgress color="inherit" />
+               {isLoading.message ?? ""}
+            </Backdrop>
+         )}
       </UserProvider.Provider>
    );
 };

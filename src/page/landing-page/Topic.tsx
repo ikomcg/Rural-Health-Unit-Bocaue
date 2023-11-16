@@ -1,4 +1,3 @@
-import React from "react";
 type CardType = {
    topic : {
      src : string
@@ -28,4 +27,4 @@ const Topic = ({ topic }: CardType) => {
    );
 };
 
-export default React.memo(Topic);
+export default Topic;

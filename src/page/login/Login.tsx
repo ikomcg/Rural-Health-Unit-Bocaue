@@ -171,7 +171,12 @@ const Login = ({ open, setOpen }: LoginType) => {
 
    return (
       <>
-         <DialogSlide open={open} setOpen={setOpen}>
+         <DialogSlide
+            open={open}
+            setOpen={setOpen}
+            fullWidth={true}
+            maxWidth={"xs"}
+         >
             <div className={style.container}>
                <div className={style.header_login}>
                   <h2 className="text-2xl font-semibold">Login</h2>

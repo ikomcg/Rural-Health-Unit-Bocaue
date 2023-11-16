@@ -18,12 +18,12 @@ const PersonalInformation: React.FC<PersonalInformationType> = ({
    OnChangeFile,
 }) => {
    return (
-      <div className="px-5">
+      <div className="px-3 md:px-5">
          <h3 className="text-xl mb-5 text-blue font-semibold">
             Personal Information
          </h3>
-         <div className="flex flex-row mt-4">
-            <div className="flex flex-col items-center justify-start w-1/4 border-r border-blue mr-3">
+         <div className="flex flex-col md:flex-row mt-4">
+            <div className="flex flex-col items-center justify-start w-1/  2 sm:w-1/4 border-r border-blue mr-3 mb-2 md:mb-0">
                <img
                   src={
                      !payload.profile || payload.profile === ""
