@@ -90,7 +90,7 @@ const Home = () => {
                   enabled: false,
                },
                yaxis: {},
-               xaxis: {
+                  xaxis: {
                   type: "category",
                   categories: [...BARANGAYS],
                },

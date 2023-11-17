@@ -5,6 +5,7 @@ import {
    onSnapshot,
    orderBy,
    query,
+   where,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebase/Base";
@@ -55,6 +56,7 @@ export const useFetchMedecineListService = ({ id }: ParamsType) => {
 
    const GetMedecinesList = async () => {
       if (!id) return;
+      console.log(id);
 
       const queryDB = query(collection(db, `medecines`, id, "medecines"));
       onSnapshot(
@@ -77,6 +79,7 @@ export const useFetchMedecineListService = ({ id }: ParamsType) => {
                   };
                }) as unknown as MedecineList[]
             ).then((res) => {
+               console.log(res);
                setMedecines(res);
             });
          },
@@ -98,7 +101,10 @@ export const useFetchAdjustmentMedecineListService = ({ id }: ParamsType) => {
    const GetMedecinesList = async () => {
       if (!id) return;
 
-      const queryDB = query(collection(db, "medicine_adjustment"));
+      const queryDB = query(
+         collection(db, "medicine_adjustment"),
+         where("service_id", "==", id)
+      );
       onSnapshot(
          queryDB,
          (snapshot) => {
