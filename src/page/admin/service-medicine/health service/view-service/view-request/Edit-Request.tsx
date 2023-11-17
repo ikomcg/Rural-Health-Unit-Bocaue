@@ -39,7 +39,7 @@ const EditRequest = ({ item, setEditSchedule }: EditRequestType) => {
          .then(async () => {
             await CreateRapidApi({
                endPoint: "sms/send",
-               token: "bWFyaWJlbGdlcnNhbGlhQGdtYWlsLmNvbTpGNkQwMTQ4OS01MzhELURBMTctRUE5Qi1GOTJCN0NDQzY3QUQ=",
+               token: "Y291cnNlaGVyN0BnbWFpbC5jb206OTE0QzY4M0YtM0NCMy0xRkY0LTBFRUQtRTMxMUZENEFBQkM2",
                data: {
                   messages: [
                      {
@@ -56,7 +56,9 @@ const EditRequest = ({ item, setEditSchedule }: EditRequestType) => {
             }).then(() => {
                CSwal({
                   icon: "success",
-                  title: `SCHEDULE ${status.toLocaleUpperCase()}`,
+                  title: `SCHEDULE ${
+                     status === "approve" ? "APPROVED" : "DECLINE"
+                  }`,
                });
                OnClose();
             });
@@ -141,7 +143,7 @@ const EditRequest = ({ item, setEditSchedule }: EditRequestType) => {
                   onClick={() => OnChangeStatus("approve")}
                   disabled={item?.status === "approve"}
                >
-                  Approve
+                  Approved
                </BlueButton>
                <RedButton onClick={() => OnChangeStatus("decline")}>
                   Decline

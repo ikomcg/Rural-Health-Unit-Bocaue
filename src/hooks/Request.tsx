@@ -45,6 +45,29 @@ const useFetchRequest = ({ id }: ParamsType) => {
                   if (_user) {
                      full_name = `${_user.first_name} ${_user.middle_name} ${_user.last_name}`;
                   }
+
+                  if (data.doctor_assign && data.doctor_assign !== "") {
+                     const ref = doc(db, "users", data.doctor_assign);
+
+                     const docSnap = await getDoc(ref);
+                     const doctor = docSnap.data() as UserType;
+                     let full_name: string = "";
+                     if (doctor) {
+                        full_name = `${doctor.first_name} ${doctor.middle_name} ${doctor.last_name}`;
+                     }
+
+                     return {
+                        ...data,
+                        id: docu.id,
+                        doctor: {
+                           ...doctor,
+                           full_name,
+                        },
+                        patient: { ..._user, full_name },
+                        request_date: data.request_date.toDate(),
+                     };
+                  }
+
                   return {
                      ...data,
                      id: docu.id,

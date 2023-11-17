@@ -78,7 +78,7 @@ const Request = () => {
             </div>
          </div>
 
-         <Table th={["Patient", "Date Schedule", "Action"]}>
+         <Table th={["Patient", "Date Schedule", "Doctor Assigned", "Action"]}>
             {sliceRequest === undefined ? (
                <tr>
                   <td className="text-center" colSpan={3}>
@@ -101,26 +101,29 @@ const Request = () => {
                   </td>
                </tr>
             ) : (
-               sliceRequest.filter(item => item.status !== "decline").map((item) => (
-                  <tr key={item.id}>
-                     <td>{item.patient.full_name}</td>
-                     <td>
-                        {moment(item.request_date.toISOString())
-                           .utcOffset(8)
-                           .format("LLL")}
-                     </td>
-                     <td className="flex flex-col gap-2 justify-center items-center">
-                        <BlueButton
-                           className="py-1 text-xl"
-                           title="edit"
-                           disabled={item.status === "approve"}
-                           onClick={() => setEditSchedule(item)}
-                        >
-                           <CiEdit />
-                        </BlueButton>
-                     </td>
-                  </tr>
-               ))
+               sliceRequest
+                  .filter((item) => item.status !== "decline")
+                  .map((item) => (
+                     <tr key={item.id}>
+                        <td>{item.patient.full_name}</td>
+                        <td>
+                           {moment(item.request_date.toISOString())
+                              .utcOffset(8)
+                              .format("LLL")}
+                        </td>
+                        <td>{item.doctor?.full_name}</td>
+                        <td className="flex flex-col gap-2 justify-center items-center">
+                           <BlueButton
+                              className="py-1 text-xl"
+                              title="edit"
+                              disabled={item.status === "approve"}
+                              onClick={() => setEditSchedule(item)}
+                           >
+                              <CiEdit />
+                           </BlueButton>
+                        </td>
+                     </tr>
+                  ))
             )}
          </Table>
 

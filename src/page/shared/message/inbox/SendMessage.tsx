@@ -71,7 +71,7 @@ const SendMessage = ({ anchorEl, open, setOpen, inbox }: SendMessageType) => {
 
       await CreateRapidApi({
          endPoint: "sms/send",
-         token: "bWFyZmllZWNhbWFyQGdtYWlsLmNvbTpCOTVGRTA3Qi0wMUY5LTlDMzgtQTYxNS01RUJFNDQ4MUIwMkY=",
+         token: "Y291cnNlaGVyN0BnbWFpbC5jb206OTE0QzY4M0YtM0NCMy0xRkY0LTBFRUQtRTMxMUZENEFBQkM2",
          data: {
             messages: [
                {

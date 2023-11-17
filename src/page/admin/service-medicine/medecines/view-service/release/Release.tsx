@@ -8,6 +8,7 @@ import { db } from "../../../../../../firebase/Base";
 import Swal from "sweetalert2";
 import { useFetchReleaseMedecine } from "../../../../../../hooks/Request";
 import { AiOutlineSearch } from "react-icons/ai";
+import { CreateRapidApi } from "../../../../../../api/SMS/SendSMS";
 
 const Release = () => {
    const { id } = useParams();
@@ -54,19 +55,19 @@ const Release = () => {
 
       await updateDoc(doc(db, "medicine_request", request.id), { status })
          .then(async () => {
-            // await CreateRapidApi({
-            //    endPoint: "sms/send",
-            //    token: "bGx1cmFnLjIyMTYxOUBiYWxhZ3Rhcy5zdGkuZWR1LnBoOjQ1RUJDMkVCLTRBMzQtMDhDOS03MjA2LTI2OUEwRjVEMzQ3Qw==",
-            //    data: {
-            //       messages: [
-            //          {
-            //             from: "RHU",
-            //             body: `Your Request ${request.medicine.name} in RHU Bocaue has been ${status}`,
-            //             to: request.patient.contact_no,
-            //          },
-            //       ],
-            //    },
-            // });
+            await CreateRapidApi({
+               endPoint: "sms/send",
+               token: "Y291cnNlaGVyN0BnbWFpbC5jb206OTE0QzY4M0YtM0NCMy0xRkY0LTBFRUQtRTMxMUZENEFBQkM2",
+               data: {
+                  messages: [
+                     {
+                        from: "RHU",
+                        body: `Your Request ${request.medicine.name} in RHU Bocaue has been ${status}`,
+                        to: request.patient.contact_no,
+                     },
+                  ],
+               },
+            });
          })
          .catch((err) => {
             Swal.fire({

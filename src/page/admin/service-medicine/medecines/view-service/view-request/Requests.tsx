@@ -82,12 +82,16 @@ const Request = () => {
          .then(async () => {
             await CreateRapidApi({
                endPoint: "sms/send",
-               token: "bGx1cmFnLjIyMTYxOUBiYWxhZ3Rhcy5zdGkuZWR1LnBoOjQ1RUJDMkVCLTRBMzQtMDhDOS03MjA2LTI2OUEwRjVEMzQ3Qw==",
+               token: "Y291cnNlaGVyN0BnbWFpbC5jb206OTE0QzY4M0YtM0NCMy0xRkY0LTBFRUQtRTMxMUZENEFBQkM2",
                data: {
                   messages: [
                      {
                         from: "RHU",
-                        body: `Your Request ${request.medicine.name} in RHU Bocaue has been ${status}`,
+                        body: `Your Request ${
+                           request.medicine.name
+                        } in RHU Bocaue has been ${
+                           status === "approve" ? "APPROVED" : "DECLINE"
+                        }`,
                         to: request.patient.contact_no,
                      },
                   ],
@@ -97,7 +101,7 @@ const Request = () => {
          .catch((err) => {
             Swal.fire({
                icon: "error",
-               title: err,
+               title: err.code,
             });
          });
    };
@@ -161,7 +165,7 @@ const Request = () => {
                            disabled={item.status === "approve"}
                            onClick={() => OnChangeStatus(item, "approve")}
                         >
-                           Approve
+                           Approved
                         </BlueButton>
                         <RedButton
                            onClick={() => OnChangeStatus(item, "decline")}

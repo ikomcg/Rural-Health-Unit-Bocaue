@@ -205,6 +205,7 @@ type FormType = {
    inventory: InventoryList[] | null | undefined;
 };
 const Form = ({ item, OnChangeHandle, OnRemove, inventory }: FormType) => {
+   const { id } = useParams();
    return (
       <div className="relative flex flex-row gap-3 mb-2">
          <div className="flex flex-col w-1/3">
@@ -222,9 +223,11 @@ const Form = ({ item, OnChangeHandle, OnRemove, inventory }: FormType) => {
                      Loading
                   </option>
                ) : (
-                  inventory.map((item) => (
-                     <option value={item.id}>{item.name}</option>
-                  ))
+                  inventory
+                     ?.filter((item) => item.category.id === id)
+                     .map((item) => (
+                        <option value={item.id}>{item.name}</option>
+                     ))
                )}
             </select>
          </div>

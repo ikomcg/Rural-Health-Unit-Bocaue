@@ -116,7 +116,6 @@ const CreateInventor = ({ isPost, setIsPost, medicines }: PostType) => {
                   value={descriptions}
                   name="descriptions"
                   id="descriptions"
-                  required
                   className="border border-1 px-2 py-1 outline-none w-full"
                   onChange={OnChangeHandle}
                ></textarea>
