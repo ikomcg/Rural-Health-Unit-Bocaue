@@ -24,6 +24,7 @@ const PersonalInformation: React.FC<PersonalInformationType> = ({
       setPayload((prev) => (prev ? { ...prev, is_verify: checked } : null));
    };
 
+   console.log(payload);
    return (
       <div className="px-3">
          <h3 className="text-xl mb-3 text-blue font-semibold">
@@ -164,7 +165,7 @@ const PersonalInformation: React.FC<PersonalInformationType> = ({
                      ----
                   </option>
                   {BARANGAYS.map((item) => (
-                     <option key={item} value={item}>
+                     <option key={item} value={item.toLocaleUpperCase()}>
                         {item}
                      </option>
                   ))}

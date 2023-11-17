@@ -1,6 +1,7 @@
 import React from "react";
 import { Input, Select } from "../../../components/forms/Form";
 import style from "./style.module.scss";
+import { BARANGAYS } from "../../../page/register/PersonalInformation";
 
 type PersonalInformationType = {
    HandleOnChange: (
@@ -135,6 +136,23 @@ const PersonalInformation: React.FC<PersonalInformationType> = ({
                   value={payload.marital_status}
                   onChange={HandleOnChange}
                />
+               <Select
+                  name="barangay"
+                  required
+                  placeholder="Barangay"
+                  label="Branggay"
+                  onChange={HandleOnChange}
+                  value={payload.barangay}
+               >
+                  <option value="" disabled>
+                     ----
+                  </option>
+                  {BARANGAYS.map((item, i) => (
+                     <option key={i} value={item}>
+                        {item}
+                     </option>
+                  ))}
+               </Select>
                <Input
                   type="text"
                   name="address"

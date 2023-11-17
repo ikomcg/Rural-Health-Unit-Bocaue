@@ -1,9 +1,14 @@
 type Inventory = {
    id: string;
    name: string;
-   status: string;
-   total_issued: number;
-   availability: number;
-   total_dispensed: number;
+   descriptions: string;
+   category: string;
+   created_at: Date;
+};
+type InventoryList = {
+   id: string;
+   name: string;
+   descriptions: string;
+   category: ServiceType;
    created_at: Date;
 };

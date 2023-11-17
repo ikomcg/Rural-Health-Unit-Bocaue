@@ -1,14 +1,16 @@
 import { useParams } from "react-router-dom";
-import MedList from "./medecines/Medecines";
+import MedecineList from "./medecines/MedecinesList";
 import { BlueButton } from "../../../../../components/button/BlueButton";
 import Request from "./view-request/Requests";
 import { useState } from "react";
-import Medecine from "./medecines/AddMedecines";
+import AddMedecine from "./medecines/AddMedecines";
+import AdjusmentList from "./medecines/AdjusmentList";
+import AddAdjustment from "./medecines/AddAdjustment";
 
 const ViewService = () => {
    const { name } = useParams();
    const [isAdd, setIsAdd] = useState(false);
-
+   const [isAdjustment, setIsAdjustment] = useState(false);
    return (
       <>
          <div className="flex flex-col">
@@ -16,16 +18,28 @@ const ViewService = () => {
             <BlueButton
                type="button"
                onClick={() => setIsAdd(true)}
-               className="ml-auto px-2  mt-3"
+               className="ml-auto px-2 py-1  mt-3"
             >
-               Add Medecines
+               Add Medicines
             </BlueButton>
 
-            <MedList />
+            <MedecineList />
+            <br />
+            <BlueButton
+               type="button"
+               onClick={() => setIsAdjustment(true)}
+               className="ml-auto px-2 py-1  mt-3"
+            >
+               Adjustment
+            </BlueButton>
+            <AdjusmentList />
             <br />
             <Request />
          </div>
-         {isAdd && <Medecine isPost={isAdd} setIsPost={setIsAdd} />}
+         {isAdd && <AddMedecine isPost={isAdd} setIsPost={setIsAdd} />}
+         {isAdjustment && (
+            <AddAdjustment isPost={isAdjustment} setIsPost={setIsAdjustment} />
+         )}
       </>
    );
 };

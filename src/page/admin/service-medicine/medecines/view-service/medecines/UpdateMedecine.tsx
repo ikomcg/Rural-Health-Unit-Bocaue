@@ -7,8 +7,9 @@ import { BlueButton } from "../../../../../../components/button/BlueButton";
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../../firebase/Base";
 import CSwal from "../../../../../../components/swal/Swal";
+import useFetchInventory from "../../../../../../hooks/Inventory";
 
-type PayloadType = object & Omit<MedecineList, "created_at">;
+type PayloadType = object & Omit<Medecine, "created_at">;
 
 type PostType = {
    payload: PayloadType;
@@ -19,6 +20,7 @@ const UpdateMedecine = ({ payload, setPayload }: PostType) => {
    const { id } = useParams();
    const [isCreate, setIsCreate] = useState(false);
    const [isPost, setIsPost] = useState(false);
+   const inventory = useFetchInventory();
 
    useEffect(() => {
       if (!payload) return;
@@ -45,10 +47,12 @@ const UpdateMedecine = ({ payload, setPayload }: PostType) => {
       if (!swal) return setIsPost(true);
 
       setIsCreate(true);
+
       const data = {
          name: payload.name,
-         descriptions: payload.descriptions,
-         stock: payload.stock,
+         batch_lot_no: payload.batch_lot_no,
+         stock_in: payload.stock_in,
+         category: payload.category,
          update_at: serverTimestamp(),
       };
 
@@ -82,7 +86,7 @@ const UpdateMedecine = ({ payload, setPayload }: PostType) => {
          open={isPost}
          setOpen={OnClose}
       >
-         <div className="p-5">
+         <div className="p-3">
             <div className={style.header_post}>
                <h1>Update Medecine</h1>
                <button type="button" onClick={OnClose}>
@@ -97,36 +101,61 @@ const UpdateMedecine = ({ payload, setPayload }: PostType) => {
                <div className="relative flex flex-row gap-3 mb-2">
                   <div className="flex flex-col w-1/3">
                      <label>Medecines Name:</label>
-                     <input
-                        required
+                     <select
+                        id="category"
                         name="name"
+                        className="border border-1 px-2 py-1 outline-none"
+                        onChange={OnChangeHandle}
                         value={payload.name}
+                     >
+                        <option value="">-----</option>
+                        {!inventory ? (
+                           <option value="" disabled>
+                              Loading
+                           </option>
+                        ) : (
+                           inventory.map((item) => (
+                              <option value={item.id}>{item.name}</option>
+                           ))
+                        )}
+                     </select>
+                  </div>
+                  <div className="flex flex-col  w-1/3">
+                     <label>Batch/Lot no:</label>
+                     <input
+                        required
+                        name="batch_lot_no"
+                        value={payload.batch_lot_no}
                         type="text"
                         className="border border-blue px-2 py-1  outline-none text-md"
                         onChange={OnChangeHandle}
                      />
                   </div>
                   <div className="flex flex-col  w-1/3">
-                     <label>Descriptions:</label>
+                     <label>Stock In:</label>
                      <input
                         required
-                        name="descriptions"
-                        value={payload.descriptions}
-                        type="text"
-                        className="border border-blue px-2 py-1  outline-none text-md"
-                        onChange={OnChangeHandle}
-                     />
-                  </div>
-                  <div className="flex flex-col  w-1/3">
-                     <label>Stock:</label>
-                     <input
-                        required
-                        name="stock"
-                        value={payload.stock}
+                        name="stock_in"
+                        value={payload.stock_in}
                         type="number"
                         className="border border-blue px-2 py-1  outline-none text-md"
                         onChange={OnChangeHandle}
                      />
+                  </div>
+                  <div className="flex flex-col w-1/3">
+                     <label>Category:</label>
+                     <select
+                        id="category"
+                        name="category"
+                        className="border border-1 px-2 py-1 outline-none"
+                        onChange={OnChangeHandle}
+                        value={payload.category}
+                     >
+                        <option value="">-----</option>
+                        <option value="DELIVERY">DELIVERY</option>
+                        <option value="RECEIVED STOCK">RECEIVED STOCK</option>
+                        <option value="ADJUSTMENT">ADJUSTMENT</option>
+                     </select>
                   </div>
                </div>
             </form>

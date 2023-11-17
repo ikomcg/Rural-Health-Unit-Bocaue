@@ -63,7 +63,7 @@ const Request = () => {
                   messages: [
                      {
                         from: "RHU",
-                        body: `Your Request ${request.medecine_name} in RHU Bocaue has been ${status}`,
+                        body: `Your Request ${request.medicine.name} in RHU Bocaue has been ${status}`,
                         to: request.patient.contact_no,
                      },
                   ],
@@ -130,7 +130,7 @@ const Request = () => {
                sliceMedecines.map((item) => (
                   <tr key={item.id}>
                      <td>{item.patient.full_name}</td>
-                     <td>{item.medecine_name}</td>
+                     <td>{item.medicine.name}</td>
                      <td>{item.quantity}</td>
                      <td className="flex flex-col gap-2 justify-center items-center">
                         <BlueButton

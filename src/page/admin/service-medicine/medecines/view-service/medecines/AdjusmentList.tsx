@@ -1,17 +1,16 @@
 import { useParams } from "react-router-dom";
 import Table from "../../../../../../components/table/Table";
 import { CircularProgress, Pagination } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useFetchMedecineListService } from "../../../../../../hooks/Medecines";
 import { AiOutlineSearch } from "react-icons/ai";
+import { useEffect, useState } from "react";
+import { useFetchAdjustmentMedecineListService } from "../../../../../../hooks/Medecines";
 
-const Medecines = () => {
+const AdjusmentList = () => {
    const { id } = useParams();
-   const medecines = useFetchMedecineListService({ id: id });
-
+   const medecines = useFetchAdjustmentMedecineListService({ id: id });
    const [currentPage, setCurrentPage] = useState(1);
    const [sliceMedecines, setSliceMedecines] = useState<
-      MedecineList[] | null
+      MedecineAdjusmentList[] | null
    >();
    const [search, setSearch] = useState("");
    const [refresh, setRefresh] = useState(false);
@@ -22,7 +21,12 @@ const Medecines = () => {
          if (medecines === null) return setSliceMedecines(null);
          if (medecines === undefined) return;
 
-         const filterData = medecines.filter((item) => item);
+         const filterData = medecines.filter((item) =>
+            item.medicines.name
+               .trim()
+               .toLocaleLowerCase()
+               .includes(search.toLocaleLowerCase().trim())
+         );
          const pages = Math.ceil(filterData.length / 10);
          setPages(pages);
 
@@ -40,6 +44,7 @@ const Medecines = () => {
       setCurrentPage(1);
       setRefresh((prev) => !prev);
    };
+
    return (
       <>
          <div className="flex flex-row justify-end mt-2">
@@ -63,7 +68,7 @@ const Medecines = () => {
                }}
             />
          </div>
-         <Table th={["Medecines", "Descriptions", "Stock"]}>
+         <Table th={["Medecines", "Descriptions", "Reason", "Stock Out"]}>
             {sliceMedecines === undefined ? (
                <tr>
                   <td className="text-center" colSpan={4}>
@@ -90,7 +95,8 @@ const Medecines = () => {
                   <tr key={item.id}>
                      <td>{item.medicines.name}</td>
                      <td>{item.medicines.descriptions}</td>
-                     <td>{item.stock_in}</td>
+                     <td>{item.reason}</td>
+                     <td>{item.stock_out}</td>
                   </tr>
                ))
             )}
@@ -111,4 +117,4 @@ const Medecines = () => {
    );
 };
 
-export default Medecines;
+export default AdjusmentList;

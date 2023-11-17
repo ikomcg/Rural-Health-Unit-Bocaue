@@ -6,9 +6,9 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import { BlueButton } from "../../../../../../components/button/BlueButton";
 import { MdAssignmentAdd, MdOutlineRemoveCircleOutline } from "react-icons/md";
 import uuid from "react-uuid";
-import { CreateMedecineListFrb } from "../../../../../../firebase/Service/Create";
 import CSwal from "../../../../../../components/swal/Swal";
 import useFetchInventory from "../../../../../../hooks/Inventory";
+import { CreateAdjustmentMedecineFrb } from "../../../../../../firebase/Service/Request";
 
 type PostType = {
    isPost: boolean;
@@ -17,22 +17,20 @@ type PostType = {
 type PayloadType = {
    id: string;
    name: string;
-   batch_lot_no: string;
-   stock_in: string | number;
-   category: string;
+   reason: string;
+   stock_out: string | number;
    status: string;
 };
 
-const AddMedecines = ({ isPost, setIsPost }: PostType) => {
+const AddAdjustment = ({ isPost, setIsPost }: PostType) => {
    const { id } = useParams();
    const [isCreate, setIsCreate] = useState(false);
    const [payload, setPayload] = useState<PayloadType[]>([
       {
          id: uuid(),
          name: "",
-         batch_lot_no: "",
-         stock_in: "",
-         category: "",
+         reason: "",
+         stock_out: "",
          status: "pending",
       },
    ]);
@@ -51,22 +49,19 @@ const AddMedecines = ({ isPost, setIsPost }: PostType) => {
       const _data = filterData.map((item) => ({
          id: item.id,
          name: item.name,
-         batch_lot_no: item.batch_lot_no,
-         stock_in: item.stock_in,
-         category: item.category,
+         reason: item.reason,
+         stock_out: item.stock_out,
       }));
 
       if (_data.length === 0) return;
       setIsCreate(true);
       let index = 0;
       do {
-         const data = await CreateMedecineListFrb({
-            id,
+         const data = await CreateAdjustmentMedecineFrb({
             data: {
                medicine_id: _data[index].name,
-               batch_lot_no: _data[index].batch_lot_no,
-               stock_in: _data[index].stock_in,
-               category: _data[index].category,
+               stock_out: _data[index].stock_out,
+               reason: _data[index].reason,
             },
          });
 
@@ -132,9 +127,8 @@ const AddMedecines = ({ isPost, setIsPost }: PostType) => {
       const form = {
          id: uuid(),
          name: "",
-         batch_lot_no: "",
-         stock_in: "",
-         category: "",
+         reason: "",
+         stock_out: "",
          status: "pending",
       };
       setPayload((prev) => [...prev.concat(form)]);
@@ -149,14 +143,14 @@ const AddMedecines = ({ isPost, setIsPost }: PostType) => {
       >
          <div className="p-3">
             <div className={style.header_post}>
-               <h1>Add Medecines</h1>
+               <h1>Adjustment</h1>
                <button type="button" onClick={OnClose}>
                   <AiFillCloseCircle />
                </button>
             </div>
             <form
                className="flex flex-col gap-3 flex-nowrap mt-5"
-               id="medecineForm"
+               id="adjustmentForm"
                onSubmit={CreateMedecines}
             >
                {payload.map((item) => (
@@ -181,7 +175,7 @@ const AddMedecines = ({ isPost, setIsPost }: PostType) => {
             <div className="flex flex-row justify-between mt-8">
                <BlueButton
                   type="submit"
-                  form="medecineForm"
+                  form="adjustmentForm"
                   className="ml-auto py-2"
                   disabled={isCreate}
                >
@@ -193,7 +187,7 @@ const AddMedecines = ({ isPost, setIsPost }: PostType) => {
    );
 };
 
-export default AddMedecines;
+export default AddAdjustment;
 
 type FormType = {
    item: PayloadType;
@@ -210,9 +204,10 @@ const Form = ({ item, OnChangeHandle, OnRemove, inventory }: FormType) => {
          <div className="flex flex-col w-1/3">
             <label>Medecines Name:</label>
             <select
-               id="category"
+               id="name"
                name="name"
-               className="border border-1 px-2 py-1 outline-none"
+               required
+               className="border border-1 px-2 py-2 outline-none"
                onChange={(e) => OnChangeHandle(e, item.id)}
                value={item.name}
             >
@@ -229,41 +224,30 @@ const Form = ({ item, OnChangeHandle, OnRemove, inventory }: FormType) => {
             </select>
          </div>
          <div className="flex flex-col  w-1/3">
-            <label>Batch/Lot no:</label>
-            <input
-               required
-               name="batch_lot_no"
-               value={item.batch_lot_no}
-               type="text"
-               className="border border-blue px-2 py-1  outline-none text-md"
-               onChange={(e) => OnChangeHandle(e, item.id)}
-            />
-         </div>
-         <div className="flex flex-col  w-1/3">
-            <label>Stock In:</label>
-            <input
-               required
-               name="stock_in"
-               value={item.stock_in}
-               type="number"
-               className="border border-blue px-2 py-1  outline-none text-md"
-               onChange={(e) => OnChangeHandle(e, item.id)}
-            />
-         </div>
-         <div className="flex flex-col w-1/3">
-            <label>Category:</label>
+            <label>Reason:</label>
             <select
-               id="category"
-               name="category"
-               className="border border-1 px-2 py-1 outline-none"
+               id="reason"
+               required
+               name="reason"
+               className="border border-1 px-2 py-2 outline-none"
                onChange={(e) => OnChangeHandle(e, item.id)}
-               value={item.category}
+               value={item.reason}
             >
                <option value="">-----</option>
-               <option value="DELIVERY">DELIVERY</option>
-               <option value="RECEIVED STOCK">RECEIVED STOCK</option>
-               <option value="ADJUSTMENT">ADJUSTMENT</option>
+               <option value="EXPIRED">EXPIRED</option>
+               <option value="TRANSFER">TRANSFER</option>
             </select>
+         </div>
+         <div className="flex flex-col w-1/3">
+            <label>Stock Out:</label>
+            <input
+               required
+               name="stock_out"
+               value={item.stock_out}
+               type="number"
+               className="border border-blue px-2 py-[5px]  outline-none"
+               onChange={(e) => OnChangeHandle(e, item.id)}
+            />
          </div>
          <button
             className="absolute right-0 text-red-500 hover:bg-red-500 hover:text-white rounded-xl"

@@ -1,4 +1,11 @@
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import {
+   collection,
+   doc,
+   getDoc,
+   onSnapshot,
+   orderBy,
+   query,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebase/Base";
 
@@ -17,15 +24,10 @@ const useFetchMedecines = () => {
          queryDB,
          (snapshot) => {
             const data = snapshot.docs.map((doc) => {
-               const timestamp =
-                  doc.data().created_at.seconds * 1000 +
-                  Math.floor(doc.data().created_at.nanoseconds / 1e6);
-               const created_at = new Date(timestamp);
-
                return {
                   ...doc.data(),
                   id: doc.id,
-                  created_at,
+                  created_at: doc.data().created_at.toDate(),
                };
             }) as unknown as MedecinesType[];
             setMedecines(data);
@@ -58,14 +60,67 @@ export const useFetchMedecineListService = ({ id }: ParamsType) => {
       onSnapshot(
          queryDB,
          (snapshot) => {
-            const data = snapshot.docs.map((doc) => {
-               return {
-                  ...doc.data(),
-                  id: doc.id,
-                  created_at: doc.data().created_at.toDate(),
-               };
-            }) as unknown as MedecineList[];
-            setMedecines(data);
+            Promise.all(
+               snapshot.docs.map(async (docu) => {
+                  const data = docu.data();
+                  const inventory = doc(db, "inventory", data.medicine_id);
+                  const medicine = await getDoc(inventory);
+
+                  return {
+                     ...data,
+                     id: docu.id,
+                     medicines: {
+                        id: medicine.id,
+                        ...medicine.data(),
+                     },
+                     created_at: data.created_at.toDate(),
+                  };
+               }) as unknown as MedecineList[]
+            ).then((res) => {
+               setMedecines(res);
+            });
+         },
+         () => {
+            setMedecines(null);
+         }
+      );
+   };
+
+   return medecines;
+};
+export const useFetchAdjustmentMedecineListService = ({ id }: ParamsType) => {
+   const [medecines, setMedecines] = useState<MedecineAdjusmentList[] | null>();
+   useEffect(() => {
+      if (!id) return;
+      GetMedecinesList();
+   }, [id]);
+
+   const GetMedecinesList = async () => {
+      if (!id) return;
+
+      const queryDB = query(collection(db, "medicine_adjustment"));
+      onSnapshot(
+         queryDB,
+         (snapshot) => {
+            Promise.all(
+               snapshot.docs.map(async (docu) => {
+                  const data = docu.data();
+                  const inventory = doc(db, "inventory", data.medicine_id);
+                  const medicine = await getDoc(inventory);
+
+                  return {
+                     ...data,
+                     id: docu.id,
+                     medicines: {
+                        id: medicine.id,
+                        ...medicine.data(),
+                     },
+                     created_at: data.created_at.toDate(),
+                  };
+               }) as unknown as MedecineAdjusmentList[]
+            ).then((res) => {
+               setMedecines(res);
+            });
          },
          () => {
             setMedecines(null);

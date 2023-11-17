@@ -93,13 +93,40 @@ export const useFetchMyRequestMedecine = ({ id, user_id }: RerquestType) => {
       onSnapshot(
          queryDB,
          (snapshot) => {
-            const data = snapshot.docs.map((doc) => {
-               return {
-                  ...doc.data(),
-                  id: doc.id,
-               };
-            }) as unknown as RequestMedecines[];
-            setRequests(data);
+            Promise.all(
+               snapshot.docs.map(async (docu) => {
+                  const data = docu.data();
+                  const medicineRef = doc(
+                     db,
+                     "medecines",
+                     data.service_id,
+                     "medecines",
+                     data.medicine_id
+                  );
+                  const medicine = await getDoc(medicineRef);
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const medicineData = medicine.data() as any;
+                  const inventory = doc(
+                     db,
+                     "inventory",
+                     medicineData.medicine_id
+                  );
+                  const inventoryData = await getDoc(inventory);
+
+                  return {
+                     ...data,
+                     id: docu.id,
+                     medicine: {
+                        id: inventoryData.id,
+                        ...inventoryData.data(),
+                     },
+                     created_at: data.created_at.toDate(),
+                  };
+               }) as unknown as RequestMedecines[]
+            ).then((res) => {
+               console.log(res);
+               setRequests(res);
+            });
          },
          (err) => {
             console.log(err);
@@ -140,10 +167,31 @@ export const useFetchRequestMedecine = ({ id }: ParamsType) => {
                      full_name = `${_user.first_name} ${_user.middle_name} ${_user.last_name}`;
                   }
 
+                  const medicineRef = doc(
+                     db,
+                     "medecines",
+                     data.service_id,
+                     "medecines",
+                     data.medicine_id
+                  );
+                  const medicine = await getDoc(medicineRef);
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const medicineData = medicine.data() as any;
+                  const inventory = doc(
+                     db,
+                     "inventory",
+                     medicineData.medicine_id
+                  );
+                  const inventoryData = await getDoc(inventory);
+
                   return {
                      ...data,
                      id: docu.id,
                      patient: { ..._user, full_name },
+                     medicine: {
+                        id: inventoryData.id,
+                        ...inventoryData.data(),
+                     },
                   };
                }) as unknown as RequestMedecines[]
             ).then((res) => {

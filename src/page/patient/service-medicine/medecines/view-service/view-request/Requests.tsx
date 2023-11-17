@@ -4,7 +4,7 @@ import { CircularProgress, Pagination } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useFetchMyRequestMedecine } from "../../../../../../hooks/Request";
 import { BlueButton } from "../../../../../../components/button/BlueButton";
-import AddRequest from "./add/Add";
+import AddRequest from "./add-request/Add-Request";
 import { UserProvider } from "../../../../../../context/UserProvider";
 const Request = () => {
    const { id } = useParams();
@@ -75,7 +75,7 @@ const Request = () => {
             ) : (
                sliceMedecines.map((item) => (
                   <tr key={item.id}>
-                     <td>{item.medecine_name}</td>
+                     <td>{item.medicine.name}</td>
                      <td>{item.quantity}</td>
                      <td>
                         <span className="bg-[gray] text-sm text-slate-100 px-2 py-1 rounded">
