@@ -2,6 +2,7 @@ import style from "./style.module.scss";
 import Card from "../../../../components/card/Card";
 import useFetchService from "../../../../hooks/Service";
 import { useNavigate } from "react-router-dom";
+import { CircularProgress } from "@mui/material";
 
 const HealthService = () => {
    const service = useFetchService({ path: "service" });
@@ -9,9 +10,12 @@ const HealthService = () => {
 
    return (
       <>
-         <div className={style.card}>
+         <div className={service ? style.card : "flex items-center mt-40"}>
             {service === undefined ? (
-               <h1 className="w-full text-center text-gray-400">Loading...</h1>
+               <div className="flex flex-col justify-center items-center w-full">
+                  <CircularProgress />
+                  <span className="text-sm">Please wait...</span>
+               </div>
             ) : service === null ? (
                <h1 className="text-center text-gray-400">
                   Something went wrong

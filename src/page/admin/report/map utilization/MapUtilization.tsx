@@ -114,6 +114,9 @@ const Table = ({ item }: TableType) => {
                         </div>
                      </td>
                      <td></td>
+                     <td></td>
+                     <td></td>
+                     <td></td>
                   </tr>
                ))}
             </tbody>
