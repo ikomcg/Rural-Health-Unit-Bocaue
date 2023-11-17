@@ -5,12 +5,9 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import useFetchRequest from "../../../../../../hooks/Request";
 import { BlueButton } from "../../../../../../components/button/BlueButton";
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "../../../../../../firebase/Base";
-import { RedButton } from "../../../../../../components/button/RedButton";
 import { AiOutlineSearch } from "react-icons/ai";
-import CSwal from "../../../../../../components/swal/Swal";
-import { CreateRapidApi } from "../../../../../../api/SMS/SendSMS";
+import { CiEdit } from "react-icons/ci";
+import EditRequest from "./Edit-Request";
 
 const Request = () => {
    const { id } = useParams();
@@ -50,36 +47,9 @@ const Request = () => {
       setRefresh((prev) => !prev);
    };
 
-   const OnChangeStatus = async (request: RequestService, status: string) => {
-      if (!id) return;
-
-      await updateDoc(doc(db, "schedules", request.id), { status })
-         .then(async () => {
-            await CreateRapidApi({
-               endPoint: "sms/send",
-               token: "bWFyaWJlbGdlcnNhbGlhQGdtYWlsLmNvbTpGNkQwMTQ4OS01MzhELURBMTctRUE5Qi1GOTJCN0NDQzY3QUQ=",
-               data: {
-                  messages: [
-                     {
-                        from: "RHU",
-                        body: `Your Schedule ${moment(
-                           request.request_date.toISOString()
-                        )
-                           .utcOffset(8)
-                           .format("LLL")} in RHU Bocaue has been ${status}`,
-                        to: request.patient.contact_no,
-                     },
-                  ],
-               },
-            }).then((res) => console.log(res));
-         })
-         .catch((err) => {
-            CSwal({
-               icon: "error",
-               title: err,
-            });
-         });
-   };
+   const [editSchedule, setEditSchedule] = useState<RequestService | null>(
+      null
+   );
 
    return (
       <>
@@ -131,7 +101,7 @@ const Request = () => {
                   </td>
                </tr>
             ) : (
-               sliceRequest.map((item) => (
+               sliceRequest.filter(item => item.status !== "decline").map((item) => (
                   <tr key={item.id}>
                      <td>{item.patient.full_name}</td>
                      <td>
@@ -141,17 +111,13 @@ const Request = () => {
                      </td>
                      <td className="flex flex-col gap-2 justify-center items-center">
                         <BlueButton
+                           className="py-1 text-xl"
+                           title="edit"
                            disabled={item.status === "approve"}
-                           onClick={() => OnChangeStatus(item, "approve")}
+                           onClick={() => setEditSchedule(item)}
                         >
-                           Approve
+                           <CiEdit />
                         </BlueButton>
-                        <RedButton
-                           disabled={item.status === "decline"}
-                           onClick={() => OnChangeStatus(item, "decline")}
-                        >
-                           Decline
-                        </RedButton>
                      </td>
                   </tr>
                ))
@@ -167,6 +133,12 @@ const Request = () => {
                shape="rounded"
                color="primary"
                onChange={(_e, page) => setCurrentPage(page)}
+            />
+         )}
+         {editSchedule && (
+            <EditRequest
+               item={editSchedule}
+               setEditSchedule={setEditSchedule}
             />
          )}
       </>

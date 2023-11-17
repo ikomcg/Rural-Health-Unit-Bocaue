@@ -16,7 +16,9 @@ type PostType = {
 };
 
 const UpdateDoctors = ({ payload, setPayload }: PostType) => {
-   const doctors = useFetchUsers({ role: ["doctor", "health-worker"] });
+   const doctors = useFetchUsers({
+      role: ["health-worker", "public health nurse"],
+   });
    const { id } = useParams();
    const [isPost, setIsPost] = useState(false);
    const [isCreate, setIsCreate] = useState(false);

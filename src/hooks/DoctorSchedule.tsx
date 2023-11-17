@@ -3,6 +3,7 @@ import {
    collection,
    doc,
    getDoc,
+   limit,
    onSnapshot,
    or,
    orderBy,
@@ -18,9 +19,10 @@ type ParamsType = {
 
 type RerquestType = {
    user_id: string | undefined;
+   _limit?: number;
 } & ParamsType;
 
-const useFetchMyRequest = ({ id, user_id }: RerquestType) => {
+const useFetchDoctorSchedulesRequest = ({ id, user_id, _limit }: RerquestType) => {
    const [requests, setRequests] = useState<RequestService[] | null>();
    useEffect(() => {
       if (!id) return;
@@ -33,10 +35,11 @@ const useFetchMyRequest = ({ id, user_id }: RerquestType) => {
       const queryDB = query(
          collection(db, "schedules"),
          and(
-            where("patient_id", "==", user_id),
+            where("doctor_assign", "==", user_id),
             or(where("service_id", "==", id))
          ),
-         orderBy("request_date", "asc")
+         orderBy("request_date", "asc"),
+         limit(_limit ?? 1000)
       );
       onSnapshot(
          queryDB,
@@ -98,4 +101,4 @@ const useFetchMyRequest = ({ id, user_id }: RerquestType) => {
    return requests;
 };
 
-export default useFetchMyRequest;
+export default useFetchDoctorSchedulesRequest;

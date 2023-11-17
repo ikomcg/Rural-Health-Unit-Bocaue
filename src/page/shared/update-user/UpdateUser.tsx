@@ -197,7 +197,7 @@ const UpdateUser = ({ setPayload, payload }: UpdateInventoryType) => {
                   Save
                </BlueButton>
                <RedButton
-                  className="ml-1o mt-5 py-1"
+                  className="ml-1 mt-5 py-1"
                   type="button"
                   onClick={OnClose}
                >

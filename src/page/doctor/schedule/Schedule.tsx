@@ -2,20 +2,20 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import Container from "../../../components/container/Container";
 import interactionPlugin from "@fullcalendar/interaction";
-import { useFetchMySchedules } from "../../../hooks/Schedule";
 import { useContext, useMemo } from "react";
 import { UserProvider } from "../../../context/UserProvider";
 import * as bootstrap from "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import moment from "moment";
 import timeGridPlugin from "@fullcalendar/timegrid";
+import { useFetchDoctorSchedules } from "../../../hooks/Schedule";
 
 const Schedule = () => {
    const { cookies } = useContext(UserProvider);
 
-   const schedules = useFetchMySchedules({
+   const schedules = useFetchDoctorSchedules({
       id: cookies?.id,
-      _limit: 100,
+      _limit: 1000,
    });
 
    const MySchedules = useMemo(() => {

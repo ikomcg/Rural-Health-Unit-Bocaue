@@ -44,7 +44,7 @@ const Request = () => {
                Add Request
             </BlueButton>
          </div>
-         <Table th={["Date Schedule", "Status"]}>
+         <Table th={["Date Schedule", "Doctor Assigned", "Status"]}>
             {sliceDoctors === undefined ? (
                <tr>
                   <td className="text-center" colSpan={3}>
@@ -74,6 +74,7 @@ const Request = () => {
                            .utcOffset(8)
                            .format("LLL")}
                      </td>
+                     <td>{item?.doctor?.full_name}</td>
                      <td>
                         <span className="bg-[gray] text-sm text-slate-100 px-2 py-1 rounded">
                            {item.status.toLocaleUpperCase()}

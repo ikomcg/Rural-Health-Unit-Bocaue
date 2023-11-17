@@ -3,14 +3,16 @@ import Table from "../../../../../../components/table/Table";
 import { CircularProgress, Pagination } from "@mui/material";
 import moment from "moment";
 import { useContext, useEffect, useState } from "react";
-import { BlueButton } from "../../../../../../components/button/BlueButton";
 import AddRequest from "./add/Add";
-import useFetchMyRequest from "../../../../../../hooks/MyRequest";
 import { UserProvider } from "../../../../../../context/UserProvider";
+import useFetchDoctorSchedulesRequest from "../../../../../../hooks/DoctorSchedule";
 const Request = () => {
    const { id } = useParams();
    const { cookies } = useContext(UserProvider);
-   const doctors = useFetchMyRequest({ id: id, user_id: cookies?.id });
+   const doctors = useFetchDoctorSchedulesRequest({
+      id: id,
+      user_id: cookies?.id,
+   });
    const [currentPage, setCurrentPage] = useState(1);
    const [sliceDoctors, setSliceDoctors] = useState<RequestService[] | null>();
    const [isOpen, setIsOpen] = useState(false);
@@ -36,15 +38,8 @@ const Request = () => {
       <>
          <div className="flex flex-row items-center mt-10">
             <h1 className="text-blue text-2xl">My Request</h1>
-            <BlueButton
-               className="ml-auto py-1"
-               onClick={() => setIsOpen(true)}
-               disabled={cookies?.account_status !== "active"}
-            >
-               Add Request
-            </BlueButton>
          </div>
-         <Table th={["Date Schedule", "Status"]}>
+         <Table th={["Patient", "Date Schedule", "Status"]}>
             {sliceDoctors === undefined ? (
                <tr>
                   <td className="text-center" colSpan={3}>
@@ -69,6 +64,7 @@ const Request = () => {
             ) : (
                sliceDoctors.map((item) => (
                   <tr key={item.id}>
+                     <td>{item.patient?.full_name}</td>
                      <td>
                         {moment(item.request_date.toISOString())
                            .utcOffset(8)
