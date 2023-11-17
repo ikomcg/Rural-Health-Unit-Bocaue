@@ -18,7 +18,9 @@ const HealtWorkers = () => {
    const [sliceDoctors, setSliceDoctors] = useState<UserType[] | null>();
    const [search, setSearch] = useState("");
    const [refresh, setRefresh] = useState(false);
-   const [toUpdate, setToUpdate] = useState<UserType | null>(null);
+   const [toUpdate, setToUpdate] = useState<
+      ({ role: string } & Omit<UserType, "role">) | null
+   >(null);
 
    useEffect(() => {
       const SlicePagination = () => {
@@ -137,6 +139,7 @@ const HealtWorkers = () => {
                               onClick={() =>
                                  setToUpdate({
                                     ...item,
+                                    role: item.role[0],
                                     birthday: DateTimeLocal(item.birthday),
                                  })
                               }
