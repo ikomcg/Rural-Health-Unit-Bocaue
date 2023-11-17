@@ -29,7 +29,14 @@ const AdminLayout = () => {
          <div className="rgth_cldr w-[25%]">
             <Calendar />
             <Schedule />
-            <Online role={["admin", "health-doctor", "patient", "doctor"]} />
+            <Online
+               role={[
+                  "rural health physician",
+                  "health-worker",
+                  "patient",
+                  "public health nurse",
+               ]}
+            />
          </div>
       </div>
    );

@@ -8,6 +8,8 @@ import { useParams } from "react-router-dom";
 import { UserProvider } from "../../../../../../../context/UserProvider";
 import { CreateRequestMedecineFrb } from "../../../../../../../firebase/Service/Request";
 import CSwal from "../../../../../../../components/swal/Swal";
+import { doc, runTransaction } from "firebase/firestore";
+import { db } from "../../../../../../../firebase/Base";
 
 type PostType = {
    isPost: boolean;
@@ -21,38 +23,70 @@ const AddRequest = ({ isPost, setIsPost }: PostType) => {
    const medecines = useFetchMedecineListService({ id: id });
    const [payload, setPayload] = useState({
       medecine_id: "",
-      quantity: 0,
+      quantity: "",
    });
    const OnClose = () => {
       setIsPost(false);
    };
+
+   console.log(medecines);
+   console.log(payload);
 
    const SendRequest = async (e: React.FormEvent) => {
       e.preventDefault();
       if (!id || !cookies || !name || !medecines) return;
 
       setIsLoading(true);
-      const _data = await CreateRequestMedecineFrb({
-         data: {
-            patient_id: cookies.id,
-            service_id: id,
-            medicine_id: payload.medecine_id,
-            quantity: payload.quantity,
-            status: "pending",
-         },
-      });
+      const medicine = medecines.find(
+         (item) => item.id === payload.medecine_id
+      );
 
-      if (!_data) {
-         return CSwal({
-            icon: "error",
-            title: "Error Send Request",
-         });
-      }
-      OnClose();
-      CSwal({
-         icon: "success",
-         title: "Send Request Successfully",
-      }).then(() => {});
+      if (!medicine) return;
+
+      const sfDocRef = doc(db, `medecines`, id, "medecines", medicine.id);
+
+      await runTransaction(db, async (transaction) => {
+         const sfDoc = await transaction.get(sfDocRef);
+         if (!sfDoc.exists()) {
+            throw "Document does not exist!";
+         }
+
+         const newStock =
+            Number(sfDoc.data().stock_in) - Number(payload.quantity);
+
+         if (newStock > Number(sfDoc.data().stock_in) || newStock < 0) {
+            await CSwal({
+               icon: "question",
+               title: "Stock out is too big",
+            });
+            return Promise.reject();
+         } else {
+            transaction.update(sfDocRef, {
+               stock_in: newStock.toString(),
+            });
+            const _data = await CreateRequestMedecineFrb({
+               data: {
+                  patient_id: cookies.id,
+                  service_id: id,
+                  medicine_id: payload.medecine_id,
+                  quantity: payload.quantity,
+                  status: "pending",
+               },
+            });
+
+            if (!_data) {
+               return CSwal({
+                  icon: "error",
+                  title: "Error Send Request",
+               });
+            }
+            OnClose();
+            CSwal({
+               icon: "success",
+               title: "Send Request Successfully",
+            }).then(() => {});
+         }
+      });
    };
 
    const OnChangeHandle = (

@@ -6,6 +6,7 @@ import { useState } from "react";
 import AddMedecine from "./medecines/Medicine/AddMedecines";
 import AdjusmentList from "./medecines/Adjusment/AdjusmentList";
 import AddAdjustment from "./medecines/Adjusment/AddAdjustment";
+import Release from "./release/Release";
 
 const ViewService = () => {
    const { name } = useParams();
@@ -35,6 +36,7 @@ const ViewService = () => {
             <AdjusmentList />
             <br />
             <Request />
+            <Release />
          </div>
          {isAdd && <AddMedecine isPost={isAdd} setIsPost={setIsAdd} />}
          {isAdjustment && (

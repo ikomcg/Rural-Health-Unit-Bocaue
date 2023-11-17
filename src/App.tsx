@@ -32,6 +32,8 @@ import DoctorHealthService from "./page/doctor/service/health service/Health Ser
 import DoctorHealthServiceView from "./page/doctor/service/health service/view-service/View";
 import DoctorSchedule from "./page/doctor/schedule/Schedule";
 import DoctorLayout from "./components/layout/doctor/Layout";
+import Reports from "./page/admin/report/Reports";
+
 const App = () => {
    return (
       <BrowserRouter>
@@ -43,6 +45,8 @@ const App = () => {
                <Route path="home" element={<HomeAdmin />} />
                <Route path="announcement" element={<Announcements />} />
                <Route path="inventory" element={<Inventory />} />
+               <Route path="reports" element={<Reports />} />
+
                <Route path="service-medicine" element={<ServiceMedicine />}>
                   <Route path="health-services">
                      <Route index element={<HealthService />} />

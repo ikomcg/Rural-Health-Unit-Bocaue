@@ -2,12 +2,12 @@ import style from "./style.module.scss";
 import { useContext } from "react";
 import { UserProvider } from "../../../context/UserProvider";
 import moment from "moment";
-import { useFetchMySchedules } from "../../../hooks/Schedule";
+import { useFetchDoctorSchedules } from "../../../hooks/Schedule";
 
 const Schedule = () => {
    const { cookies } = useContext(UserProvider);
 
-   const schedules = useFetchMySchedules({
+   const schedules = useFetchDoctorSchedules({
       id: cookies?.id,
       _limit: 4,
    });

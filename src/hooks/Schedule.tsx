@@ -160,3 +160,55 @@ export const useFetchAllSchedules = ({ _limit }: Schedule) => {
 
    return schedules;
 };
+
+export const useFetchDoctorSchedules = ({ id, _limit }: Schedule) => {
+   const [schedules, setSchedules] = useState<RequestService[] | null>();
+
+   useEffect(() => {
+      if (!id) return;
+      GetSchedules();
+   }, [id]);
+
+   const GetSchedules = async () => {
+      if (!id) return;
+
+      const queryDB = query(
+         collection(db, "schedules"),
+         and(where("doctor_assign", "==", id), where("status", "==", "approve")),
+         orderBy("request_date", "asc"),
+         limit(_limit)
+      );
+      onSnapshot(
+         queryDB,
+         (snapshot) => {
+            Promise.all(
+               snapshot.docs.map(async (docu) => {
+                  const data = docu.data();
+                  const ref = doc(db, "users", data.patient_id);
+
+                  const docSnap = await getDoc(ref);
+                  const _user = docSnap.data();
+
+                  return {
+                     ...data,
+                     id: docu.id,
+                     patient: _user,
+                     request_date: data.request_date.toDate(),
+                  };
+               }) as unknown as RequestService[]
+            ).then((res) => {
+               const data = res.filter(
+                  (item) => item.patient.account_status === "active"
+               );
+               setSchedules(data);
+            });
+         },
+         (err) => {
+            console.log(err);
+            setSchedules(null);
+         }
+      );
+   };
+
+   return schedules;
+};

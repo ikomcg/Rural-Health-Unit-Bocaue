@@ -204,9 +204,14 @@ const PersonalInformation: React.FC<PersonalInformationType> = ({
                   <option value="" disabled>
                      ----
                   </option>
-                  <option value="admin">Admin</option>
-                  <option value="health-worker">health-worker</option>
-                  <option value="doctor">Doctor</option>
+
+                  <option value="rural health physician">
+                     Rural Health Physician
+                  </option>
+                  <option value="health-worker">Health Worker</option>
+                  <option value="public health nurse">
+                     Public Health Nurse
+                  </option>
                   <option value="patient">Patient</option>
                </Select>
             </div>

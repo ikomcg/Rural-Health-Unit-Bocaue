@@ -22,7 +22,12 @@ const Card: React.FC<CardType> = ({ count, name }) => {
 const Home = () => {
    const users =
       useFetchUsers({
-         role: ["patient", "admin", "health-worker", "doctor"],
+         role: [
+            "rural health physician",
+            "health-worker",
+            "patient",
+            "public health nurse",
+         ],
       }) ?? [];
 
    const patientUsers =
@@ -35,7 +40,7 @@ const Home = () => {
          ?.filter(
             (item) =>
                item.role.includes("health-worker") ||
-               item.role.includes("doctor")
+               item.role.includes("public health nurse")
          )
          .sort((a, b) => a.barangay.localeCompare(b.barangay)) ?? [];
 

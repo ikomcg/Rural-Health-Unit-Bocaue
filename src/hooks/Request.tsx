@@ -7,6 +7,7 @@ import {
    orderBy,
    query,
    where,
+   or,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebase/Base";
@@ -44,6 +45,29 @@ const useFetchRequest = ({ id }: ParamsType) => {
                   if (_user) {
                      full_name = `${_user.first_name} ${_user.middle_name} ${_user.last_name}`;
                   }
+
+                  if (data.doctor_assign && data.doctor_assign !== "") {
+                     const ref = doc(db, "users", data.doctor_assign);
+
+                     const docSnap = await getDoc(ref);
+                     const doctor = docSnap.data() as UserType;
+                     let full_name: string = "";
+                     if (doctor) {
+                        full_name = `${doctor.first_name} ${doctor.middle_name} ${doctor.last_name}`;
+                     }
+
+                     return {
+                        ...data,
+                        id: docu.id,
+                        doctor: {
+                           ...doctor,
+                           full_name,
+                        },
+                        patient: { ..._user, full_name },
+                        request_date: data.request_date.toDate(),
+                     };
+                  }
+
                   return {
                      ...data,
                      id: docu.id,
@@ -150,7 +174,87 @@ export const useFetchRequestMedecine = ({ id }: ParamsType) => {
 
       const queryDB = query(
          collection(db, `medicine_request`),
-         where("service_id", "==", id),
+         and(where("status", "==", "pending"), where("service_id", "==", id)),
+         orderBy("created_at", "asc")
+      );
+      onSnapshot(
+         queryDB,
+         (snapshot) => {
+            Promise.all(
+               snapshot.docs.map(async (docu) => {
+                  const data = docu.data();
+                  const ref = doc(db, "users", data.patient_id);
+                  const docSnap = await getDoc(ref);
+                  const _user = docSnap.data() as UserType;
+                  let full_name: string = "";
+                  if (_user) {
+                     full_name = `${_user.first_name} ${_user.middle_name} ${_user.last_name}`;
+                  }
+
+                  const medicineRef = doc(
+                     db,
+                     "medecines",
+                     data.service_id,
+                     "medecines",
+                     data.medicine_id
+                  );
+                  const medicine = await getDoc(medicineRef);
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const medicineData = medicine.data() as any;
+                  const inventory = doc(
+                     db,
+                     "inventory",
+                     medicineData.medicine_id
+                  );
+                  const inventoryData = await getDoc(inventory);
+
+                  return {
+                     ...data,
+                     id: docu.id,
+                     patient: { ..._user, full_name },
+                     medicine: {
+                        id: inventoryData.id,
+                        ...inventoryData.data(),
+                     },
+                  };
+               }) as unknown as RequestMedecines[]
+            ).then((res) => {
+               const data = res.filter(
+                  (item) => item.patient.account_status === "active"
+               );
+
+               setRequests(data);
+            });
+         },
+         (err) => {
+            console.log(err);
+            setRequests(null);
+         }
+      );
+   };
+
+   return requests;
+};
+
+export const useFetchReleaseMedecine = ({ id }: ParamsType) => {
+   const [requests, setRequests] = useState<RequestMedecines[] | null>();
+   useEffect(() => {
+      if (!id) return;
+      GetRequests();
+   }, [id]);
+
+   const GetRequests = async () => {
+      if (!id) return;
+
+      const queryDB = query(
+         collection(db, `medicine_request`),
+         and(
+            where("service_id", "==", id),
+            or(
+               where("status", "==", "approve"),
+               where("status", "==", "release")
+            )
+         ),
          orderBy("created_at", "asc")
       );
       onSnapshot(

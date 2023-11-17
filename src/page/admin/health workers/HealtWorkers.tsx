@@ -11,7 +11,7 @@ import DateTimeLocal from "../../../shared/DateTimeLocal";
 
 const HealtWorkers = () => {
    const doctors = useFetchUsers({
-      role: ["doctor", "health-worker", "admin"],
+      role: ["rural health physician", "health-worker", "public health nurse"],
    });
    const [currentPage, setCurrentPage] = useState(1);
    const [pages, setPages] = useState(0);

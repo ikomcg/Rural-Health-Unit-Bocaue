@@ -7,7 +7,7 @@ import { BlueButton } from "../../../../../../../components/button/BlueButton";
 import { MdOutlineRemoveCircleOutline } from "react-icons/md";
 import uuid from "react-uuid";
 import CSwal from "../../../../../../../components/swal/Swal";
-import useFetchInventory from "../../../../../../../hooks/Inventory";
+// import useFetchInventory from "../../../../../../../hooks/Inventory";
 import { CreateAdjustmentMedecineFrb } from "../../../../../../../firebase/Service/Request";
 import { doc, runTransaction } from "firebase/firestore";
 import { db } from "../../../../../../../firebase/Base";
@@ -39,7 +39,7 @@ const AddAdjustment = ({ isPost, setIsPost }: PostType) => {
       },
    ]);
 
-   const inventory = useFetchInventory();
+   // const inventory = useFetchInventory();
    const OnClose = () => {
       setIsPost(false);
    };
@@ -102,6 +102,7 @@ const AddAdjustment = ({ isPost, setIsPost }: PostType) => {
                      const data = await CreateAdjustmentMedecineFrb({
                         data: {
                            medicine_id: _data[index].name,
+                           service_id: id,
                            stock_out: _data[index].stock_out,
                            reason: _data[index].reason,
                         },
@@ -173,17 +174,6 @@ const AddAdjustment = ({ isPost, setIsPost }: PostType) => {
       setPayload(filterPayload);
    };
 
-   // const AddForm = () => {
-   //    const form = {
-   //       id: uuid(),
-   //       name: "",
-   //       reason: "",
-   //       stock_out: "",
-   //       status: "pending",
-   //    };
-   //    setPayload((prev) => [...prev.concat(form)]);
-   // };
-
    return (
       <DialogSlide
          fullWidth={true}
@@ -209,18 +199,9 @@ const AddAdjustment = ({ isPost, setIsPost }: PostType) => {
                      item={item}
                      OnChangeHandle={OnChangeHandle}
                      OnRemove={OnRemoveHandle}
-                     inventory={inventory}
+                     medecines={medecines}
                   />
                ))}
-
-               {/* <button
-                  type="button"
-                  className={style.addForm}
-                  onClick={AddForm}
-                  disabled={isCreate}
-               >
-                  <MdAssignmentAdd />
-               </button> */}
             </form>
             <div className="flex flex-row justify-between mt-8">
                <BlueButton
@@ -246,9 +227,9 @@ type FormType = {
       e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
       uuid: string
    ) => void;
-   inventory: InventoryList[] | null | undefined;
+   medecines: MedecineList[] | null | undefined;
 };
-const Form = ({ item, OnChangeHandle, OnRemove, inventory }: FormType) => {
+const Form = ({ item, OnChangeHandle, OnRemove, medecines }: FormType) => {
    return (
       <div className="relative flex flex-row gap-3 mb-2">
          <div className="flex flex-col w-1/3">
@@ -262,13 +243,15 @@ const Form = ({ item, OnChangeHandle, OnRemove, inventory }: FormType) => {
                value={item.name}
             >
                <option value="">-----</option>
-               {!inventory ? (
+               {!medecines ? (
                   <option value="" disabled>
                      Loading
                   </option>
                ) : (
-                  inventory.map((item) => (
-                     <option value={item.id}>{item.name}</option>
+                  medecines.map((item) => (
+                     <option value={item?.medicines?.id}>
+                        {item?.medicines?.name}
+                     </option>
                   ))
                )}
             </select>

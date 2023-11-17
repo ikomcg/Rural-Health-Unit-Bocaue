@@ -90,15 +90,12 @@ const Login = () => {
             status: "online",
          })
             .then(() => {
-               if (set_cookie.role.includes("admin")) {
+               if (set_cookie.role.includes("rural health physician")) {
                   navigate("/admin/home");
-               } else if (
-                  set_cookie.role.includes("doctor") ||
-                  set_cookie.role.includes("health-worker")
-               ) {
-                  navigate("/health-worker/home");
-               } else {
+               } else if (set_cookie.role.includes("patient")) {
                   navigate("/patient/home");
+               } else {
+                  navigate("/health-worker/home");
                }
             })
             .catch(() => {

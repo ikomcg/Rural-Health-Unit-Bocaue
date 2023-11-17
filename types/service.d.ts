@@ -19,6 +19,8 @@ type RequestService = {
    patient: UserType;
    service_id: string;
    service_name: string;
+   doctor_assign: string;
+   doctor: UserType;
    request_date: any;
    created_at: any;
    status: "pending" | "approve" | "decline";
@@ -49,7 +51,8 @@ type RequestMedecines = {
    id: string;
    patient: UserType;
    medicine: InventoryList;
+   medicine_id: string;
    quantity: any;
    created_at: any;
-   status: "pending" | "approve" | "decline";
+   status: "pending" | "approve" | "decline" | "release";
 };

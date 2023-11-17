@@ -1,0 +1,13 @@
+@use "../../../color";
+
+.button {
+   color: color.$blue;
+   font-size: 18px;
+   font-weight: 600;
+}
+.active {
+   border-bottom: 3px solid color.$blue;
+}
+.inactive {
+   border: 0;
+}

@@ -71,7 +71,7 @@ const Reply = ({ activeInbox }: ReplyType) => {
 
       await CreateRapidApi({
          endPoint: "sms/send",
-         token: "bWlrb2d1cnJvYmF0OjFFOUE4MkFFLTIyQTItQ0REMS1DRUFDLTNFQjEzRjgyNjhBMg==",
+         token: "Y291cnNlaGVyN0BnbWFpbC5jb206OTE0QzY4M0YtM0NCMy0xRkY0LTBFRUQtRTMxMUZENEFBQkM2",
          data: {
             messages: [
                {
