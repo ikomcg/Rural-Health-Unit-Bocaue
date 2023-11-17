@@ -35,7 +35,6 @@ const PersonalInformation: React.FC<PersonalInformationType> = ({
    HandleOnChange,
    OnChangeFile,
 }) => {
-  
    return (
       <div className="px-3 md:px-5">
          <h3 className="text-xl mb-5 text-blue font-semibold">
@@ -159,15 +158,15 @@ const PersonalInformation: React.FC<PersonalInformationType> = ({
                   name="barangay"
                   required
                   placeholder="Barangay"
-                  label="Branggay"
+                  label="Barangay"
                   value={payload.barangay}
                   onChange={HandleOnChange}
                >
                   <option value="" disabled>
                      ----
                   </option>
-                  {BARANGAYS.map((item) => (
-                     <option key={item} value={item}>
+                  {BARANGAYS.map((item, i) => (
+                     <option key={i} value={item.toLocaleUpperCase()}>
                         {item}
                      </option>
                   ))}

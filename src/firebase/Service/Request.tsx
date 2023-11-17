@@ -30,3 +30,17 @@ export const CreateRequestMedecineFrb = async ({ data }: Params) => {
          return null;
       });
 };
+export const CreateAdjustmentMedecineFrb = async ({ data }: Params) => {
+   const docData = {
+      ...data,
+      created_at: serverTimestamp(),
+   };
+
+   return await addDoc(collection(db, "medicine_adjustment"), docData)
+      .then((res) => {
+         return res;
+      })
+      .catch(() => {
+         return null;
+      });
+};

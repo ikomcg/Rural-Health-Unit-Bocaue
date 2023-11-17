@@ -1,42 +1,36 @@
 import { useParams } from "react-router-dom";
 import Table from "../../../../../../components/table/Table";
 import { CircularProgress, Pagination } from "@mui/material";
+import moment from "moment";
 import { useContext, useEffect, useState } from "react";
-import { useFetchMyRequestMedecine } from "../../../../../../hooks/Request";
 import { BlueButton } from "../../../../../../components/button/BlueButton";
-import AddRequest from "./add-request/Add-Request";
+import AddRequest from "./add/Add";
+import useFetchMyRequest from "../../../../../../hooks/MyRequest";
 import { UserProvider } from "../../../../../../context/UserProvider";
 const Request = () => {
    const { id } = useParams();
    const { cookies } = useContext(UserProvider);
-
-   const medecines = useFetchMyRequestMedecine({
-      id: id,
-      user_id: cookies?.id,
-   });
+   const doctors = useFetchMyRequest({ id: id, user_id: cookies?.id });
    const [currentPage, setCurrentPage] = useState(1);
-   const [sliceMedecines, setSliceMedecines] = useState<
-      RequestMedecines[] | null
-   >();
+   const [sliceDoctors, setSliceDoctors] = useState<RequestService[] | null>();
    const [isOpen, setIsOpen] = useState(false);
    const [pages, setPages] = useState(0);
    useEffect(() => {
       const SlicePagination = () => {
-         if (medecines === null) return setSliceMedecines(null);
-         if (medecines === undefined) return;
+         if (doctors === null) return setSliceDoctors(null);
+         if (doctors === undefined) return;
 
-         const pages = Math.ceil(medecines.length / 10);
-         setPages(pages);
+         setPages(Math.ceil(doctors.length / 10));
 
          const lastPostIndex = currentPage * 5;
          const firstPostIndex = lastPostIndex - 5;
 
-         const currentPost = medecines?.slice(firstPostIndex, lastPostIndex);
-         setSliceMedecines(currentPost);
+         const currentPost = doctors.slice(firstPostIndex, lastPostIndex);
+         setSliceDoctors(currentPost);
       };
 
       SlicePagination();
-   }, [currentPage, medecines]);
+   }, [currentPage, doctors]);
 
    return (
       <>
@@ -50,8 +44,8 @@ const Request = () => {
                Add Request
             </BlueButton>
          </div>
-         <Table th={["Medecine", "Quantity", "Status"]}>
-            {sliceMedecines === undefined ? (
+         <Table th={["Date Schedule", "Status"]}>
+            {sliceDoctors === undefined ? (
                <tr>
                   <td className="text-center" colSpan={3}>
                      <div className="flex flex-col justify-center items-center">
@@ -60,23 +54,26 @@ const Request = () => {
                      </div>
                   </td>
                </tr>
-            ) : sliceMedecines === null ? (
+            ) : sliceDoctors === null ? (
                <tr>
                   <td className="text-sm" colSpan={3}>
                      Error Get Request List!!
                   </td>
                </tr>
-            ) : sliceMedecines.length === 0 ? (
+            ) : sliceDoctors.length === 0 ? (
                <tr>
                   <td className="text-sm" colSpan={3}>
                      No Request found
                   </td>
                </tr>
             ) : (
-               sliceMedecines.map((item) => (
+               sliceDoctors.map((item) => (
                   <tr key={item.id}>
-                     <td>{item.medicine.name}</td>
-                     <td>{item.quantity}</td>
+                     <td>
+                        {moment(item.request_date.toISOString())
+                           .utcOffset(8)
+                           .format("LLL")}
+                     </td>
                      <td>
                         <span className="bg-[gray] text-sm text-slate-100 px-2 py-1 rounded">
                            {item.status.toLocaleUpperCase()}
@@ -87,7 +84,7 @@ const Request = () => {
             )}
          </Table>
 
-         {medecines && (
+         {doctors && (
             <Pagination
                className="mt-2"
                page={currentPage}
@@ -98,6 +95,7 @@ const Request = () => {
                onChange={(_e, page) => setCurrentPage(page)}
             />
          )}
+
          {isOpen && <AddRequest isPost={isOpen} setIsPost={setIsOpen} />}
       </>
    );

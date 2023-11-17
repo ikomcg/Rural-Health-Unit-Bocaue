@@ -30,17 +30,13 @@ const AddRequest = ({ isPost, setIsPost }: PostType) => {
    const SendRequest = async (e: React.FormEvent) => {
       e.preventDefault();
       if (!id || !cookies || !name || !medecines) return;
-      const medecine = medecines.find(
-         (item) => item.id === payload.medecine_id
-      );
+
       setIsLoading(true);
       const _data = await CreateRequestMedecineFrb({
          data: {
             patient_id: cookies.id,
             service_id: id,
-            service_name: name,
-            medecine_name: medecine?.name ?? "",
-            medecine_id: payload.medecine_id,
+            medicine_id: payload.medecine_id,
             quantity: payload.quantity,
             status: "pending",
          },
@@ -66,6 +62,12 @@ const AddRequest = ({ isPost, setIsPost }: PostType) => {
 
       setPayload((prev) => ({ ...prev, [name]: value }));
    };
+
+   const filterSelectMedicines = medecines?.find((item) => {
+      if (item.id === payload.medecine_id) {
+         return item;
+      }
+   });
 
    return (
       <DialogSlide
@@ -111,7 +113,7 @@ const AddRequest = ({ isPost, setIsPost }: PostType) => {
                      ) : (
                         medecines.map((item) => (
                            <option key={item.id} value={item.id}>
-                              {item.name}
+                              {item.medicines.name}
                            </option>
                         ))
                      )}
@@ -122,7 +124,7 @@ const AddRequest = ({ isPost, setIsPost }: PostType) => {
                   <input
                      value={payload.quantity}
                      required
-                     max={10}
+                     max={filterSelectMedicines?.stock_in}
                      name="quantity"
                      className="border border-blue py-[2px] px-2 mt-1"
                      type="number"

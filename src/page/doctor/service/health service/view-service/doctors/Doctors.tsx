@@ -1,28 +1,31 @@
 import { useParams } from "react-router-dom";
 import Table from "../../../../../../components/table/Table";
+import useFetchSchedulesService from "../../../../../../hooks/Schedule";
 import { CircularProgress, Pagination } from "@mui/material";
+import moment from "moment";
 import { useEffect, useState } from "react";
-import { useFetchMedecineListService } from "../../../../../../hooks/Medecines";
 import { AiOutlineSearch } from "react-icons/ai";
-
-const Medecines = () => {
+const Doctors = () => {
    const { id } = useParams();
-   const medecines = useFetchMedecineListService({ id: id });
+   const doctors = useFetchSchedulesService({ id: id });
 
    const [currentPage, setCurrentPage] = useState(1);
-   const [sliceMedecines, setSliceMedecines] = useState<
-      MedecineList[] | null
-   >();
+   const [sliceDoctors, setSliceDoctors] = useState<ScheduleService[] | null>();
    const [search, setSearch] = useState("");
    const [refresh, setRefresh] = useState(false);
    const [pages, setPages] = useState(0);
 
    useEffect(() => {
       const SlicePagination = () => {
-         if (medecines === null) return setSliceMedecines(null);
-         if (medecines === undefined) return;
+         if (doctors === null) return setSliceDoctors(null);
+         if (doctors === undefined) return;
 
-         const filterData = medecines.filter((item) => item);
+         const filterData = doctors.filter((item) =>
+            item.name
+               .trim()
+               .toLocaleLowerCase()
+               .includes(search.toLocaleLowerCase().trim())
+         );
          const pages = Math.ceil(filterData.length / 10);
          setPages(pages);
 
@@ -30,16 +33,16 @@ const Medecines = () => {
          const firstPostIndex = lastPostIndex - 10;
 
          const currentPost = filterData?.slice(firstPostIndex, lastPostIndex);
-         setSliceMedecines(currentPost);
+         setSliceDoctors(currentPost);
       };
-
       SlicePagination();
-   }, [currentPage, medecines, refresh]);
+   }, [currentPage, doctors, refresh]);
 
    const HandleRefresh = () => {
       setCurrentPage(1);
       setRefresh((prev) => !prev);
    };
+
    return (
       <>
          <div className="flex flex-row justify-end mt-2">
@@ -63,8 +66,8 @@ const Medecines = () => {
                }}
             />
          </div>
-         <Table th={["Medecines", "Descriptions", "Stock"]}>
-            {sliceMedecines === undefined ? (
+         <Table th={["Health Worker Name", "Available From", "Available To"]}>
+            {sliceDoctors === undefined ? (
                <tr>
                   <td className="text-center" colSpan={4}>
                      <div className="flex flex-col justify-center items-center">
@@ -73,30 +76,38 @@ const Medecines = () => {
                      </div>
                   </td>
                </tr>
-            ) : sliceMedecines === null ? (
+            ) : sliceDoctors === null ? (
                <tr>
                   <td className="text-sm" colSpan={4}>
-                     Error Get Medecine List!
+                     Error Get Schedules!!
                   </td>
                </tr>
-            ) : sliceMedecines.length === 0 ? (
+            ) : sliceDoctors.length === 0 ? (
                <tr>
                   <td className="text-sm" colSpan={4}>
-                     No Medecines found
+                     No Schedules found
                   </td>
                </tr>
             ) : (
-               sliceMedecines.map((item) => (
+               sliceDoctors.map((item) => (
                   <tr key={item.id}>
-                     <td>{item.medicines.name}</td>
-                     <td>{item.medicines.descriptions}</td>
-                     <td>{item.stock_in}</td>
+                     <td>{item.name}</td>
+                     <td>
+                        {moment(item.available_from.toISOString())
+                           .utcOffset(8)
+                           .format("LLL")}
+                     </td>
+                     <td>
+                        {moment(item.available_to.toISOString())
+                           .utcOffset(8)
+                           .format("LLL")}
+                     </td>
                   </tr>
                ))
             )}
          </Table>
 
-         {medecines && (
+         {doctors && (
             <Pagination
                className="mt-2"
                page={currentPage}
@@ -111,4 +122,4 @@ const Medecines = () => {
    );
 };
 
-export default Medecines;
+export default Doctors;

@@ -1,16 +1,16 @@
 import { useParams } from "react-router-dom";
-import Table from "../../../../../../components/table/Table";
+import Table from "../../../../../../../components/table/Table";
 import { CircularProgress, Pagination } from "@mui/material";
 import { FaTrash } from "react-icons/fa";
 import { AiFillEdit, AiOutlineSearch } from "react-icons/ai";
 import { deleteDoc, doc } from "firebase/firestore";
-import { db } from "../../../../../../firebase/Base";
+import { db } from "../../../../../../../firebase/Base";
 import { useEffect, useState } from "react";
-import { useFetchMedecineListService } from "../../../../../../hooks/Medecines";
+import { useFetchMedecineListService } from "../../../../../../../hooks/Medecines";
 import UpdateMedecine from "./UpdateMedecine";
-import CSwal from "../../../../../../components/swal/Swal";
+import CSwal from "../../../../../../../components/swal/Swal";
 
-type PayloadType = object & Omit<MedecineList, "created_at">;
+type PayloadType = object & Omit<Medecine, "created_at">;
 
 const Medecines = () => {
    const { id } = useParams();
@@ -56,7 +56,7 @@ const Medecines = () => {
          if (medecines === undefined) return;
 
          const filterData = medecines.filter((item) =>
-            item.name
+            item.medicines.name
                .trim()
                .toLocaleLowerCase()
                .includes(search.toLocaleLowerCase().trim())
@@ -82,9 +82,10 @@ const Medecines = () => {
    const OnClickEdit = (item: MedecineList) => {
       setPayload({
          id: item.id,
-         name: item.name,
-         descriptions: item.descriptions,
-         stock: item.stock,
+         name: item.medicines.name,
+         batch_lot_no: item.batch_lot_no,
+         stock_in: item.stock_in,
+         category: item.category,
       });
    };
 
@@ -136,9 +137,9 @@ const Medecines = () => {
             ) : (
                sliceMedecines.map((item) => (
                   <tr key={item.id}>
-                     <td>{item.name}</td>
-                     <td>{item.descriptions}</td>
-                     <td>{item.stock}</td>
+                     <td>{item.medicines.name}</td>
+                     <td>{item.medicines.descriptions}</td>
+                     <td>{item.stock_in}</td>
                      <td className="flex flex-row gap-2 justify-center">
                         <button
                            className="bg-red-500 px-1 py-1 rounded text-xs"

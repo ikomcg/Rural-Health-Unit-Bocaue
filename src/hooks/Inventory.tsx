@@ -1,9 +1,16 @@
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import {
+   collection,
+   doc,
+   getDoc,
+   onSnapshot,
+   orderBy,
+   query,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebase/Base";
 
 const useFetchInventory = () => {
-   const [inventory, setInventory] = useState<Inventory[] | null>();
+   const [inventory, setInventory] = useState<InventoryList[] | null>();
 
    const GetInventory = async () => {
       const queryDB = query(
@@ -13,24 +20,29 @@ const useFetchInventory = () => {
       onSnapshot(
          queryDB,
          (snapshot) => {
-            const data = snapshot.docs.map((doc) => {
-               const timestamp =
-                  doc.data().created_at.seconds * 1000 +
-                  Math.floor(doc.data().created_at.nanoseconds / 1e6);
-               const created_at = new Date(timestamp);
+            Promise.all(
+               snapshot.docs.map(async (docu) => {
+                  const data = docu.data();
+                  const userRef = doc(db, "medecines", docu.data().category);
+                  const categorys = await getDoc(userRef);
 
-               const status = doc.data().availability > 100 ? "High" : "Low";
-
-               return {
-                  ...doc.data(),
-                  id: doc.id,
-                  status,
-                  created_at,
-               };
-            }) as unknown as Inventory[];
-            setInventory(data);
+                  return {
+                     ...data,
+                     id: docu.id,
+                     category: {
+                        id: categorys.id,
+                        ...categorys.data(),
+                     },
+                     created_at: data.created_at.toDate(),
+                  };
+               }) as unknown as InventoryList[]
+            ).then((res) => {
+               console.log(res);
+               setInventory(res);
+            });
          },
-         () => {
+         (err) => {
+            console.log(err);
             setInventory(null);
          }
       );

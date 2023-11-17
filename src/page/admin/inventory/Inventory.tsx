@@ -10,16 +10,20 @@ import { BlueButton } from "../../../components/button/BlueButton";
 import { MdOutlineInventory } from "react-icons/md";
 import CreateInventor from "./add-inventory/CreateInventor";
 import UpdateInventory from "./update-inventory/UpdateInventory";
+import useFetchMedecines from "../../../hooks/Medecines";
 
 const Inventory = () => {
    const inventory = useFetchInventory();
    const [currentPage, setCurrentPage] = useState(1);
    const [pages, setPages] = useState(0);
-   const [sliceInventory, setSliceInventory] = useState<Inventory[] | null>();
+   const [sliceInventory, setSliceInventory] = useState<
+      InventoryList[] | null
+   >();
    const [search, setSearch] = useState("");
    const [refresh, setRefresh] = useState(false);
    const [isAdd, setIsAdd] = useState(false);
    const [toUpdate, setToUpdate] = useState<Inventory | null>(null);
+   const medicines = useFetchMedecines();
 
    useEffect(() => {
       const SlicePagination = () => {
@@ -87,15 +91,7 @@ const Inventory = () => {
                Add
             </BlueButton>
             <Table
-               th={[
-                  "#",
-                  "Name",
-                  "Total Issued",
-                  "Total Dispensed",
-                  "Status",
-                  "Availability",
-                  "Action",
-               ]}
+               th={["#", "Name", "Descriptions", "Category", "Action"]}
                className={style.table}
             >
                {sliceInventory === undefined ? (
@@ -124,14 +120,17 @@ const Inventory = () => {
                      <tr key={item.id}>
                         <td>{i + 1}</td>
                         <td>{item.name}</td>
-                        <td>{item.total_issued}</td>
-                        <td>{item.total_dispensed}</td>
-                        <td>{item.status}</td>
-                        <td>{item.availability}</td>
+                        <td>{item.descriptions}</td>
+                        <td>{item.category.name}</td>
                         <td className="flex flex-row gap-2 items-center justify-center">
                            <button
                               className="bg-blue text-white px-1 py-1 rounded text-xs"
-                              onClick={() => setToUpdate(item)}
+                              onClick={() =>
+                                 setToUpdate({
+                                    ...item,
+                                    category: item.category.id,
+                                 })
+                              }
                            >
                               <BsFillGearFill />
                            </button>
@@ -154,10 +153,18 @@ const Inventory = () => {
             )}
          </Container>
 
-         <CreateInventor setIsPost={setIsAdd} isPost={isAdd} />
+         <CreateInventor
+            setIsPost={setIsAdd}
+            isPost={isAdd}
+            medicines={medicines}
+         />
 
          {toUpdate && (
-            <UpdateInventory setPayload={setToUpdate} payload={toUpdate} />
+            <UpdateInventory
+               setPayload={setToUpdate}
+               payload={toUpdate}
+               medicines={medicines}
+            />
          )}
       </>
    );

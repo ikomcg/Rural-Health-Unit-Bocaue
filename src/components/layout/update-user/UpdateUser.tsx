@@ -111,6 +111,8 @@ const UpdateUser = ({ setPayload, payload }: UpdateInventoryType) => {
          update_at: serverTimestamp(),
       };
 
+      console.log(data);
+
       return await updateDoc(doc(db, "users", payload.id), data)
          .then(() => true)
          .catch((err) => {

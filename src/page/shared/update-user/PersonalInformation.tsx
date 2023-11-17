@@ -9,8 +9,10 @@ type PersonalInformationType = {
    HandleOnChange: (
       e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
    ) => void;
-   payload: UserType;
-   setPayload: React.Dispatch<React.SetStateAction<UserType | null>>;
+   payload: { role: string } & Omit<UserType, "role">;
+   setPayload: React.Dispatch<
+      React.SetStateAction<({ role: string } & Omit<UserType, "role">) | null>
+   >;
    OnChangeFile: (e: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
 };
 const PersonalInformation: React.FC<PersonalInformationType> = ({
@@ -24,6 +26,7 @@ const PersonalInformation: React.FC<PersonalInformationType> = ({
       setPayload((prev) => (prev ? { ...prev, is_verify: checked } : null));
    };
 
+   console.log(payload);
    return (
       <div className="px-3">
          <h3 className="text-xl mb-3 text-blue font-semibold">
@@ -164,7 +167,7 @@ const PersonalInformation: React.FC<PersonalInformationType> = ({
                      ----
                   </option>
                   {BARANGAYS.map((item) => (
-                     <option key={item} value={item}>
+                     <option key={item} value={item.toLocaleUpperCase()}>
                         {item}
                      </option>
                   ))}
@@ -195,14 +198,14 @@ const PersonalInformation: React.FC<PersonalInformationType> = ({
                   required
                   placeholder="Role"
                   label="Role"
-                  value={payload.role}
                   onChange={HandleOnChange}
+                  value={payload.role}
                >
                   <option value="" disabled>
                      ----
                   </option>
                   <option value="admin">Admin</option>
-                  <option value="Health-worker">health-worker</option>
+                  <option value="health-worker">health-worker</option>
                   <option value="doctor">Doctor</option>
                   <option value="patient">Patient</option>
                </Select>

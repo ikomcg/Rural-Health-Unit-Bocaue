@@ -23,20 +23,32 @@ type RequestService = {
    created_at: any;
    status: "pending" | "approve" | "decline";
 };
-type MedecineList = {
+type Medecine = {
    id: string;
    name: string;
-   descriptions: string;
-   stock: number;
+   batch_lot_no: string;
+   stock_in: string | number;
+   category: string;
+};
+type MedecineList = {
+   id: string;
+   batch_lot_no: string;
+   medicines: InventoryList;
+   category: string;
+   stock_in: number;
+   created_at: any;
+};
+type MedecineAdjusmentList = {
+   id: string;
+   medicines: InventoryList;
+   reason: string;
+   stock_out: number;
    created_at: any;
 };
 type RequestMedecines = {
    id: string;
-   patient_id: string;
    patient: UserType;
-   service_name: string;
-   medecine_name: string;
-   medecine_id: string;
+   medicine: InventoryList;
    quantity: any;
    created_at: any;
    status: "pending" | "approve" | "decline";
