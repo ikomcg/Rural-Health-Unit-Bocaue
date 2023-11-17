@@ -7,6 +7,7 @@ import { BlueButton } from "../../../../../../../components/button/BlueButton";
 import { MdOutlineRemoveCircleOutline } from "react-icons/md";
 import uuid from "react-uuid";
 import CSwal from "../../../../../../../components/swal/Swal";
+// import useFetchInventory from "../../../../../../../hooks/Inventory";
 import { CreateAdjustmentMedecineFrb } from "../../../../../../../firebase/Service/Request";
 import { doc, runTransaction } from "firebase/firestore";
 import { db } from "../../../../../../../firebase/Base";
@@ -248,7 +249,9 @@ const Form = ({ item, OnChangeHandle, OnRemove, medecines }: FormType) => {
                   </option>
                ) : (
                   medecines.map((item) => (
-                     <option value={item.id}>{item.medicines.name}</option>
+                     <option value={item?.medicines?.id}>
+                        {item?.medicines?.name}
+                     </option>
                   ))
                )}
             </select>

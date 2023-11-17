@@ -11,7 +11,7 @@ import {
    MdOutlineQueuePlayNext,
 } from "react-icons/md";
 import { useState } from "react";
-import { TbReportSearch } from "react-icons/tb";
+// import { TbReportSearch } from "react-icons/tb";
 
 type ModuleType = {
    isMenu: boolean;
@@ -43,7 +43,7 @@ const Module = ({ isMenu }: ModuleType) => {
          icon: <MdInventory />,
          link: "inventory",
       },
-      { name: "Reports", icon: <TbReportSearch />, link: "reports" },
+      // { name: "Reports", icon: <TbReportSearch />, link: "reports" },
       {
          name: "Health Workers",
          icon: <MdHealthAndSafety />,
