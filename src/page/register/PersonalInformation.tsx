@@ -158,7 +158,7 @@ const PersonalInformation: React.FC<PersonalInformationType> = ({
                   name="barangay"
                   required
                   placeholder="Barangay"
-                  label="Branggay"
+                  label="Barangay"
                   value={payload.barangay}
                   onChange={HandleOnChange}
                >

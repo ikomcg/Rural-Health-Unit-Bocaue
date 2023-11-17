@@ -26,7 +26,12 @@ import Queue from "./page/patient/queue/Queue";
 import ViewDepartment from "./page/patient/queue/view-department/ViewDepartment";
 import AdminQueue from "./page/admin/queue/Queue";
 import AdminViewDepartment from "./page/admin/queue/view-department/ViewDepartment";
-
+import DoctorHome from "./page/doctor/home/Home";
+import DoctorService from "./page/doctor/service/ServiceMedicine";
+import DoctorHealthService from "./page/doctor/service/health service/Health Service";
+import DoctorHealthServiceView from "./page/doctor/service/health service/view-service/View";
+import DoctorSchedule from "./page/doctor/schedule/Schedule";
+import DoctorLayout from "./components/layout/doctor/Layout";
 const App = () => {
    return (
       <BrowserRouter>
@@ -87,7 +92,21 @@ const App = () => {
                   <Route path=":name/:id" element={<ViewDepartment />} />
                </Route>
             </Route>
+            <Route path="health-worker" element={<DoctorLayout />}>
+               <Route path="home" element={<DoctorHome />} />
 
+               <Route path="service" element={<DoctorService />}>
+                  <Route path="health-services">
+                     <Route index element={<DoctorHealthService />} />
+                     <Route
+                        path=":name/:id"
+                        element={<DoctorHealthServiceView />}
+                     />
+                  </Route>
+               </Route>
+               <Route path="schedule" element={<DoctorSchedule />} />
+               <Route path="messages" element={<Messages />} />
+            </Route>
             <Route path="*" element={<>Page Not Found</>} />
          </Routes>
       </BrowserRouter>

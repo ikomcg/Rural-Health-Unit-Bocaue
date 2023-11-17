@@ -17,8 +17,10 @@ import { CreateRapidApi } from "../../../api/SMS/SendSMS";
 import { RedButton } from "../../../components/button/RedButton";
 
 type UpdateInventoryType = {
-   payload: UserType;
-   setPayload: React.Dispatch<SetStateAction<UserType | null>>;
+   payload: { role: string } & Omit<UserType, "role">;
+   setPayload: React.Dispatch<
+      SetStateAction<({ role: string } & Omit<UserType, "role">) | null>
+   >;
 };
 const UpdateUser = ({ setPayload, payload }: UpdateInventoryType) => {
    const [isSaving, setIsSaving] = useState(false);
@@ -31,7 +33,9 @@ const UpdateUser = ({ setPayload, payload }: UpdateInventoryType) => {
       e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
    ) => {
       const { name, value } = e.target;
-
+      if (name === "role") {
+         return setPayload((prev) => (prev ? { ...prev, role: value } : null));
+      }
       setPayload((prev) =>
          prev ? { ...prev, [name]: value.toLocaleUpperCase() } : null
       );
@@ -99,6 +103,7 @@ const UpdateUser = ({ setPayload, payload }: UpdateInventoryType) => {
    const UpdateAccount = async () => {
       const _data = {
          ...payload,
+         role: [payload.role],
          birthday: TimeStampValue(payload.birthday),
          update_at: serverTimestamp(),
       };

@@ -92,6 +92,11 @@ const Login = () => {
             .then(() => {
                if (set_cookie.role.includes("admin")) {
                   navigate("/admin/home");
+               } else if (
+                  set_cookie.role.includes("doctor") ||
+                  set_cookie.role.includes("health-worker")
+               ) {
+                  navigate("/health-worker/home");
                } else {
                   navigate("/patient/home");
                }
@@ -143,24 +148,19 @@ const Login = () => {
       } as UserType;
 
       if (role.includes("patient")) {
-         if (is_verify) {
-            saveCookies(cookie);
-            return cookie;
-         } else {
+         if (!is_verify) {
             Swal.fire({
                icon: "info",
                title: "Account not Verify",
                text: "Contact Rural Health Unit to verify your account",
             });
 
-            return false;
+            return null;
          }
-      } else if (role.includes("admin")) {
-         saveCookies(cookie);
-         return cookie;
       }
 
-      return false;
+      saveCookies(cookie);
+      return cookie;
    };
 
    return (
