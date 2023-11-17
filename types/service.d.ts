@@ -49,7 +49,8 @@ type RequestMedecines = {
    id: string;
    patient: UserType;
    medicine: InventoryList;
+   medicine_id : string
    quantity: any;
    created_at: any;
-   status: "pending" | "approve" | "decline";
+   status: "pending" | "approve" | "decline" | "release";
 };

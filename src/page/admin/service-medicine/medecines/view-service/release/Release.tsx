@@ -3,17 +3,15 @@ import Table from "../../../../../../components/table/Table";
 import { CircularProgress, Pagination } from "@mui/material";
 import { useEffect, useState } from "react";
 import { BlueButton } from "../../../../../../components/button/BlueButton";
-import { doc, runTransaction, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../../firebase/Base";
-import { RedButton } from "../../../../../../components/button/RedButton";
 import Swal from "sweetalert2";
-import { useFetchRequestMedecine } from "../../../../../../hooks/Request";
+import { useFetchReleaseMedecine } from "../../../../../../hooks/Request";
 import { AiOutlineSearch } from "react-icons/ai";
-import { CreateRapidApi } from "../../../../../../api/SMS/SendSMS";
 
-const Request = () => {
+const Release = () => {
    const { id } = useParams();
-   const medecine = useFetchRequestMedecine({ id: id });
+   const medecine = useFetchReleaseMedecine({ id: id });
    const [currentPage, setCurrentPage] = useState(1);
    const [sliceMedecines, setSliceMedecines] = useState<
       RequestMedecines[] | null
@@ -53,46 +51,22 @@ const Request = () => {
 
    const OnChangeStatus = async (request: RequestMedecines, status: string) => {
       if (!id) return;
-      console.log(request, "asd");
-
-      if (status === "decline") {
-         const sfDocRef = doc(
-            db,
-            `medecines`,
-            id,
-            "medecines",
-            request.medicine_id
-         );
-         await runTransaction(db, async (transaction) => {
-            const sfDoc = await transaction.get(sfDocRef);
-            if (!sfDoc.exists()) {
-               throw "Document does not exist!";
-            }
-
-            const newStock =
-               Number(sfDoc.data().stock_in) + Number(request.quantity);
-
-            transaction.update(sfDocRef, {
-               stock_in: newStock.toString(),
-            });
-         });
-      }
 
       await updateDoc(doc(db, "medicine_request", request.id), { status })
          .then(async () => {
-            await CreateRapidApi({
-               endPoint: "sms/send",
-               token: "bGx1cmFnLjIyMTYxOUBiYWxhZ3Rhcy5zdGkuZWR1LnBoOjQ1RUJDMkVCLTRBMzQtMDhDOS03MjA2LTI2OUEwRjVEMzQ3Qw==",
-               data: {
-                  messages: [
-                     {
-                        from: "RHU",
-                        body: `Your Request ${request.medicine.name} in RHU Bocaue has been ${status}`,
-                        to: request.patient.contact_no,
-                     },
-                  ],
-               },
-            });
+            // await CreateRapidApi({
+            //    endPoint: "sms/send",
+            //    token: "bGx1cmFnLjIyMTYxOUBiYWxhZ3Rhcy5zdGkuZWR1LnBoOjQ1RUJDMkVCLTRBMzQtMDhDOS03MjA2LTI2OUEwRjVEMzQ3Qw==",
+            //    data: {
+            //       messages: [
+            //          {
+            //             from: "RHU",
+            //             body: `Your Request ${request.medicine.name} in RHU Bocaue has been ${status}`,
+            //             to: request.patient.contact_no,
+            //          },
+            //       ],
+            //    },
+            // });
          })
          .catch((err) => {
             Swal.fire({
@@ -105,7 +79,7 @@ const Request = () => {
    return (
       <>
          <div className="flex flex-row justify-between items-center mt-10">
-            <h1 className="text-blue text-2xl ">Patient's Request</h1>
+            <h1 className="text-blue text-2xl ">Release</h1>
             <div className="flex flex-row items-center w-[40%]">
                <button
                   className="text-white bg-blue text-xl px-2 py-[6px] rounded-l border border-blue"
@@ -147,7 +121,7 @@ const Request = () => {
             ) : sliceMedecines.length === 0 ? (
                <tr>
                   <td className="text-sm" colSpan={4}>
-                     No Request found
+                     No Release found
                   </td>
                </tr>
             ) : (
@@ -158,16 +132,11 @@ const Request = () => {
                      <td>{item.quantity}</td>
                      <td className="flex flex-col gap-2 justify-center items-center">
                         <BlueButton
-                           disabled={item.status === "approve"}
-                           onClick={() => OnChangeStatus(item, "approve")}
+                           disabled={item.status === "release"}
+                           onClick={() => OnChangeStatus(item, "release")}
                         >
-                           Approve
+                           Release
                         </BlueButton>
-                        <RedButton
-                           onClick={() => OnChangeStatus(item, "decline")}
-                        >
-                           Decline
-                        </RedButton>
                      </td>
                   </tr>
                ))
@@ -189,4 +158,4 @@ const Request = () => {
    );
 };
 
-export default Request;
+export default Release;
