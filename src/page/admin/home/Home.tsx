@@ -19,37 +19,51 @@ const Card: React.FC<CardType> = ({ count, name }) => {
    );
 };
 
-// interface CountedData {
-//    count: number;
-//    created_at: string;
-// }
-
 const Home = () => {
-   const users = useFetchUsers({
-      role: ["patient", "admin", "health-worker", "doctor"],
-   });
-   // const [hWCount, setHWCount] = useState<
-   //    { count: number; created_at: string }[] | null
-   // >();
-   // const [patientCount, setPatientCount] = useState<
-   //    { count: number; created_at: string }[] | null
-   // >();
-   // const [userCount, setUserCount] = useState<
-   //    { count: number; created_at: string }[] | null
-   // >();
-   const filterPatient = users?.filter((item) => item.role.includes("patient"));
-   const healthWorkers = users?.filter(
-      (item) =>
-         item.role.includes("health-worker") || item.role.includes("doctor")
+   const users =
+      useFetchUsers({
+         role: ["patient", "admin", "health-worker", "doctor"],
+      }) ?? [];
+
+   const patientUsers =
+      users
+         ?.filter((item) => item.role.includes("patient"))
+         .sort((a, b) => a.barangay.localeCompare(b.barangay)) ?? [];
+
+   const healthWorkers =
+      users
+         ?.filter(
+            (item) =>
+               item.role.includes("health-worker") ||
+               item.role.includes("doctor")
+         )
+         .sort((a, b) => a.barangay.localeCompare(b.barangay)) ?? [];
+
+   const countPatient = Object.values(
+      patientUsers.reduce((acc, user) => {
+         acc[user.barangay] = (acc[user.barangay] || 0) + 1;
+         return acc;
+      }, {} as Record<string, number>)
    );
 
-   // const dataCountPatient = filterPatient.
+   const countHealthWorkers = Object.values(
+      healthWorkers.reduce((acc, user) => {
+         acc[user.barangay] = (acc[user.barangay] || 0) + 1;
+         return acc;
+      }, {} as Record<string, number>)
+   );
 
-   // console.log(userCount);
+   const countUsers = Object.values(
+      users.reduce((acc, user) => {
+         acc[user.barangay] = (acc[user.barangay] || 0) + 1;
+         return acc;
+      }, {} as Record<string, number>)
+   );
+
    return (
       <>
          <div className="flex flex-row my-10">
-            <Card count={filterPatient?.length ?? 0} name="Total Patient" />
+            <Card count={patientUsers?.length ?? 0} name="Total Patient" />
             <Card count={users?.length ?? 0} name="Users" />
             <Card count={healthWorkers?.length ?? 0} name="Health Workers" />
          </div>
@@ -60,21 +74,22 @@ const Home = () => {
             series={[
                {
                   name: "Patient",
-                  data: [30, 40, 50],
+                  data: countPatient ? [...countPatient] : [],
                },
                {
                   name: "Health Workers",
-                  data: [30, 40, 50],
+                  data: countHealthWorkers ? [...countHealthWorkers] : [],
                },
                {
                   name: "User",
-                  data: [30, 40, 50],
+                  data: countUsers ? [...countUsers] : [],
                },
             ]}
             options={{
                dataLabels: {
                   enabled: false,
                },
+               yaxis: {},
                xaxis: {
                   type: "category",
                   categories: [...BARANGAYS],
