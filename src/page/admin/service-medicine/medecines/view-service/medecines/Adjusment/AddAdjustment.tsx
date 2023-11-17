@@ -1,14 +1,17 @@
 import React, { SetStateAction, useState } from "react";
-import style from "../../style.module.scss";
+import style from "../../../style.module.scss";
 import { useParams } from "react-router-dom";
 import DialogSlide from "../../../../../../../components/mui/dialog/SlideModal";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { BlueButton } from "../../../../../../../components/button/BlueButton";
-import { MdAssignmentAdd, MdOutlineRemoveCircleOutline } from "react-icons/md";
+import { MdOutlineRemoveCircleOutline } from "react-icons/md";
 import uuid from "react-uuid";
 import CSwal from "../../../../../../../components/swal/Swal";
 import useFetchInventory from "../../../../../../../hooks/Inventory";
 import { CreateAdjustmentMedecineFrb } from "../../../../../../../firebase/Service/Request";
+import { doc, runTransaction } from "firebase/firestore";
+import { db } from "../../../../../../../firebase/Base";
+import { useFetchMedecineListService } from "../../../../../../../hooks/Medecines";
 
 type PostType = {
    isPost: boolean;
@@ -24,6 +27,7 @@ type PayloadType = {
 
 const AddAdjustment = ({ isPost, setIsPost }: PostType) => {
    const { id } = useParams();
+   const medecines = useFetchMedecineListService({ id: id });
    const [isCreate, setIsCreate] = useState(false);
    const [payload, setPayload] = useState<PayloadType[]>([
       {
@@ -36,16 +40,14 @@ const AddAdjustment = ({ isPost, setIsPost }: PostType) => {
    ]);
 
    const inventory = useFetchInventory();
-
    const OnClose = () => {
       setIsPost(false);
    };
 
    const CreateMedecines = async (e: React.FormEvent) => {
       e.preventDefault();
-      if (!id) return;
+      if (!id || !medecines) return;
       const filterData = payload.filter((item) => item.status !== "success");
-
       const _data = filterData.map((item) => ({
          id: item.id,
          name: item.name,
@@ -55,38 +57,86 @@ const AddAdjustment = ({ isPost, setIsPost }: PostType) => {
 
       if (_data.length === 0) return;
       setIsCreate(true);
+
       let index = 0;
       do {
-         const data = await CreateAdjustmentMedecineFrb({
-            data: {
-               medicine_id: _data[index].name,
-               stock_out: _data[index].stock_out,
-               reason: _data[index].reason,
-            },
-         });
+         const medicine = medecines.find(
+            (item) => item.medicines.id === _data[index].name
+         );
 
-         if (!data) {
-            CSwal({
-               icon: "error",
-               title: "Something went wrong",
-               text: "Failed to Save",
-            });
-            return;
-         } else {
-            setPayload((prev) => [
-               ...prev.map((item) => {
-                  if (item.id === _data[index].id) {
-                     return {
-                        ...item,
-                        status: "success",
-                     };
+         try {
+            if (medicine) {
+               const sfDocRef = doc(
+                  db,
+                  `medecines`,
+                  id,
+                  "medecines",
+                  medicine.id
+               );
+
+               await runTransaction(db, async (transaction) => {
+                  const sfDoc = await transaction.get(sfDocRef);
+                  if (!sfDoc.exists()) {
+                     throw "Document does not exist!";
                   }
-                  return item;
-               }),
-            ]);
+
+                  const newStock =
+                     Number(sfDoc.data().stock_in) -
+                     Number(_data[index].stock_out);
+
+                  if (
+                     newStock > Number(sfDoc.data().stock_in) ||
+                     newStock < 0
+                  ) {
+                     await CSwal({
+                        icon: "question",
+                        title: "Stock out is too big",
+                     });
+                     setIsCreate(false);
+                     return Promise.reject();
+                  } else {
+                     transaction.update(sfDocRef, {
+                        stock_in: newStock.toString(),
+                     });
+
+                     const data = await CreateAdjustmentMedecineFrb({
+                        data: {
+                           medicine_id: _data[index].name,
+                           stock_out: _data[index].stock_out,
+                           reason: _data[index].reason,
+                        },
+                     });
+
+                     if (!data) {
+                        CSwal({
+                           icon: "error",
+                           title: "Something went wrong",
+                           text: "Failed to Save",
+                        });
+                        return;
+                     } else {
+                        // if (index === _data.length || !_data[index].id) return;
+                        // setPayload((prev) => [
+                        //    ...prev.map((item) => {
+                        //       if (item.id === _data[index].id) {
+                        //          return {
+                        //             ...item,
+                        //             status: "success",
+                        //          };
+                        //       }
+                        //       return item;
+                        //    }),
+                        // ]);
+                     }
+
+                     index++;
+                  }
+               });
+            }
+         } catch (e) {
+            console.error(e);
          }
 
-         index++;
          if (index === _data.length) {
             CSwal({
                icon: "success",
@@ -123,16 +173,16 @@ const AddAdjustment = ({ isPost, setIsPost }: PostType) => {
       setPayload(filterPayload);
    };
 
-   const AddForm = () => {
-      const form = {
-         id: uuid(),
-         name: "",
-         reason: "",
-         stock_out: "",
-         status: "pending",
-      };
-      setPayload((prev) => [...prev.concat(form)]);
-   };
+   // const AddForm = () => {
+   //    const form = {
+   //       id: uuid(),
+   //       name: "",
+   //       reason: "",
+   //       stock_out: "",
+   //       status: "pending",
+   //    };
+   //    setPayload((prev) => [...prev.concat(form)]);
+   // };
 
    return (
       <DialogSlide
@@ -163,14 +213,14 @@ const AddAdjustment = ({ isPost, setIsPost }: PostType) => {
                   />
                ))}
 
-               <button
+               {/* <button
                   type="button"
                   className={style.addForm}
                   onClick={AddForm}
                   disabled={isCreate}
                >
                   <MdAssignmentAdd />
-               </button>
+               </button> */}
             </form>
             <div className="flex flex-row justify-between mt-8">
                <BlueButton

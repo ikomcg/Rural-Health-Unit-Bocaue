@@ -1,5 +1,5 @@
 import React, { SetStateAction, useState } from "react";
-import style from "../../style.module.scss";
+import style from "../../../style.module.scss";
 import { useParams } from "react-router-dom";
 import DialogSlide from "../../../../../../../components/mui/dialog/SlideModal";
 import { AiFillCloseCircle } from "react-icons/ai";
