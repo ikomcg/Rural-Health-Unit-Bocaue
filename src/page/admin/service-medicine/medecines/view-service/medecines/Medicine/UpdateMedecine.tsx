@@ -1,13 +1,13 @@
 import React, { SetStateAction, useEffect, useState } from "react";
 import style from "../../style.module.scss";
 import { useParams } from "react-router-dom";
-import DialogSlide from "../../../../../../components/mui/dialog/SlideModal";
+import DialogSlide from "../../../../../../../components/mui/dialog/SlideModal";
 import { AiFillCloseCircle } from "react-icons/ai";
-import { BlueButton } from "../../../../../../components/button/BlueButton";
+import { BlueButton } from "../../../../../../../components/button/BlueButton";
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
-import { db } from "../../../../../../firebase/Base";
-import CSwal from "../../../../../../components/swal/Swal";
-import useFetchInventory from "../../../../../../hooks/Inventory";
+import { db } from "../../../../../../../firebase/Base";
+import CSwal from "../../../../../../../components/swal/Swal";
+import useFetchInventory from "../../../../../../../hooks/Inventory";
 
 type PayloadType = object & Omit<Medecine, "created_at">;
 

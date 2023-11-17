@@ -1,11 +1,11 @@
 import { useParams } from "react-router-dom";
-import MedecineList from "./medecines/MedecinesList";
+import MedecineList from "./medecines/Medicine/MedecinesList";
 import { BlueButton } from "../../../../../components/button/BlueButton";
 import Request from "./view-request/Requests";
 import { useState } from "react";
-import AddMedecine from "./medecines/AddMedecines";
-import AdjusmentList from "./medecines/AdjusmentList";
-import AddAdjustment from "./medecines/AddAdjustment";
+import AddMedecine from "./medecines/Medicine/AddMedecines";
+import AdjusmentList from "./medecines/Adjusment/AdjusmentList";
+import AddAdjustment from "./medecines/Adjusment/AddAdjustment";
 
 const ViewService = () => {
    const { name } = useParams();

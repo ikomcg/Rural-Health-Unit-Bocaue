@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
-import Table from "../../../../../../components/table/Table";
+import Table from "../../../../../../../components/table/Table";
 import { CircularProgress, Pagination } from "@mui/material";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useEffect, useState } from "react";
-import { useFetchAdjustmentMedecineListService } from "../../../../../../hooks/Medecines";
+import { useFetchAdjustmentMedecineListService } from "../../../../../../../hooks/Medecines";
 
 const AdjusmentList = () => {
    const { id } = useParams();

@@ -1,14 +1,14 @@
 import { useParams } from "react-router-dom";
-import Table from "../../../../../../components/table/Table";
+import Table from "../../../../../../../components/table/Table";
 import { CircularProgress, Pagination } from "@mui/material";
 import { FaTrash } from "react-icons/fa";
 import { AiFillEdit, AiOutlineSearch } from "react-icons/ai";
 import { deleteDoc, doc } from "firebase/firestore";
-import { db } from "../../../../../../firebase/Base";
+import { db } from "../../../../../../../firebase/Base";
 import { useEffect, useState } from "react";
-import { useFetchMedecineListService } from "../../../../../../hooks/Medecines";
+import { useFetchMedecineListService } from "../../../../../../../hooks/Medecines";
 import UpdateMedecine from "./UpdateMedecine";
-import CSwal from "../../../../../../components/swal/Swal";
+import CSwal from "../../../../../../../components/swal/Swal";
 
 type PayloadType = object & Omit<Medecine, "created_at">;
 
@@ -54,7 +54,7 @@ const Medecines = () => {
       const SlicePagination = () => {
          if (medecines === null) return setSliceMedecines(null);
          if (medecines === undefined) return;
-         
+
          const filterData = medecines.filter((item) =>
             item.medicines.name
                .trim()
