@@ -73,20 +73,20 @@ const Table = ({ item }: TableType) => {
                <th>End of Month Stocks</th>
             </thead>
             <tbody>
-               {item.medecines?.map((item) => (
+               {item.medecines?.map((med) => (
                   <tr>
-                     <td>{item.medicine?.name}</td>
+                     <td>{med.medicine?.name}</td>
                      <td>0</td>
                      <td>
                         {/* delivery */}
-                        {item.category === "DELIVERY" ? (
+                        {med.category === "DELIVERY" ? (
                            <div className="flex flex-row">
-                              <span className="w-1/3">{item.stock_in}</span>
+                              <span className="w-1/3">{med.stock_in}</span>
                               <span className="w-1/3 h-full">
-                                 {item.batch_lot_no}
+                                 {med.batch_lot_no}
                               </span>
                               <span className="w-1/3">
-                                 {moment(item.medicine?.created_at)
+                                 {moment(med.medicine?.created_at)
                                     .utcOffset(8)
                                     .format("L")}
                               </span>
@@ -101,22 +101,61 @@ const Table = ({ item }: TableType) => {
                      </td>
                      <td>
                         <div className="flex flex-row">
-                           {item.category === "RECEIVED STOCK" ? (
-                              <span className="w-1/2">{item.stock_in}</span>
-                           ) : (
-                              <span className="w-1/2"></span>
-                           )}
-                           {item.category === "ADJUSTMENT" ? (
-                              <span className="w-1/2">{item.stock_in}</span>
-                           ) : (
-                              <span className="w-1/2"></span>
-                           )}
+                           <span className="w-1/2">
+                              {med.category === "RECEIVED STOCK"
+                                 ? med.stock_in
+                                 : ""}
+                           </span>
+
+                           <span className="w-1/2">
+                              {item.medicine_adjustment?.find(
+                                 (medAD) =>
+                                    medAD.medicine_id === med.medicine.id &&
+                                    medAD.reason === "TRANSFER"
+                              )?.stock_out ?? ""}
+                           </span>
                         </div>
                      </td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
+                     <td>
+                        {item.medicines_request.find(
+                           (item) => item.medicine_id === med.id
+                        )?.quantity ?? ""}
+                     </td>
+                     <td>
+                        {
+                           item.medicines_request.filter(
+                              (item) => item.medicine_id === med.id
+                           ).length
+                        }
+                     </td>
+                     <td>
+                        {item.medicine_adjustment?.find(
+                           (medAD) =>
+                              medAD.medicine_id === med.medicine.id &&
+                              medAD.reason === "EXPIRED"
+                        )?.stock_out ?? ""}
+                     </td>
+                     <td>
+                        {(Number(
+                           item.medicines_request.find(
+                              (item) => item.medicine_id === med.id
+                           )?.quantity ?? "0"
+                        ) + Number(med.stock_in) + Number(item.medicine_adjustment?.find(
+                           (medAD) =>
+                              medAD.medicine_id === med.medicine.id &&
+                              medAD.reason === "TRANSFER"
+                        )?.stock_out ?? "0") ) - (Number(item.medicines_request.find(
+                           (item) => item.medicine_id === med.id
+                        )?.quantity ?? "0") + Number(item.medicine_adjustment?.find(
+                           (medAD) =>
+                              medAD.medicine_id === med.medicine.id &&
+                              medAD.reason === "EXPIRED"
+                        )?.stock_out ?? "0") + Number(item.medicine_adjustment?.find(
+                           (medAD) =>
+                              medAD.medicine_id === med.medicine.id &&
+                              medAD.reason === "EXPIRED"
+                        )?.stock_out ?? "0"))}
+                     </td>
                   </tr>
                ))}
             </tbody>

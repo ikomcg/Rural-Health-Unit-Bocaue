@@ -17,4 +17,17 @@ type MedecinesReportsType = {
       medicine_id: string;
       reason: string;
    }[];
+   medicines_request: {
+      id: string;
+      medicine_id: string;
+      service_id: string;
+      quantity: string;
+   }[];
+   medicine_adjustment: {
+      id: string;
+      service_id: string;
+      medicine_id: string;
+      stock_out: string;
+      reason : string
+   }[];
 } & ServiceType;

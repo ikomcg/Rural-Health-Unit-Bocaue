@@ -19,7 +19,7 @@ const Button: React.FC<ButtonType> = ({ active, ...props }) => {
 };
 
 const Reports = () => {
-   const [activetab, setActiveTab] = useState("family-planning");
+   const [activetab, setActiveTab] = useState("utilization");
    const OnNavigateHandle = (e: React.MouseEvent<HTMLButtonElement>) => {
       const { name } = e.currentTarget;
 
@@ -29,13 +29,13 @@ const Reports = () => {
    return (
       <Container className="overflow-x-hidden w-full">
          <div className="flex flex-row gap-3">
-            <Button
+            {/* <Button
                active={!activetab.includes("utilization")}
                name="family-planning"
                onClick={OnNavigateHandle}
             >
                Family Planning
-            </Button>
+            </Button> */}
             <Button
                active={activetab.includes("utilization")}
                name="utilization"
