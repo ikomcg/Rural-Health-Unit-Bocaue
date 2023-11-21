@@ -55,6 +55,11 @@ const Module = ({ isMenu }: ModuleType) => {
          link: "patient",
       },
       {
+         name: "User",
+         icon: <FaUsers />,
+         link: "user",
+      },
+      {
          name: "Schedule",
          icon: <AiFillSchedule />,
          link: "schedule",

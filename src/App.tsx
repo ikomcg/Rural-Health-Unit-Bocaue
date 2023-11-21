@@ -33,6 +33,7 @@ import DoctorHealthServiceView from "./page/doctor/service/health service/view-s
 import DoctorSchedule from "./page/doctor/schedule/Schedule";
 import DoctorLayout from "./components/layout/doctor/Layout";
 import Reports from "./page/admin/report/Reports";
+import Users from "./page/admin/user/Users";
 
 const App = () => {
    return (
@@ -65,6 +66,7 @@ const App = () => {
                <Route path="schedule" element={<AdminSchedule />} />
                <Route path="health-worker" element={<HealtWorkers />} />
                <Route path="patient" element={<Patient />} />
+               <Route path="user" element={<Users />} />
                <Route path="queueing">
                   <Route index element={<AdminQueue />} />
                   <Route path=":name/:id" element={<AdminViewDepartment />} />
