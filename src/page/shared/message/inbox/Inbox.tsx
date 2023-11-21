@@ -5,14 +5,22 @@ import { BiSolidEdit } from "react-icons/bi";
 import { useContext, useMemo, useState } from "react";
 import SendMessage from "./SendMessage";
 import { UserProvider } from "../../../../context/UserProvider";
+import { FaChevronCircleLeft, FaChevronCircleRight } from "react-icons/fa";
 
 type InboxType = {
    activeInbox: Inbox | null | undefined;
+   isHide: boolean;
+   setIsHide: React.Dispatch<React.SetStateAction<boolean>>;
    setActiveInbox: React.Dispatch<
       React.SetStateAction<Inbox | null | undefined>
    >;
 };
-const Inbox = ({ activeInbox, setActiveInbox }: InboxType) => {
+const Inbox = ({
+   activeInbox,
+   setActiveInbox,
+   isHide,
+   setIsHide,
+}: InboxType) => {
    const { cookies } = useContext(UserProvider);
    const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
    const [open, setOpen] = useState(false);
@@ -47,10 +55,36 @@ const Inbox = ({ activeInbox, setActiveInbox }: InboxType) => {
       return filterInBox;
    }, [inbox, search]);
 
+   const styleMenu = {
+      active: {
+         width: 0,
+         padding: 0,
+         transition: "all ease-in-out .2s",
+         // overflow: "hidden",
+      },
+      inactive: {
+         width: "40%",
+         padding: "10px",
+         transition: "all ease-in-out .2s",
+      },
+   };
+
+   const SetMenuHide = () => {
+      setIsHide((prev) => !prev);
+   };
+
    return (
       <>
-         <div className="w-[40%] h-full border-r p-2">
-            <div className="flex flex-col pr-3 h-full">
+         <div
+            className="relative w-[40%] h-full border-r p-2 ease-in-out"
+            style={isHide ? styleMenu.active : styleMenu.inactive}
+         >
+            <div
+               className="flex-col pr-3 h-full"
+               style={{
+                  display: isHide ? "none" : "flex",
+               }}
+            >
                <div className="flex items-center justify-between mb-5">
                   <h1 className="text-lg font-semibold text-blue">Inbox</h1>
                   <button
@@ -112,7 +146,9 @@ const Inbox = ({ activeInbox, setActiveInbox }: InboxType) => {
                               />
                               <div className="flex flex-col pl-2">
                                  <h2 className="text-sm font-semibold">
-                                    {isReciever ? item.from_user.full_name : item.to_user.full_name}
+                                    {isReciever
+                                       ? item.from_user.full_name
+                                       : item.to_user.full_name}
                                  </h2>
                                  <p className="word-wrap line-clamp-1 text-sm">
                                     {item.message}
@@ -124,6 +160,9 @@ const Inbox = ({ activeInbox, setActiveInbox }: InboxType) => {
                   )}
                </div>
             </div>
+            <button className={style.btn_inbox} onClick={SetMenuHide}>
+               {!isHide ? <FaChevronCircleLeft /> : <FaChevronCircleRight />}
+            </button>
          </div>
          {inbox && (
             <SendMessage

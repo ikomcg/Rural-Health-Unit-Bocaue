@@ -7,17 +7,18 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../firebase/Base";
 import { SimpleSnackbar } from "../../../../components/mui/alert/alert";
 import moment from "moment";
-import {LazyLoadImage} from 'react-lazy-load-image-component';
+import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 
 type MessagesType = {
    activeInbox: Inbox;
+   isHide: boolean;
    messages: MessageType[] | null | undefined;
    setMessages: React.Dispatch<
       React.SetStateAction<MessageType[] | null | undefined>
    >;
 };
-const Messages = ({ activeInbox, messages }: MessagesType) => {
+const Messages = ({ activeInbox, messages, isHide }: MessagesType) => {
    const ref = useRef<HTMLDivElement | null>(null);
    const { cookies } = useContext(UserProvider);
    const isNotActive =
@@ -61,7 +62,13 @@ const Messages = ({ activeInbox, messages }: MessagesType) => {
 
    return (
       <>
-         <div className="flex flex-col items-start w-[60%] h-screen border-r">
+         <div
+            className="flex flex-col items-start h-screen border-r"
+            style={{
+               width: isHide ? "100%" : "60%",
+               transition: "all ease-in-out .2s",
+            }}
+         >
             <div className="flex flex-col justify-between w-full h-screen">
                <div className="message-container flex flex-col gap-3 h-screen pt-2 overflow-y-auto px-2">
                   {messages === undefined ? (

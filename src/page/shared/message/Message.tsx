@@ -33,7 +33,7 @@ const Message = () => {
             HandleGapMinutes(data);
          },
          (err) => {
-            console.log(err)
+            console.log(err);
             setMessages(null);
          }
       );
@@ -66,12 +66,19 @@ const Message = () => {
          setMessages(data);
       }
    };
+   const [isHide, setIsHide] = useState(false);
 
    return (
       <div className="flex flex-row h-screen">
-         <Inbox activeInbox={activeInbox} setActiveInbox={setActiveInbox} />
+         <Inbox
+            isHide={isHide}
+            setIsHide={setIsHide}
+            activeInbox={activeInbox}
+            setActiveInbox={setActiveInbox}
+         />
          {activeInbox && (
             <Messages
+               isHide={isHide}
                activeInbox={activeInbox}
                messages={messages}
                setMessages={setMessages}
