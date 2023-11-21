@@ -3,6 +3,7 @@ import DialogSlide from "../../../../components/mui/dialog/SlideModal";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import style from "./style.module.scss";
 import MDEditor from "@uiw/react-md-editor";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 type CarouselType = {
    toView: ToViewType;
@@ -22,31 +23,41 @@ const Carousel = ({ toView, isOpen, setIsOpen }: CarouselType) => {
             setIsOpen(false);
             setActiveIndex(0);
          }}
+         className={style.dialog_slide}
       >
          <div className={style.container}>
             <div>
                <div className="relative">
                   <button
                      className={style.btn_prev}
-                     onClick={() => setActiveIndex((prev) => prev - 1)}
+                     onClick={() => {
+                        if (activeIndex === 0) return;
+                        setActiveIndex((prev) => prev - 1);
+                     }}
                   >
                      <AiOutlineLeft />
                   </button>
                   <button
                      className={style.btn_next}
-                     onClick={() => setActiveIndex((prev) => prev + 1)}
+                     onClick={() => {
+                        if (activeIndex + 1 === toView.images.length) return;
+                        setActiveIndex((prev) => prev + 1);
+                     }}
                   >
                      <AiOutlineRight />
                   </button>
-                  <img
+                  <LazyLoadImage
                      src={toView.images[activeIndex]}
                      alt={toView.images[activeIndex]}
+                     effect="blur"
                   />
                </div>
 
                <div className={style.image_list}>
                   {toView.images.map((item, i) => (
-                     <img
+                     <LazyLoadImage
+                        key={i}
+                        effect="blur"
                         src={item}
                         alt={item}
                         onClick={() => setActiveIndex(i)}

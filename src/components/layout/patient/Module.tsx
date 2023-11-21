@@ -40,9 +40,10 @@ const Module = ({ isMenu, setIsMenu }: ModuleType) => {
 
    const link = window.location.pathname;
    const [activeTab, setActiveTab] = useState(link);
-
+   const isMobile = window.innerWidth;
    const HandleActiveLink = (link: string) => {
       setActiveTab(link);
+      if (isMobile > 1024) return;
       setIsMenu((prev) => !prev);
    };
    return (
