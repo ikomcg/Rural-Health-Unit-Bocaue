@@ -7,6 +7,8 @@ import { BlueButton } from "../../../../../../components/button/BlueButton";
 import AddRequest from "./add/Add";
 import useFetchMyRequest from "../../../../../../hooks/MyRequest";
 import { UserProvider } from "../../../../../../context/UserProvider";
+import style from "./style.module.scss";
+
 const Request = () => {
    const { id } = useParams();
    const { cookies } = useContext(UserProvider);
@@ -44,7 +46,10 @@ const Request = () => {
                Add Request
             </BlueButton>
          </div>
-         <Table th={["Date Schedule", "Doctor Assigned", "Status"]}>
+         <Table
+            th={["Date Schedule", "Reason", "Doctor Assigned", "Status"]}
+            className={style.table_request}
+         >
             {sliceDoctors === undefined ? (
                <tr>
                   <td className="text-center" colSpan={3}>
@@ -74,6 +79,7 @@ const Request = () => {
                            .utcOffset(8)
                            .format("LLL")}
                      </td>
+                     <td>{item?.reason}</td>
                      <td>{item?.doctor?.full_name}</td>
                      <td>
                         <span className="bg-[gray] text-sm text-slate-100 px-2 py-1 rounded">

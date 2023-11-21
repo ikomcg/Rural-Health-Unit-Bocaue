@@ -91,7 +91,10 @@ const EditRequest = ({ item, setEditSchedule }: EditRequestType) => {
                <h1>Schedule</h1>
                <button type="button"></button>
             </div>
-            <div className="flex flex-row gap-3 flex-nowrap mt-5" id="schedule">
+            <div
+               className="flex flex-row flex-wrap gap-3 flex-nowrap mt-5"
+               id="schedule"
+            >
                <div className="flex flex-col w-1/3">
                   <label htmlFor="" className="text-blue">
                      Patient Name:
@@ -110,6 +113,7 @@ const EditRequest = ({ item, setEditSchedule }: EditRequestType) => {
                         .format("LLL")}
                   </span>
                </div>
+
                <div className="flex flex-col w-1/3">
                   <label className="text-blue">Assigned doctor:</label>
                   <select
@@ -133,6 +137,12 @@ const EditRequest = ({ item, setEditSchedule }: EditRequestType) => {
                         ))
                      )}
                   </select>
+               </div>
+               <div className="flex flex-col w-1/2">
+                  <label htmlFor="" className="text-blue">
+                     Reason:
+                  </label>
+                  <span>{item?.reason}</span>
                </div>
             </div>
             <div className="flex flex-row justify-between mt-8 gap-2">

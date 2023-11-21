@@ -1,4 +1,11 @@
 @use "../../../color";
+.container {
+   position: relative;
+   display: flex;
+   flex-flow: row;
+
+   height: 100vh;
+}
 
 .module {
    color: #ffffff;

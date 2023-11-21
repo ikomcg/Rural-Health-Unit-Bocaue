@@ -6,6 +6,8 @@ import { useContext, useEffect, useState } from "react";
 import AddRequest from "./add/Add";
 import { UserProvider } from "../../../../../../context/UserProvider";
 import useFetchDoctorSchedulesRequest from "../../../../../../hooks/DoctorSchedule";
+import style from "./style.module.scss";
+
 const Request = () => {
    const { id } = useParams();
    const { cookies } = useContext(UserProvider);
@@ -39,10 +41,13 @@ const Request = () => {
          <div className="flex flex-row items-center mt-10">
             <h1 className="text-blue text-2xl">My Request</h1>
          </div>
-         <Table th={["Patient", "Date Schedule", "Status"]}>
+         <Table
+            th={["Patient", "Reason", "Date Schedule", "Status"]}
+            className={style.table_request}
+         >
             {sliceDoctors === undefined ? (
                <tr>
-                  <td className="text-center" colSpan={3}>
+                  <td className="text-center" colSpan={4}>
                      <div className="flex flex-col justify-center items-center">
                         <CircularProgress />
                         <span className="text-sm">Please wait...</span>
@@ -51,13 +56,13 @@ const Request = () => {
                </tr>
             ) : sliceDoctors === null ? (
                <tr>
-                  <td className="text-sm" colSpan={3}>
+                  <td className="text-sm" colSpan={4}>
                      Error Get Request List!!
                   </td>
                </tr>
             ) : sliceDoctors.length === 0 ? (
                <tr>
-                  <td className="text-sm" colSpan={3}>
+                  <td className="text-sm" colSpan={4}>
                      No Request found
                   </td>
                </tr>
@@ -65,6 +70,7 @@ const Request = () => {
                sliceDoctors.map((item) => (
                   <tr key={item.id}>
                      <td>{item.patient?.full_name}</td>
+                     <td>{item.reason}</td>
                      <td>
                         {moment(item.request_date.toISOString())
                            .utcOffset(8)

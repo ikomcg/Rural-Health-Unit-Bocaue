@@ -69,7 +69,7 @@ const Doctors = () => {
          <Table th={["Health Worker Name", "Available From", "Available To"]}>
             {sliceDoctors === undefined ? (
                <tr>
-                  <td className="text-center" colSpan={4}>
+                  <td className="text-center" colSpan={3}>
                      <div className="flex flex-col justify-center items-center">
                         <CircularProgress />
                         <span className="text-sm">Please wait...</span>
@@ -78,13 +78,13 @@ const Doctors = () => {
                </tr>
             ) : sliceDoctors === null ? (
                <tr>
-                  <td className="text-sm" colSpan={4}>
+                  <td className="text-sm" colSpan={3}>
                      Error Get Schedules!!
                   </td>
                </tr>
             ) : sliceDoctors.length === 0 ? (
                <tr>
-                  <td className="text-sm" colSpan={4}>
+                  <td className="text-sm" colSpan={3}>
                      No Schedules found
                   </td>
                </tr>
