@@ -6,6 +6,7 @@ import { useContext, useMemo, useState } from "react";
 import SendMessage from "./SendMessage";
 import { UserProvider } from "../../../../context/UserProvider";
 import { FaChevronCircleLeft, FaChevronCircleRight } from "react-icons/fa";
+import CSwal from "../../../../components/swal/Swal";
 
 type InboxType = {
    activeInbox: Inbox | null | undefined;
@@ -27,6 +28,14 @@ const Inbox = ({
    const inbox = InboxFetch(setActiveInbox);
    const [search, setSearch] = useState("");
    const HandleAddMessage = (event: React.MouseEvent<HTMLButtonElement>) => {
+      if (!cookies?.is_verify) {
+         CSwal({
+            icon: "info",
+            title: "Account not Verified",
+            text: "Contact Rural Health Unit to verify your account",
+         });
+         return;
+      }
       setAnchorEl(event.currentTarget);
       setOpen((prev) => !prev);
    };

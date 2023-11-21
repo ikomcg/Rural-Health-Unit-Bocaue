@@ -6,6 +6,7 @@ import { useFetchMyRequestMedecine } from "../../../../../../hooks/Request";
 import { BlueButton } from "../../../../../../components/button/BlueButton";
 import AddRequest from "./add-request/Add-Request";
 import { UserProvider } from "../../../../../../context/UserProvider";
+import CSwal from "../../../../../../components/swal/Swal";
 const Request = () => {
    const { id } = useParams();
    const { cookies } = useContext(UserProvider);
@@ -44,7 +45,17 @@ const Request = () => {
             <h1 className="text-blue text-2xl">My Request</h1>
             <BlueButton
                className="ml-auto py-1"
-               onClick={() => setIsOpen(true)}
+               onClick={() => {
+                  if (!cookies?.is_verify) {
+                     CSwal({
+                        icon: "info",
+                        title: "Account not Verified",
+                        text: "Contact Rural Health Unit to verify your account",
+                     });
+                     return;
+                  }
+                  setIsOpen(true);
+               }}
                disabled={cookies?.account_status !== "active"}
             >
                Add Request

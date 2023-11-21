@@ -92,7 +92,10 @@ const Login = () => {
             .then(() => {
                if (set_cookie.role.includes("rural health physician")) {
                   navigate("/admin/home");
-               } else if (set_cookie.role.includes("patient")) {
+               } else if (
+                  set_cookie.role.includes("patient") ||
+                  set_cookie.role[0] === ""
+               ) {
                   navigate("/patient/home");
                } else {
                   navigate("/health-worker/home");
@@ -128,11 +131,7 @@ const Login = () => {
       if (!user) {
          return false;
       }
-
       if (!user.exists()) return false;
-      const role = user.data().role;
-      // for patient account
-      const is_verify = user.data().is_verify;
       const full_name = `${user.data().first_name} ${user.data().middle_name} ${
          user.data().last_name
       }`;
@@ -143,18 +142,6 @@ const Login = () => {
          birthday: user.data().birthday.toDate(),
          created_at: user.data().created_at.toDate(),
       } as UserType;
-
-      if (role.includes("patient")) {
-         if (!is_verify) {
-            Swal.fire({
-               icon: "info",
-               title: "Account not Verified",
-               text: "Contact Rural Health Unit to verify your account",
-            });
-
-            return null;
-         }
-      }
 
       saveCookies(cookie);
       return cookie;

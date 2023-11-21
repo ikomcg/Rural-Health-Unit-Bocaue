@@ -8,6 +8,7 @@ import AddRequest from "./add/Add";
 import useFetchMyRequest from "../../../../../../hooks/MyRequest";
 import { UserProvider } from "../../../../../../context/UserProvider";
 import style from "./style.module.scss";
+import CSwal from "../../../../../../components/swal/Swal";
 
 const Request = () => {
    const { id } = useParams();
@@ -40,7 +41,17 @@ const Request = () => {
             <h1 className="text-blue text-2xl">My Request</h1>
             <BlueButton
                className="ml-auto py-1"
-               onClick={() => setIsOpen(true)}
+               onClick={() => {
+                  if (!cookies?.is_verify) {
+                     CSwal({
+                        icon: "info",
+                        title: "Account not Verified",
+                        text: "Contact Rural Health Unit to verify your account",
+                     });
+                     return;
+                  }
+                  setIsOpen(true);
+               }}
                disabled={cookies?.account_status !== "active"}
             >
                Add Request
@@ -52,7 +63,7 @@ const Request = () => {
          >
             {sliceDoctors === undefined ? (
                <tr>
-                  <td className="text-center" colSpan={3}>
+                  <td className="text-center" colSpan={4}>
                      <div className="flex flex-col justify-center items-center">
                         <CircularProgress />
                         <span className="text-sm">Please wait...</span>
@@ -61,13 +72,13 @@ const Request = () => {
                </tr>
             ) : sliceDoctors === null ? (
                <tr>
-                  <td className="text-sm" colSpan={3}>
+                  <td className="text-sm" colSpan={4}>
                      Error Get Request List!!
                   </td>
                </tr>
             ) : sliceDoctors.length === 0 ? (
                <tr>
-                  <td className="text-sm" colSpan={3}>
+                  <td className="text-sm" colSpan={4}>
                      No Request found
                   </td>
                </tr>
