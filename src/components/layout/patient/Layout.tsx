@@ -34,14 +34,14 @@ const PatientLayout = () => {
       <div className={style.container}>
          <SideBar isMenu={isMenu} setIsMenu={setIsMenu} />
          <div
-            className={`overflow-y-auto`}
+            className={`overflow-y-auto mt-20 lg:mt-0 ${style.oulet_container}`}
             style={{
                width: isMenu ? "60%" : "80%",
             }}
          >
             <Outlet />
          </div>
-         <div className="rgth_cldr w-[25%]">
+         <div className={`rgth_cldr w-[25%] ${style.right_bar}`}>
             <Calendar />
             <Schedule />
             <Online

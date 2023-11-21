@@ -26,7 +26,7 @@ const SideBar = ({ isMenu, setIsMenu }: SideBarType) => {
                   onClick={() => setIsMenu((prev) => !prev)}
                />
             </div>
-            <Module isMenu={isMenu} />
+            <Module isMenu={isMenu} setIsMenu={setIsMenu} />
          </div>
          <User isMenu={isMenu} />
       </div>

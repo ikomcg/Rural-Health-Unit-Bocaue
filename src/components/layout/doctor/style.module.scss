@@ -1,12 +1,5 @@
 @use "../../../color";
 
-.container {
-   display: flex;
-   flex-flow: row nowrap;
-
-   height: 100vh;
-}
-
 .module {
    color: #ffffff;
    margin-top: 50px;
@@ -23,6 +16,12 @@
          background-color: #ffffff;
 
          a {
+            .container {
+               display: flex;
+               flex-flow: row nowrap;
+
+               height: 100vh;
+            }
             color: #000000;
          }
       }
