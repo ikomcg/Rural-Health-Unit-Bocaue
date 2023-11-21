@@ -53,7 +53,6 @@ const Request = () => {
 
    const OnChangeStatus = async (request: RequestMedecines, status: string) => {
       if (!id) return;
-      console.log(request, "asd");
 
       if (status === "decline") {
          const sfDocRef = doc(
@@ -78,7 +77,10 @@ const Request = () => {
          });
       }
 
-      await updateDoc(doc(db, "medicine_request", request.id), { status })
+      await updateDoc(doc(db, "medicine_request", request.id), {
+         status,
+         quantity: request.quantity,
+      })
          .then(async () => {
             await CreateRapidApi({
                endPoint: "sms/send",
@@ -104,6 +106,27 @@ const Request = () => {
                title: err.code,
             });
          });
+   };
+
+   const OnChangeQuantity = (
+      id: string,
+      e: React.ChangeEvent<HTMLInputElement>
+   ) => {
+      setSliceMedecines((prev) =>
+         prev
+            ? [
+                 ...prev.map((item) => {
+                    if (id === item.id) {
+                       return {
+                          ...item,
+                          quantity: e.target.value,
+                       };
+                    }
+                    return item;
+                 }),
+              ]
+            : null
+      );
    };
 
    return (
@@ -159,7 +182,14 @@ const Request = () => {
                   <tr key={item.id}>
                      <td>{item.patient.full_name}</td>
                      <td>{item.medicine.name}</td>
-                     <td>{item.quantity}</td>
+                     <td>
+                        <input
+                           type="text"
+                           className="border border-blue w-[50px] text-center"
+                           value={item.quantity}
+                           onChange={(e) => OnChangeQuantity(item.id, e)}
+                        />
+                     </td>
                      <td className="flex flex-col gap-2 justify-center items-center">
                         <BlueButton
                            disabled={item.status === "approve"}
