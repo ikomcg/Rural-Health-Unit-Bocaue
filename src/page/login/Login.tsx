@@ -148,7 +148,7 @@ const Login = () => {
          if (!is_verify) {
             Swal.fire({
                icon: "info",
-               title: "Account not Verify",
+               title: "Account not Verified",
                text: "Contact Rural Health Unit to verify your account",
             });
 
@@ -162,7 +162,7 @@ const Login = () => {
 
    return (
       <>
-         <div className="shadow w-[60%]">
+         <div className="md:shadow w-full sm:w-[70%] md:w-[60%]">
             <div className={style.container}>
                <div className={style.header_login}>
                   <h2 className="text-2xl font-semibold">Login</h2>
