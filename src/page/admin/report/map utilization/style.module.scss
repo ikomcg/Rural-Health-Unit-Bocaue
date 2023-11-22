@@ -1,37 +1,121 @@
 @use "../../../../color";
+
+.container {
+   margin: 0 10px;
+   h4,
+   h3 {
+      font-size: 14px;
+   }
+   span,
+   b {
+      font-size: 12px;
+   }
+   input {
+      width: 100%;
+      font-size: 12px;
+   }
+}
+
 .table {
-   overflow-x: scroll;
-   width: max-content;
+   margin: 0 auto;
    thead {
-      font-size: 16px;
+      font-size: 12px;
       th {
-         width: 300px;
-         border: 1px solid gray;
+         width: 100px;
+         border: 1px solid black;
          font-weight: 500;
          text-align: center;
          &:first-child {
-            width: 300px;
+            width: 150px;
          }
          &:nth-child(2) {
-            width: 250px;
+            width: 100px;
+         }
+         &:nth-child(3) {
+            width: 190px;
+         }
+         &:nth-child(4) {
+            width: 140px;
          }
          &:nth-child(5) {
-            width: 150px;
+            width: 100px;
          }
          &:nth-child(6),
          &:nth-child(7) {
-            width: 150px;
+            width: 50px;
          }
          &:nth-child(8) {
-            width: 150px;
+            width: 50px;
          }
       }
    }
    tbody {
       tr {
+         font-size: 12px;
          td {
-            border:  1px solid black;
+            border: 1px solid black;
             text-align: center;
+         }
+      }
+   }
+}
+
+.report_footer {
+   display: none;
+   justify-content: space-around;
+}
+
+@media print {
+   .report_footer {
+      display: flex !important;
+   }
+
+   .container {
+      margin-top: 20px;
+      input {
+         border: none !important;
+         color: color.$blue;
+         padding: 0;
+         font-size: 14px;
+         font-weight: 600;
+      }
+      input[type="date"]::-webkit-calendar-picker-indicator {
+         background: transparent;
+         bottom: 0;
+         color: transparent;
+         cursor: pointer;
+         height: auto;
+         left: 0;
+         position: absolute;
+         right: 0;
+         top: 0;
+         width: auto;
+      }
+
+      button {
+         display: none;
+      }
+   }
+   .rhu_form {
+      > div {
+         &:nth-child(1) {
+            width: 40%;
+         }
+         &:nth-child(2) {
+            width: 25%;
+         }
+         &:nth-child(3) {
+            width: 35%;
+         }
+         > div {
+            display: flex;
+            align-items: center;
+            span {
+               width: 50%;
+            }
+            input {
+               width: 50%;
+            }
          }
       }
    }
