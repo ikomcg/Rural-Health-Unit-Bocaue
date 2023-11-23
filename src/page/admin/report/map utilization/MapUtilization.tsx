@@ -2,12 +2,10 @@ import { useFetchReports } from "../../../../hooks/Reports";
 import style from "./style.module.scss";
 import { BlueButton } from "../../../../components/button/BlueButton";
 import { useReactToPrint } from "react-to-print";
-import { useContext, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Table from "./Table";
-import { UserProvider } from "../../../../context/UserProvider";
 
 const MapUtilization = () => {
-   const { cookies } = useContext(UserProvider);
    const medecines = useFetchReports();
    const componentRef = useRef<HTMLDivElement>(null);
    const handlePrint = useReactToPrint({
@@ -160,23 +158,15 @@ const MapUtilization = () => {
                      <div className={`mt-4 ${style.report_footer}`}>
                         <div>
                            <small>Prepared by:</small>
-                           <h2 className="text-center font-bold mt-4  text-sm">
-                              {cookies?.full_name}
-                           </h2>
+                           <h2 className="text-center font-bold mt-4 text-sm"></h2>
                            <hr className="border border-black" />
-                           <h3 className="text-center text-xs">
-                              {cookies?.role[0].toUpperCase()}
-                           </h3>
+                           <h3 className="text-center text-xs"></h3>
                         </div>
                         <div>
                            <small>Noted by:</small>
-                           <h2 className="text-center text-sm font-bold mt-4">
-                              JOAN MARIE A. DATOON, MD, DPPS
-                           </h2>
+                           <h2 className="text-center text-sm font-bold mt-4"></h2>
                            <hr className="border border-black" />
-                           <h3 className="text-center text-xs">
-                              Rural Health Physician
-                           </h3>
+                           <h3 className="text-center text-xs"></h3>
                         </div>
                      </div>
                   </div>
