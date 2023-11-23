@@ -1,8 +1,9 @@
 @use "../../../color";
 
 .container {
+   position: relative;
    display: flex;
-   flex-flow: row nowrap;
+   flex-flow: row;
 
    height: 100vh;
 }
@@ -105,5 +106,61 @@
       &:hover {
          text-decoration: underline;
       }
+   }
+}
+@media (max-width: 1024px) {
+   .container {
+      flex-flow: column nowrap;
+      height: max-content;
+   }
+   .oulet_container {
+      overflow-y: visible;
+      height: max-content;
+      width: 100% !important;
+   }
+   .menu {
+      position: fixed;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 9999;
+      overflow: hidden;
+   }
+   .actv_menu {
+      transition: height 0.5s;
+      height: 80px;
+      width: 100%;
+   }
+
+   .inactv_menu {
+      transition: height 0.5s;
+      font-size: 18px;
+      height: 100vh;
+      width: 100%;
+   }
+   .inactv_header {
+      h1 {
+         display: block;
+      }
+   }
+   .actve_mnu,
+   .in_actv_mnu {
+      font-size: 18px;
+   }
+
+   .in_actv_mnu {
+      align-items: start;
+      justify-content: start;
+      > span {
+         &:last-child {
+            display: block;
+         }
+      }
+   }
+   .right_bar {
+      margin-bottom: 40px;
+      width: 100% !important;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
    }
 }

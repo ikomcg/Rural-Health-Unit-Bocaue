@@ -49,7 +49,7 @@ const LandingPage = () => {
          ..._payload,
          age: Number(_payload.age),
          birthday: TimeStampValue(_payload.birthday),
-         role: ["patient"],
+         role: [""],
          is_verify: false,
          status: "offline",
          account_status: "active",
@@ -78,16 +78,18 @@ const LandingPage = () => {
    };
 
    return (
-      <div className="flex flex-row justify-around items-center h-screen">
-         <div className="flex flex-col items-center justify-center w-1/2 px-5">
-            <h1 className="text-blue text-4xl font-bold text-center">RURAL HEALTH UNIT</h1>
+      <div className="flex flex-col md:flex-row md:justify-around items-center h-screen">
+         <div className="flex flex-col items-center justify-center w-full md:w-1/2 px-5 mb-5 md:mb-0">
+            <h1 className="text-blue text-4xl font-bold text-center">
+               RURAL HEALTH UNIT
+            </h1>
             <span>Bocaue Bulacan</span>
-            <p className="text-xl my-3">
+            <p className="text-xl text-center my-3">
                RURAL HEALTH UNIT provide medical advice, diagnosis, or
                treatment.
             </p>
          </div>
-         <div className="flex justify-center w-1/2">
+         <div className="flex justify-center w-full md:w-1/2 pb-5 md:pb-0">
             <Login />
          </div>
       </div>

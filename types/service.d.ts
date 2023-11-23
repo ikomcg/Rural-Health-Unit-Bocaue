@@ -23,6 +23,7 @@ type RequestService = {
    doctor: UserType;
    request_date: any;
    created_at: any;
+   reason: string;
    status: "pending" | "approve" | "decline";
 };
 type Medecine = {

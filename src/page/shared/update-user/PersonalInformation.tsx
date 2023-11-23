@@ -214,6 +214,19 @@ const PersonalInformation: React.FC<PersonalInformationType> = ({
                   </option>
                   <option value="patient">Patient</option>
                </Select>
+               <Select
+                  name="specialization"
+                  required
+                  placeholder="Specialization"
+                  label="Specialization"
+                  onChange={HandleOnChange}
+                  value={payload.role}
+               >
+                  <option value="" disabled>
+                     ----
+                  </option>
+
+               </Select>
             </div>
          </div>
       </div>

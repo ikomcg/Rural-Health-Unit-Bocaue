@@ -61,13 +61,29 @@ const To = ({ toMessage, users, setToMessage, setUsers }: ToType) => {
    const userList = useMemo(() => {
       if (!users) return [];
 
-      const filterUsers = users.filter((item) =>
-         item.full_name
-            .toLocaleLowerCase()
-            .includes(toMessage.toLocaleLowerCase())
-      );
+      let userLists: UserType[] = [];
 
-      return filterUsers;
+      if (cookies?.role.includes("patient")) {
+         const filterUser = users.filter(
+            (item) =>
+               !item.role.includes("rural health physician") ||
+               item.status === "online"
+         );
+
+         userLists = filterUser.filter((item) =>
+            item.full_name
+               .toLocaleLowerCase()
+               .includes(toMessage.toLocaleLowerCase())
+         );
+      } else {
+         userLists = users.filter((item) =>
+            item.full_name
+               .toLocaleLowerCase()
+               .includes(toMessage.toLocaleLowerCase())
+         );
+      }
+
+      return userLists;
    }, [users, toMessage]);
 
    return (

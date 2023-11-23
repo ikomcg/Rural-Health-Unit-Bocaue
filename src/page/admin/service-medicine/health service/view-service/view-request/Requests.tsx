@@ -8,6 +8,7 @@ import { BlueButton } from "../../../../../../components/button/BlueButton";
 import { AiOutlineSearch } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import EditRequest from "./Edit-Request";
+import style from "./style.module.scss";
 
 const Request = () => {
    const { id } = useParams();
@@ -78,10 +79,19 @@ const Request = () => {
             </div>
          </div>
 
-         <Table th={["Patient", "Date Schedule", "Doctor Assigned", "Action"]}>
+         <Table
+            th={[
+               "Patient",
+               "Date Schedule",
+               "Request",
+               "Doctor Assigned",
+               "Action",
+            ]}
+            className={style.table_request}
+         >
             {sliceRequest === undefined ? (
                <tr>
-                  <td className="text-center" colSpan={3}>
+                  <td className="text-center" colSpan={4}>
                      <div className="flex flex-col justify-center items-center">
                         <CircularProgress />
                         <span className="text-sm">Please wait...</span>
@@ -90,13 +100,13 @@ const Request = () => {
                </tr>
             ) : sliceRequest === null ? (
                <tr>
-                  <td className="text-sm" colSpan={3}>
+                  <td className="text-sm" colSpan={4}>
                      Error Get Request List!!
                   </td>
                </tr>
             ) : sliceRequest.length === 0 ? (
                <tr>
-                  <td className="text-sm" colSpan={3}>
+                  <td className="text-sm" colSpan={4}>
                      No Request found
                   </td>
                </tr>
@@ -111,6 +121,7 @@ const Request = () => {
                               .utcOffset(8)
                               .format("LLL")}
                         </td>
+                        <td>{item.reason}</td>
                         <td>{item.doctor?.full_name}</td>
                         <td className="flex flex-col gap-2 justify-center items-center">
                            <BlueButton

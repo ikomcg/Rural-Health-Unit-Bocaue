@@ -1,0 +1,19 @@
+.table {
+   thead {
+      tr {
+         th {
+            &:last-child{
+                width: 10%;
+            }
+            &:first-child {
+               width: 10%;
+            }
+         }
+      }
+   }
+}
+.profile {
+   width: 35px;
+   height: 35px;
+   clip-path: circle();
+}

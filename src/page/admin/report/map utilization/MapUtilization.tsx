@@ -1,165 +1,190 @@
-import moment from "moment";
 import { useFetchReports } from "../../../../hooks/Reports";
 import style from "./style.module.scss";
+import { BlueButton } from "../../../../components/button/BlueButton";
+import { useReactToPrint } from "react-to-print";
+import { useContext, useRef, useState } from "react";
+import Table from "./Table";
+import { UserProvider } from "../../../../context/UserProvider";
 
 const MapUtilization = () => {
+   const { cookies } = useContext(UserProvider);
    const medecines = useFetchReports();
+   const componentRef = useRef<HTMLDivElement>(null);
+   const handlePrint = useReactToPrint({
+      content: () => componentRef.current,
+   });
+
+   const [information, setInformation] = useState({
+      name: "",
+      province: "",
+      date_monitoring: "",
+      date_accomplished: "",
+      region: "",
+      municipality: "",
+   });
+   const {
+      name,
+      province,
+      region,
+      municipality,
+      date_accomplished,
+      date_monitoring,
+   } = information;
+   const OnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setInformation((prev) => ({ ...prev, [name]: value }));
+   };
    return (
-      <div className="flex flex-col gap-5">
-         {medecines === undefined ? (
-            <h1 className="text-gray w-full text-center">Loading...</h1>
-         ) : medecines === null ? (
-            <h1 className="text-gray w-full text-center">
-               Somethin went wrong...
-            </h1>
-         ) : (
-            medecines.map((item) => <Table item={item} />)
-         )}
-      </div>
+      <>
+         <div className="flex flex-col gap-5">
+            {medecines === undefined ? (
+               <h1 className="text-gray w-full text-center">Loading...</h1>
+            ) : medecines === null ? (
+               <h1 className="text-gray w-full text-center">
+                  Somethin went wrong...
+               </h1>
+            ) : (
+               <>
+                  <div ref={componentRef} className={style.container}>
+                     <div className="flex relative flex-row items-center w-full justify-center">
+                        <img
+                           className="absolute left-0 top-0"
+                           src="/image/DOH.png"
+                           alt="DOH"
+                           style={{
+                              width: "100px",
+                              height: "100px",
+                           }}
+                        />
+                        <div className="flex flex-col gap-2">
+                           <h4 className="text-center">
+                              Republic of the Philippines
+                           </h4>
+                           <h3 className="text-center">Department of Health</h3>
+                           <h1 className="text-center font-bold text-xl">
+                              OFFICE OF THE SECRETARY
+                           </h1>
+                        </div>
+                     </div>
+                     <div className="flex flex-col items-center mt-2">
+                        <h4 className="text-center font-bold">
+                           HEALTH FACILITY MONTHLY UTILIZATION/ STOCK INVENTORY
+                           REPORT FORM
+                        </h4>
+                        <span>
+                           for Public Health Pharmaceuticals Inventory Notes
+                        </span>
+                     </div>
+                     <div
+                        className={`flex flex-nowrap gap-3 flex-wrap mt-3 ${style.rhu_form} `}
+                     >
+                        <div className={`w-[40%]`}>
+                           <div>
+                              <span>Name of Health Facility:</span>
+                              <input
+                                 type="text"
+                                 className="border p-1"
+                                 name="name"
+                                 value={name}
+                                 onChange={OnChange}
+                              />
+                           </div>
+                           <div>
+                              <span>Municipality:</span>
+                              <input
+                                 type="text"
+                                 className="border p-1"
+                                 name="municipality"
+                                 value={municipality}
+                                 onChange={OnChange}
+                              />
+                           </div>
+                        </div>
+                        <div className="w-[30%]">
+                           <div>
+                              <span>Province:</span>
+                              <input
+                                 type="text"
+                                 className="border p-1"
+                                 value={province}
+                                 name="province"
+                                 onChange={OnChange}
+                              />
+                           </div>
+                           <div>
+                              <span>Region:</span>
+                              <input
+                                 type="text"
+                                 className="border p-1"
+                                 name="region"
+                                 value={region}
+                                 onChange={OnChange}
+                              />
+                           </div>
+                        </div>
+                        <div className="w-[30%]">
+                           <div>
+                              <span>Date of Monitoring:</span>
+                              <input
+                                 type="date"
+                                 className="border p-1"
+                                 name="date_monitoring"
+                                 value={date_monitoring}
+                                 onChange={OnChange}
+                              />
+                           </div>
+                           <div>
+                              <span>Date Accomplished:</span>
+                              <input
+                                 type="date"
+                                 className="border p-1"
+                                 name="date_accomplished"
+                                 value={date_accomplished}
+                                 onChange={OnChange}
+                              />
+                           </div>
+                        </div>
+                     </div>
+
+                     <div className="flex flex-row items-center mt-3">
+                        <BlueButton
+                           className="ml-auto py-1"
+                           onClick={handlePrint}
+                        >
+                           Print Report
+                        </BlueButton>
+                     </div>
+                     {medecines.map((item) => (
+                        <Table item={item} />
+                     ))}
+                     <div className={`mt-4 ${style.report_footer}`}>
+                        <div>
+                           <small>Prepared by:</small>
+                           <h2 className="text-center font-bold mt-4  text-sm">
+                              {cookies?.full_name}
+                           </h2>
+                           <hr className="border border-black" />
+                           <h3 className="text-center text-xs">
+                              {cookies?.role[0].toUpperCase()}
+                           </h3>
+                        </div>
+                        <div>
+                           <small>Noted by:</small>
+                           <h2 className="text-center text-sm font-bold mt-4">
+                              JOAN MARIE A. DATOON, MD, DPPS
+                           </h2>
+                           <hr className="border border-black" />
+                           <h3 className="text-center text-xs">
+                              Rural Health Physician
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+               </>
+            )}
+         </div>
+      </>
    );
 };
 
 export default MapUtilization;
-
-type TableType = {
-   item: MedecinesReportsType;
-};
-const Table = ({ item }: TableType) => {
-   return (
-      <div
-         className="mt-3"
-         style={{
-            overflowX: "scroll",
-         }}
-      >
-         <table className={style.table}>
-            <thead>
-               <th>{item.name}</th>
-               <th>
-                  Ending Inventory from the{" "}
-                  <span className="text-red-500">PREVIOUS</span> Month <br />
-                  (A)
-               </th>
-               <th className="">
-                  <div className="flex flex-col" style={{ maxHeight: "100%" }}>
-                     <b>Deliveries</b>
-                     <div className="flex flex-row">
-                        <span className="w-1/3 h-full">
-                           Quantity <br /> (B)
-                        </span>
-                        <span className="w-1/3">Batch/lot no.</span>
-                        <span className="w-1/3">Date of Delivery</span>
-                     </div>
-                  </div>
-               </th>
-               <th>
-                  <div className="flex flex-col">
-                     <b>Stocks Transfer</b>
-                     <div className="flex flex-row">
-                        <span className="w-1/2">
-                           Received (C) <br />
-                        </span>
-                        <span className="w-1/2">
-                           Transferred (D) <br />
-                        </span>
-                     </div>
-                  </div>
-               </th>
-               <th>
-                  Monthly Consumption <br /> (E)
-               </th>
-               <th className="text-red-500">No. of Patients</th>
-               <th>Expired Stocks</th>
-               <th>End of Month Stocks</th>
-            </thead>
-            <tbody>
-               {item.medecines?.map((med) => (
-                  <tr>
-                     <td>{med.medicine?.name}</td>
-                     <td>0</td>
-                     <td>
-                        {/* delivery */}
-                        {med.category === "DELIVERY" ? (
-                           <div className="flex flex-row">
-                              <span className="w-1/3">{med.stock_in}</span>
-                              <span className="w-1/3 h-full">
-                                 {med.batch_lot_no}
-                              </span>
-                              <span className="w-1/3">
-                                 {moment(med.medicine?.created_at)
-                                    .utcOffset(8)
-                                    .format("L")}
-                              </span>
-                           </div>
-                        ) : (
-                           <div className="flex flex-row">
-                              <span className="w-1/3 h-full"></span>
-                              <span className="w-1/3"></span>
-                              <span className="w-1/3"></span>
-                           </div>
-                        )}
-                     </td>
-                     <td>
-                        <div className="flex flex-row">
-                           <span className="w-1/2">
-                              {med.category === "RECEIVED STOCK"
-                                 ? med.stock_in
-                                 : ""}
-                           </span>
-
-                           <span className="w-1/2">
-                              {item.medicine_adjustment?.find(
-                                 (medAD) =>
-                                    medAD.medicine_id === med.medicine.id &&
-                                    medAD.reason === "TRANSFER"
-                              )?.stock_out ?? ""}
-                           </span>
-                        </div>
-                     </td>
-                     <td>
-                        {item.medicines_request.find(
-                           (item) => item.medicine_id === med.id
-                        )?.quantity ?? ""}
-                     </td>
-                     <td>
-                        {
-                           item.medicines_request.filter(
-                              (item) => item.medicine_id === med.id
-                           ).length
-                        }
-                     </td>
-                     <td>
-                        {item.medicine_adjustment?.find(
-                           (medAD) =>
-                              medAD.medicine_id === med.medicine.id &&
-                              medAD.reason === "EXPIRED"
-                        )?.stock_out ?? ""}
-                     </td>
-                     <td>
-                        {(Number(
-                           item.medicines_request.find(
-                              (item) => item.medicine_id === med.id
-                           )?.quantity ?? "0"
-                        ) + Number(med.stock_in) + Number(item.medicine_adjustment?.find(
-                           (medAD) =>
-                              medAD.medicine_id === med.medicine.id &&
-                              medAD.reason === "TRANSFER"
-                        )?.stock_out ?? "0") ) - (Number(item.medicines_request.find(
-                           (item) => item.medicine_id === med.id
-                        )?.quantity ?? "0") + Number(item.medicine_adjustment?.find(
-                           (medAD) =>
-                              medAD.medicine_id === med.medicine.id &&
-                              medAD.reason === "EXPIRED"
-                        )?.stock_out ?? "0") + Number(item.medicine_adjustment?.find(
-                           (medAD) =>
-                              medAD.medicine_id === med.medicine.id &&
-                              medAD.reason === "EXPIRED"
-                        )?.stock_out ?? "0"))}
-                     </td>
-                  </tr>
-               ))}
-            </tbody>
-         </table>
-      </div>
-   );
-};

@@ -1,8 +1,8 @@
 @use "../../../color";
-
 .container {
+   position: relative;
    display: flex;
-   flex-flow: row nowrap;
+   flex-flow: row;
 
    height: 100vh;
 }
@@ -23,6 +23,12 @@
          background-color: #ffffff;
 
          a {
+            .container {
+               display: flex;
+               flex-flow: row nowrap;
+
+               height: 100vh;
+            }
             color: #000000;
          }
       }

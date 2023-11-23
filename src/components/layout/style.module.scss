@@ -74,3 +74,13 @@
       }
    }
 }
+@media (max-width: 1024px) {
+   .in_actv_ftr {
+      img {
+         display: block;
+      }
+      h2 {
+         display: block;
+      }
+   }
+}

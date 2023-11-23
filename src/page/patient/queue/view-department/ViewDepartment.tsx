@@ -17,9 +17,16 @@ const ViewDepartment = () => {
    const currentQueue = queueLists?.find((item) => item.status === "current");
    const userToken = queueLists?.find((item) => item.patient === cookies?.id);
    const [isLoading, setIsLoading] = useState(false);
-  
 
    const GetToken = async () => {
+      if (!cookies?.is_verify) {
+         CSwal({
+            icon: "info",
+            title: "Account not Verified",
+            text: "Contact Rural Health Unit to verify your account",
+         });
+         return;
+      }
       if (!id) return;
       setIsLoading(true);
       const words = name?.split(" ");
@@ -56,7 +63,9 @@ const ViewDepartment = () => {
          <h1 className="text-4xl text-blue text-center">RURAL HEALTH UNIT</h1>
          <h2 className="text-center text-2xl">BOCAUE, BULACAN</h2>
 
-         <div className={`flex flex-row gap-5 mt-10 h-full overflow-hidden`}>
+         <div
+            className={`flex flex-col md:flex-row gap-5 mt-10 h-full overflow-hidden`}
+         >
             {queueLists === undefined ? (
                <h1 className="text-center text-gray-400 w-full mt-20">
                   Loading...
@@ -67,7 +76,7 @@ const ViewDepartment = () => {
                </h1>
             ) : (
                <>
-                  <div className="flex flex-col w-[60%]">
+                  <div className="flex flex-col w-full md:w-[60%]">
                      <div className={` ${style.proceed_Card}`}>
                         <h3>Token Number</h3>
                         <h2>
@@ -99,7 +108,7 @@ const ViewDepartment = () => {
                      </BlueButton>
                   </div>
                   <div
-                     className={`flex flex-col gap-3 w-[40%] h-[85%] overflow-y-auto pb-3`}
+                     className={`flex flex-row md:flex-col gap-3 w-full md:w-[40%] h-[85%] overflow-auto pb-3`}
                   >
                      {queueLists
                         .filter((item) => item.status === "waiting")

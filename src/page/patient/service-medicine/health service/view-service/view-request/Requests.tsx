@@ -7,6 +7,9 @@ import { BlueButton } from "../../../../../../components/button/BlueButton";
 import AddRequest from "./add/Add";
 import useFetchMyRequest from "../../../../../../hooks/MyRequest";
 import { UserProvider } from "../../../../../../context/UserProvider";
+import style from "./style.module.scss";
+import CSwal from "../../../../../../components/swal/Swal";
+
 const Request = () => {
    const { id } = useParams();
    const { cookies } = useContext(UserProvider);
@@ -38,16 +41,29 @@ const Request = () => {
             <h1 className="text-blue text-2xl">My Request</h1>
             <BlueButton
                className="ml-auto py-1"
-               onClick={() => setIsOpen(true)}
+               onClick={() => {
+                  if (!cookies?.is_verify) {
+                     CSwal({
+                        icon: "info",
+                        title: "Account not Verified",
+                        text: "Contact Rural Health Unit to verify your account",
+                     });
+                     return;
+                  }
+                  setIsOpen(true);
+               }}
                disabled={cookies?.account_status !== "active"}
             >
                Add Request
             </BlueButton>
          </div>
-         <Table th={["Date Schedule", "Doctor Assigned", "Status"]}>
+         <Table
+            th={["Date Schedule", "Reason", "Doctor Assigned", "Status"]}
+            className={style.table_request}
+         >
             {sliceDoctors === undefined ? (
                <tr>
-                  <td className="text-center" colSpan={3}>
+                  <td className="text-center" colSpan={4}>
                      <div className="flex flex-col justify-center items-center">
                         <CircularProgress />
                         <span className="text-sm">Please wait...</span>
@@ -56,13 +72,13 @@ const Request = () => {
                </tr>
             ) : sliceDoctors === null ? (
                <tr>
-                  <td className="text-sm" colSpan={3}>
+                  <td className="text-sm" colSpan={4}>
                      Error Get Request List!!
                   </td>
                </tr>
             ) : sliceDoctors.length === 0 ? (
                <tr>
-                  <td className="text-sm" colSpan={3}>
+                  <td className="text-sm" colSpan={4}>
                      No Request found
                   </td>
                </tr>
@@ -74,6 +90,7 @@ const Request = () => {
                            .utcOffset(8)
                            .format("LLL")}
                      </td>
+                     <td>{item?.reason}</td>
                      <td>{item?.doctor?.full_name}</td>
                      <td>
                         <span className="bg-[gray] text-sm text-slate-100 px-2 py-1 rounded">

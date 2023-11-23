@@ -76,9 +76,16 @@ input[type="file"]::file-selector-button {
    font-size: 14px;
 }
 .apexcharts-canvas {
-   
    margin: 0 auto !important;
    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
       rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
       rgba(0, 0, 0, 0.2) 0px -3px 0px inset !important;
+}
+
+@media (max-width: 768px) {
+   .fc .fc-header-toolbar,
+   .fc .fc-col-header-cell-cushion,
+   .fc .fc-daygrid-day-number {
+      font-size: 12px;
+   }
 }

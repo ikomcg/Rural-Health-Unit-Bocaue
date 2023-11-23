@@ -7,8 +7,9 @@ import { useState } from "react";
 
 type ModuleType = {
    isMenu: boolean;
+   setIsMenu: React.Dispatch<React.SetStateAction<boolean>>;
 };
-const Module = ({ isMenu }: ModuleType) => {
+const Module = ({ isMenu, setIsMenu }: ModuleType) => {
    const Menu = [
       {
          name: "Home",
@@ -39,11 +40,12 @@ const Module = ({ isMenu }: ModuleType) => {
 
    const link = window.location.pathname;
    const [activeTab, setActiveTab] = useState(link);
-
+   const isMobile = window.innerWidth;
    const HandleActiveLink = (link: string) => {
       setActiveTab(link);
+      if (isMobile > 1024) return;
+      setIsMenu((prev) => !prev);
    };
-
    return (
       <ul className={style.module}>
          {Menu.map((item, i) => {

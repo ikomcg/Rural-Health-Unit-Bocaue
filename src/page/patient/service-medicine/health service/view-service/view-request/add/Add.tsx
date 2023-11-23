@@ -17,7 +17,10 @@ type PostType = {
 const AddRequest = ({ isPost, setIsPost }: PostType) => {
    const { id, name } = useParams();
    const { cookies } = useContext(UserProvider);
-   const [requestDate, setRequestDate] = useState("");
+   const [payload, setPayload] = useState({
+      requestDate: "",
+      reasons: "",
+   });
    const [isLoading, seIsLoading] = useState(false);
    const OnClose = () => {
       setIsPost(false);
@@ -33,7 +36,8 @@ const AddRequest = ({ isPost, setIsPost }: PostType) => {
             patient_id: cookies.id,
             service_id: id,
             service_name: name,
-            request_date: TimeStampValue(requestDate),
+            request_date: TimeStampValue(payload.requestDate),
+            reason: payload.reasons,
             status: "pending",
          },
       });
@@ -52,6 +56,14 @@ const AddRequest = ({ isPost, setIsPost }: PostType) => {
       }).then(() => {});
    };
 
+   const OnChange = (
+      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+   ) => {
+      setPayload((prev) => ({
+         ...prev,
+         [e.target.name]: e.target.value,
+      }));
+   };
    return (
       <DialogSlide
          fullWidth={true}
@@ -74,9 +86,19 @@ const AddRequest = ({ isPost, setIsPost }: PostType) => {
                      className="border border-blue py-1 px-2 mt-1"
                      type="datetime-local"
                      required
-                     value={requestDate}
-                     name="request_date"
-                     onChange={(e) => setRequestDate(e.target.value)}
+                     value={payload.requestDate}
+                     name="requestDate"
+                     onChange={OnChange}
+                  />
+               </div>
+               <div className="flex flex-col mt-3">
+                  <label htmlFor="">Reason:</label>
+                  <textarea
+                     className="border border-blue py-1 px-2 mt-1"
+                     required
+                     value={payload.reasons}
+                     name="reasons"
+                     onChange={OnChange}
                   />
                </div>
             </form>

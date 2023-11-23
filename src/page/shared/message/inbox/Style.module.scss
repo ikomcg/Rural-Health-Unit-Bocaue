@@ -1,3 +1,5 @@
+@use "../../../../color";
+
 .inbox_card {
    display: flex;
    cursor: pointer;
@@ -53,6 +55,13 @@
    border: 1px solid rgb(220, 220, 220);
    border-radius: 5px;
    padding: 4px 5px !important;
-
-
+}
+.btn_inbox {
+   position: absolute;
+   right: 0;
+   top: 50%;
+   bottom: 50%;
+   transform: translate(50%, -50%);
+   font-size: 18px;
+   color: color.$blue;
 }
