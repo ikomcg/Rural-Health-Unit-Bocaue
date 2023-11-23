@@ -2,12 +2,10 @@ import { useFetchReports } from "../../../../hooks/Reports";
 import style from "./style.module.scss";
 import { BlueButton } from "../../../../components/button/BlueButton";
 import { useReactToPrint } from "react-to-print";
-import { useContext, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Table from "./Table";
-import { UserProvider } from "../../../../context/UserProvider";
 
 const MapUtilization = () => {
-   const { cookies } = useContext(UserProvider);
    const medecines = useFetchReports();
    const componentRef = useRef<HTMLDivElement>(null);
    const handlePrint = useReactToPrint({
