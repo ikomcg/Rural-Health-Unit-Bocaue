@@ -16,7 +16,7 @@ type UserType = {
 };
 const User = ({ isMenu }: UserType) => {
    const { cookies, deleteCookies, setLoading } = useContext(UserProvider);
-   const [toUpdate, setToUpdate] = useState<globalThis.UserType | null>(null);
+   const [toUpdate, setToUpdate] = useState<UserType | null>(null);
 
    const profile = cookies?.profile ? cookies?.profile : "/image/profile.png";
    const navigate = useNavigate();

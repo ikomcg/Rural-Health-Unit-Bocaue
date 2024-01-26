@@ -21,8 +21,8 @@ import { SignOutFireBase } from "../../../firebase/SignOut";
 import { RedButton } from "../../button/RedButton";
 
 type UpdateInventoryType = {
-   payload: globalThis.UserType;
-   setPayload: React.Dispatch<SetStateAction<globalThis.UserType | null>>;
+   payload: UserType;
+   setPayload: React.Dispatch<SetStateAction<UserType | null>>;
 };
 const UpdateUser = ({ setPayload, payload }: UpdateInventoryType) => {
    const inputRef = useRef<HTMLInputElement>(null);
