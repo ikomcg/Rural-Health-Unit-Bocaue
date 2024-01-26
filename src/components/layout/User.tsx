@@ -11,12 +11,12 @@ import { db } from "../../firebase/Base";
 import UpdateUser from "./update-user/UpdateUser";
 import CSwal from "../swal/Swal";
 
-type UserType = {
+type UserProps = {
    isMenu: boolean;
 };
-const User = ({ isMenu }: UserType) => {
+const User = ({ isMenu }: UserProps) => {
    const { cookies, deleteCookies, setLoading } = useContext(UserProvider);
-   const [toUpdate, setToUpdate] = useState<globalThis.UserType | null>(null);
+   const [toUpdate, setToUpdate] = useState<UserType | null>(null);
 
    const profile = cookies?.profile ? cookies?.profile : "/image/profile.png";
    const navigate = useNavigate();

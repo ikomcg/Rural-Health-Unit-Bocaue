@@ -70,7 +70,7 @@ export const UpdateConversation = async ({
       id: convoID,
       data: {
          update_at: serverTimestamp(),
-         latest_message: message.trim() === "" ? "sent a files" : message,
+         message: message.trim() === "" ? "sent a files" : message,
       },
    });
 
