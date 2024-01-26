@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { messaging } from "../../../firebase/Base";
 import { getToken } from "firebase/messaging";
 import { Outlet } from "react-router-dom";
