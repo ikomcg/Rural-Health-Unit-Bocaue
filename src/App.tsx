@@ -34,86 +34,95 @@ import DoctorSchedule from "./page/doctor/schedule/Schedule";
 import DoctorLayout from "./components/layout/doctor/Layout";
 import Reports from "./page/admin/report/Reports";
 import Users from "./page/admin/user/Users";
+import Layout from "./components/layout/main-layout/Layout";
 
 const App = () => {
    return (
       <BrowserRouter>
          <Routes>
-            <Route element={<LandingPageLayout />}>
-               <Route index element={<LandingPage />} />
-            </Route>
-            <Route path="admin" element={<AdminLayout />}>
-               <Route path="home" element={<HomeAdmin />} />
-               <Route path="announcement" element={<Announcements />} />
-               <Route path="inventory" element={<Inventory />} />
-               <Route path="reports" element={<Reports />} />
+            <Route path="/" element={<Layout />}>
+               <Route element={<LandingPageLayout />}>
+                  <Route index element={<LandingPage />} />
+               </Route>
+               <Route path="admin" element={<AdminLayout />}>
+                  <Route path="home" element={<HomeAdmin />} />
+                  <Route path="announcement" element={<Announcements />} />
+                  <Route path="inventory" element={<Inventory />} />
+                  <Route path="reports" element={<Reports />} />
 
-               <Route path="service-medicine" element={<ServiceMedicine />}>
-                  <Route path="health-services">
-                     <Route index element={<HealthService />} />
-                     <Route path=":name/:id" element={<ViewService />} />
+                  <Route path="service-medicine" element={<ServiceMedicine />}>
+                     <Route path="health-services">
+                        <Route index element={<HealthService />} />
+                        <Route path=":name/:id" element={<ViewService />} />
+                     </Route>
+
+                     <Route path="medicines">
+                        <Route index element={<Medicines />} />
+                        <Route
+                           path=":name/:id"
+                           element={<MedecinesViewService />}
+                        />
+                     </Route>
                   </Route>
-
-                  <Route path="medicines">
-                     <Route index element={<Medicines />} />
+                  <Route path="messages" element={<Messages />} />
+                  <Route path="schedule" element={<AdminSchedule />} />
+                  <Route path="health-worker" element={<HealtWorkers />} />
+                  <Route path="patient" element={<Patient />} />
+                  <Route path="user" element={<Users />} />
+                  <Route path="queueing">
+                     <Route index element={<AdminQueue />} />
                      <Route
                         path=":name/:id"
-                        element={<MedecinesViewService />}
+                        element={<AdminViewDepartment />}
                      />
                   </Route>
                </Route>
-               <Route path="messages" element={<Messages />} />
-               <Route path="schedule" element={<AdminSchedule />} />
-               <Route path="health-worker" element={<HealtWorkers />} />
-               <Route path="patient" element={<Patient />} />
-               <Route path="user" element={<Users />} />
-               <Route path="queueing">
-                  <Route index element={<AdminQueue />} />
-                  <Route path=":name/:id" element={<AdminViewDepartment />} />
-               </Route>
-            </Route>
-            <Route path="patient" element={<PatientLayout />}>
-               <Route path="home" element={<HomePatient />} />
-               <Route
-                  path="service-medicine"
-                  element={<PatientServiceMedicine />}
-               >
-                  <Route path="health-services">
-                     <Route index element={<PatientHealthService />} />
-                     <Route path=":name/:id" element={<PatientViewService />} />
-                  </Route>
+               <Route path="patient" element={<PatientLayout />}>
+                  <Route path="home" element={<HomePatient />} />
+                  <Route
+                     path="service-medicine"
+                     element={<PatientServiceMedicine />}
+                  >
+                     <Route path="health-services">
+                        <Route index element={<PatientHealthService />} />
+                        <Route
+                           path=":name/:id"
+                           element={<PatientViewService />}
+                        />
+                     </Route>
 
-                  <Route path="medicines">
-                     <Route index element={<PatientMedicines />} />
-                     <Route
-                        path=":name/:id"
-                        element={<PatientViewMedecines />}
-                     />
+                     <Route path="medicines">
+                        <Route index element={<PatientMedicines />} />
+                        <Route
+                           path=":name/:id"
+                           element={<PatientViewMedecines />}
+                        />
+                     </Route>
+                  </Route>
+                  <Route path="schedule" element={<PatientSchedule />} />
+                  <Route path="messages" element={<Messages />} />
+                  <Route path="queueing">
+                     <Route index element={<Queue />} />
+                     <Route path=":name/:id" element={<ViewDepartment />} />
                   </Route>
                </Route>
-               <Route path="schedule" element={<PatientSchedule />} />
-               <Route path="messages" element={<Messages />} />
-               <Route path="queueing">
-                  <Route index element={<Queue />} />
-                  <Route path=":name/:id" element={<ViewDepartment />} />
-               </Route>
-            </Route>
-            <Route path="health-worker" element={<DoctorLayout />}>
-               <Route path="home" element={<DoctorHome />} />
+               <Route path="health-worker" element={<DoctorLayout />}>
+                  <Route path="home" element={<DoctorHome />} />
 
-               <Route path="service" element={<DoctorService />}>
-                  <Route path="health-services">
-                     <Route index element={<DoctorHealthService />} />
-                     <Route
-                        path=":name/:id"
-                        element={<DoctorHealthServiceView />}
-                     />
+                  <Route path="service" element={<DoctorService />}>
+                     <Route path="health-services">
+                        <Route index element={<DoctorHealthService />} />
+                        <Route
+                           path=":name/:id"
+                           element={<DoctorHealthServiceView />}
+                        />
+                     </Route>
                   </Route>
+                  <Route path="schedule" element={<DoctorSchedule />} />
+                  <Route path="messages" element={<Messages />} />
                </Route>
-               <Route path="schedule" element={<DoctorSchedule />} />
-               <Route path="messages" element={<Messages />} />
+               <Route path="*" element={<>Page Not Found</>} />
             </Route>
-            <Route path="*" element={<>Page Not Found</>} />
          </Routes>
       </BrowserRouter>
    );
