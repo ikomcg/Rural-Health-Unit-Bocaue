@@ -12,6 +12,7 @@ const Layout = () => {
                   "BHHZG56KgOZ1Ub_zZKt6Iu9RUY9MoMKsrkXAKN6b6DUbGPbN320nvAPMk7xPy1uAfrkp791poW3Docpwm-XWENk",
             })
                .then((currentToken) => {
+                  alert(currentToken);
                   console.log("Token", currentToken);
                })
                .catch((err) => {
