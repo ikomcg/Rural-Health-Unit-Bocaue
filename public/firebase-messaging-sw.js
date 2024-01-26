@@ -54,13 +54,13 @@ importScripts(
 );
 
 firebase.initializeApp({
-   apiKey: "AIzaSyDKCxtaBlzKqXdG2sqhTuSKChAqxDV00Bw",
-   authDomain: "rural-health-unit-72880.firebaseapp.com",
-   projectId: "rural-health-unit-72880",
-   storageBucket: "rural-health-unit-72880.appspot.com",
-   messagingSenderId: "267032767902",
-   appId: "1:267032767902:web:4727d38bf4ecb3944bba8f",
-   measurementId: "G-1EJ7W4TQ54",
+   apiKey: "AIzaSyDmOndmRn3F51JeLcl94mQ-7JouqUv1Ce8",
+   authDomain: "rhu-prod.firebaseapp.com",
+   projectId: "rhu-prod",
+   storageBucket: "rhu-prod.appspot.com",
+   messagingSenderId: "713912225365",
+   appId: "1:713912225365:web:ba02f02cb10a34249e4edc",
+   measurementId: "G-VYV614B80N",
 });
 
 firebase.messaging();
