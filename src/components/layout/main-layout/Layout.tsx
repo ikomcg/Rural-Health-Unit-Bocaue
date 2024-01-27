@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { messaging } from "../../../firebase/Base";
 import { getToken } from "firebase/messaging";
 import { Outlet } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Layout = () => {
    const GetFCM = async () => {
@@ -12,7 +13,10 @@ const Layout = () => {
                   "BBzsG61OFxBiCuH6DlEOTBSCefgrJ1jKhc1MhQDGzbC4PXbPhIbkrymKqUAxzTsT4urUQ6en5W66j1KpcSJic7E",
             })
                .then((currentToken) => {
-                  alert(currentToken);
+                  Swal.fire({
+                     icon: "info",
+                     text: currentToken,
+                  });
                   console.log("Token", currentToken);
                })
                .catch((err) => {
