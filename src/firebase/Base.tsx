@@ -3,7 +3,7 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getMessaging } from "firebase/messaging";
 
-const ENV = import.meta.env;
+// const ENV = import.meta.env;
 
 // const firebaseConfig = {
 //    apiKey: ENV.VITE_API_KEY,
