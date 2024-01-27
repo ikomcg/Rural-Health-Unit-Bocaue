@@ -9,7 +9,7 @@ const Layout = () => {
          if (res === "granted") {
             return getToken(messaging, {
                vapidKey:
-                  "BBzsG61OFxBiCuH6DlEOTBSCefgrJ1jKhc1MhQDGzbC4PXb",
+                  "BBzsG61OFxBiCuH6DlEOTBSCefgrJ1jKhc1MhQDGzbC4PXbPhIbkrymKqUAxzTsT4urUQ6en5W66j1KpcSJic7E",
             })
                .then((currentToken) => {
                   alert(currentToken);
