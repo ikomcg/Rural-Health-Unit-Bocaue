@@ -1,0 +1,15 @@
+{
+   "background_color": "#ffffff",
+   "description": "RURAL HEALTH UNIT website services, content are for informational purposes.RURAL HEALTH UNIT provide medical advice, diagnosis, or treatment.",
+   "dir": "ltr",
+   "display": "fullscreen",
+   "name": "rural-health-unit-production.vercel",
+   "orientation": "any",
+   "scope": "/",
+   "short_name": "rural-health-unit-production.vercel",
+   "start_url": "/",
+   "theme_color": "#ffffff",
+   "display_override": ["fullscreen", "standalone", "window-controls-overlay"],
+   "lang": "en",
+   "categories": ["medical"]
+}
