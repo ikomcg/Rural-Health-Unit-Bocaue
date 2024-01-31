@@ -90,7 +90,7 @@ self.addEventListener("push", (event) => {
    // Set or clear the badge.
    if (navigator.setAppBadge) {
       if (unreadCount && unreadCount > 0) {
-         navigator.setAppBadge(unreadCount);
+         navigator.setAppBadge(5);
       } else {
          navigator.clearAppBadge();
       }
