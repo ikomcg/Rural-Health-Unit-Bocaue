@@ -1,0 +1,10 @@
+[
+   {
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+         "namespace": "android_app",
+         "package_name": "com.lamparasystem.rhuportal",
+         "SHA256": "F6:41:20:74:4D:5F:AF:42:C0:DA:15:BE:59:8E:10:B0:EF:31:61:0F:5C:2B:4F:5A:38:42:1F:AA:E3:11:FD:5F"
+      }
+   }
+]
