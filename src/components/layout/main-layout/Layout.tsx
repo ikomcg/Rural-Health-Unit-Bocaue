@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { messaging } from "../../../firebase/Base";
 import { getToken } from "firebase/messaging";
 import { Outlet } from "react-router-dom";
-import Swal from "sweetalert2";
 const Layout = () => {
+   
    const GetToken = async () => {
       const vapidKey =
          "BBzsG61OFxBiCuH6DlEOTBSCefgrJ1jKhc1MhQDGzbC4PXbPhIbkrymKqUAxzTsT4urUQ6en5W66j1KpcSJic7E";
@@ -12,9 +12,7 @@ const Layout = () => {
          vapidKey,
       })
          .then((currentToken) => {
-            // eslint-disable-next-line no-console
             console.log("Token", currentToken);
-            Swal.fire({icon :"info", text : currentToken})
          })
          .catch((err) => err);
    };
